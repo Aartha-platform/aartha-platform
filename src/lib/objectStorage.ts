@@ -30,7 +30,7 @@ export const MAX_FILE_SIZE_BYTES = 15 * 1024 * 1024; // 15MB limit
 
 const isSupabaseEnabled = !!(
   process.env.NEXT_PUBLIC_SUPABASE_URL && 
-  process.env.SUPABASE_SERVICE_ROLE_KEY
+  (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY)
 );
 
 const LOCAL_STORAGE_ROOT = path.join(process.cwd(), 'data', 'uploads');

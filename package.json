@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "npx tsx scripts/run_all_tests.ts"
+    "test": "npx tsx scripts/run_all_tests.ts",
+    "test:live": "npx tsx scripts/verify_live_supabase.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.0",

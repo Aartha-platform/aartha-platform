@@ -11,14 +11,14 @@ const isProduction = process.env.NODE_ENV === 'production';
 const isBuildPhase = process.env.NEXT_PHASE === 'phase-production-build' || process.env.npm_lifecycle_event === 'build';
 const isSupabaseEnabled = !!(
   process.env.NEXT_PUBLIC_SUPABASE_URL && 
-  process.env.SUPABASE_SERVICE_ROLE_KEY
+  (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY)
 );
 
 // In production runtime (not build phase), fail closed if PostgreSQL is missing
 if (isProduction && !isBuildPhase && !isSupabaseEnabled) {
   throw new Error(
     '[FATAL ERROR] Artha Production Gate: Production deployment requires PostgreSQL / Supabase credentials. ' +
-    'Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY environment variables. ' +
+    'Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_SECRET_KEY) environment variables. ' +
     'Silent fallback to local JSON is strictly forbidden in production.'
   );
 }

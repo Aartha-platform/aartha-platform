@@ -14,7 +14,7 @@ import * as supabaseStore from './supabaseStore';
 
 const isSupabaseEnabled = !!(
   process.env.NEXT_PUBLIC_SUPABASE_URL && 
-  process.env.SUPABASE_SERVICE_ROLE_KEY
+  (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY)
 );
 
 const LEDGER_DIR = path.join(process.cwd(), 'data');

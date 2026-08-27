@@ -48,9 +48,23 @@ export async function POST(request: NextRequest) {
 
     const fileBuffer = Buffer.from(await file.arrayBuffer());
     
+    // Resolve target bucket among the 4 private buckets
+    const requestedBucket = formData.get('bucket') as string;
+    let targetBucket: 'factory-documents' | 'audit-evidence' | 'rfq-attachments' | 'commercial-documents' = 'factory-documents';
+
+    if (requestedBucket === 'audit-evidence' || requestedBucket === 'rfq-attachments' || requestedBucket === 'commercial-documents' || requestedBucket === 'factory-documents') {
+      targetBucket = requestedBucket;
+    } else if (['invoice', 'packing_list', 'bill_of_lading'].includes(type)) {
+      targetBucket = 'commercial-documents';
+    } else if (['who_gmp', 'iso_9001', 'gots'].includes(type)) {
+      targetBucket = 'audit-evidence';
+    } else {
+      targetBucket = 'factory-documents';
+    }
+
     // Upload via Unified Object Storage Adapter
     const uploadResult = await uploadDocument(
-      'factory-documents',
+      targetBucket,
       file.name,
       fileBuffer,
       file.type || 'application/pdf',
@@ -59,7 +73,7 @@ export async function POST(request: NextRequest) {
 
     let fileUrl = uploadResult.url || '';
     if (!fileUrl && uploadResult.path) {
-      const signed = await getSignedDocumentUrl('factory-documents', uploadResult.path, 86400);
+      const signed = await getSignedDocumentUrl(targetBucket, uploadResult.path, 86400);
       fileUrl = signed.signedUrl || `/uploads/${uploadResult.path}`;
     }
 
