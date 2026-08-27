@@ -1,13 +1,15 @@
 /**
  * scripts/verify_live_supabase.ts
- * Real Live Integration Verification for Supabase Database & Private Storage.
+ * Real Live Integration Verification for Supabase Database & All 4 Private Storage Buckets.
  *
- * Runs 5 automated checks:
- * 1. Environment variable configuration check (NEXT_PUBLIC_SUPABASE_URL + SECRET)
+ * Checks:
+ * 1. Environment configuration (NEXT_PUBLIC_SUPABASE_URL + SUPABASE_SECRET_KEY/SERVICE_ROLE)
  * 2. Live PostgreSQL database connectivity and RLS insert/select/delete check
- * 3. Private bucket upload check ('factory-documents')
- * 4. Time-bound Signed URL generation and HTTPS fetch validation
- * 5. Clean-up & storage deletion verification
+ * 3. Multi-bucket Private Storage upload, signed URL generation, HTTPS download, and cleanup for:
+ *    - 'factory-documents'
+ *    - 'audit-evidence'
+ *    - 'rfq-attachments'
+ *    - 'commercial-documents'
  */
 
 import fs from 'fs';
@@ -33,13 +35,13 @@ if (fs.existsSync(envLocalPath)) {
 
 async function runLiveVerification() {
   console.log('===============================================================');
-  console.log('  AARTHA — LIVE SUPABASE DATABASE & STORAGE INTEGRATION TEST   ');
+  console.log('  AARTHA — LIVE SUPABASE DATABASE & 4-BUCKET STORAGE TEST      ');
   console.log('===============================================================');
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY;
+  const supabaseKey = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  console.log(`\n[1/5] Checking Configuration...`);
+  console.log(`\n[1/6] Checking Configuration...`);
   console.log(`  Supabase URL: ${supabaseUrl || 'MISSING ❌'}`);
   console.log(`  Supabase Secret Key: ${supabaseKey ? 'SET (' + supabaseKey.slice(0, 12) + '...)' : 'MISSING ❌'}`);
 
@@ -55,9 +57,10 @@ async function runLiveVerification() {
   // Dynamically import Supabase modules after env vars are populated
   const { supabase } = await import('../src/lib/supabaseClient');
   const { uploadDocument, getSignedDocumentUrl, deleteDocument } = await import('../src/lib/objectStorage');
+  type StorageBucket = 'factory-documents' | 'audit-evidence' | 'rfq-attachments' | 'commercial-documents';
 
   // 2. Database Connectivity & Operation Check
-  console.log(`\n[2/5] Testing Live PostgreSQL Database Connection...`);
+  console.log(`\n[2/6] Testing Live PostgreSQL Database Connection...`);
   const testAuditId = `AUDIT-TEST-${Date.now()}`;
   const { error: insertErr } = await supabase.from('audit_log').insert([
     {
@@ -92,61 +95,71 @@ async function runLiveVerification() {
   await supabase.from('audit_log').delete().eq('id', testAuditId);
   console.log(`  ✓ PASS: Successfully cleaned up test row.`);
 
-  // 3. Storage Upload Test
-  console.log(`\n[3/5] Testing Private Storage Upload (factory-documents)...`);
-  const testFileName = `probe_verification_${Date.now()}.txt`;
-  const testContent = Buffer.from(`AARTHA Production Live Storage Probe: ${new Date().toISOString()}`, 'utf8');
-
-  const uploadResult = await uploadDocument(
+  // 3. Multi-Bucket Storage Verification
+  const buckets: StorageBucket[] = [
     'factory-documents',
-    testFileName,
-    testContent,
-    'application/pdf', // Testing valid mime type
-    { probe: true, environment: 'production-verification' }
-  );
+    'audit-evidence',
+    'rfq-attachments',
+    'commercial-documents',
+  ];
 
-  if (!uploadResult.success || !uploadResult.path) {
-    console.error(`  ❌ FAIL: Storage upload failed:`, uploadResult.error);
-    process.exit(1);
-  }
-  console.log(`  ✓ PASS: Uploaded probe document to private bucket: "${uploadResult.path}"`);
+  let stepNumber = 3;
+  for (const bucket of buckets) {
+    console.log(`\n[${stepNumber}/6] Testing Private Bucket "${bucket}"...`);
+    const testFileName = `probe_${bucket.replace('-', '_')}_${Date.now()}.pdf`;
+    const probeSecret = `PROBE_PAYLOAD_${bucket}_${Date.now()}`;
+    const testContent = Buffer.from(`AARTHA Production Live Storage Probe for ${bucket}: ${probeSecret}`, 'utf8');
 
-  // 4. Signed URL Generation & HTTPS Download Test
-  console.log(`\n[4/5] Testing Time-Bound Signed URL & HTTPS Retrieval...`);
-  const signedUrlResult = await getSignedDocumentUrl('factory-documents', uploadResult.path, 300);
+    // Upload
+    const uploadResult = await uploadDocument(
+      bucket,
+      testFileName,
+      testContent,
+      'application/pdf',
+      { probe: true, bucket, environment: 'production-verification' }
+    );
 
-  if (!signedUrlResult.signedUrl) {
-    console.error(`  ❌ FAIL: Signed URL generation failed:`, signedUrlResult.error);
-    process.exit(1);
-  }
-  console.log(`  ✓ PASS: Signed URL generated successfully.`);
-
-  try {
-    const fetchRes = await fetch(signedUrlResult.signedUrl);
-    if (!fetchRes.ok) {
-      throw new Error(`HTTP fetch returned status ${fetchRes.status}: ${fetchRes.statusText}`);
+    if (!uploadResult.success || !uploadResult.path) {
+      console.error(`  ❌ FAIL: Storage upload to "${bucket}" failed:`, uploadResult.error);
+      process.exit(1);
     }
-    const bodyText = await fetchRes.text();
-    if (!bodyText.includes('AARTHA Production Live Storage Probe')) {
-      throw new Error('Payload mismatch on retrieved storage object.');
-    }
-    console.log(`  ✓ PASS: Signed URL verified over HTTPS. Content accurately matches uploaded probe.`);
-  } catch (err: any) {
-    console.error(`  ❌ FAIL: Fetching signed URL failed:`, err.message);
-    process.exit(1);
-  }
+    console.log(`  ✓ PASS: Uploaded probe to "${bucket}": "${uploadResult.path}"`);
 
-  // 5. Deletion & Cleanup
-  console.log(`\n[5/5] Cleaning Up Probe Object...`);
-  const deleteResult = await deleteDocument('factory-documents', uploadResult.path);
-  if (!deleteResult.success) {
-    console.warn(`  ⚠️ Warning: Probe cleanup encountered:`, deleteResult.error);
-  } else {
-    console.log(`  ✓ PASS: Successfully purged probe object from private bucket.`);
+    // Signed URL & Download
+    const signedUrlResult = await getSignedDocumentUrl(bucket, uploadResult.path, 300);
+    if (!signedUrlResult.signedUrl) {
+      console.error(`  ❌ FAIL: Signed URL generation for "${bucket}" failed:`, signedUrlResult.error);
+      process.exit(1);
+    }
+
+    try {
+      const fetchRes = await fetch(signedUrlResult.signedUrl);
+      if (!fetchRes.ok) {
+        throw new Error(`HTTP ${fetchRes.status}: ${fetchRes.statusText}`);
+      }
+      const bodyText = await fetchRes.text();
+      if (!bodyText.includes(probeSecret)) {
+        throw new Error('Payload mismatch on retrieved storage object.');
+      }
+      console.log(`  ✓ PASS: Signed URL verified over HTTPS for "${bucket}".`);
+    } catch (err: any) {
+      console.error(`  ❌ FAIL: HTTPS fetch for "${bucket}" failed:`, err.message);
+      process.exit(1);
+    }
+
+    // Cleanup
+    const deleteResult = await deleteDocument(bucket, uploadResult.path);
+    if (!deleteResult.success) {
+      console.warn(`  ⚠️ Warning: Probe cleanup in "${bucket}" encountered:`, deleteResult.error);
+    } else {
+      console.log(`  ✓ PASS: Successfully cleaned up probe object from "${bucket}".`);
+    }
+
+    stepNumber++;
   }
 
   console.log('\n===============================================================');
-  console.log('  ALL 5 LIVE SUPABASE DATABASE & STORAGE CHECKS PASSED (100%)  ');
+  console.log('  ALL LIVE SUPABASE DATABASE & 4-BUCKET STORAGE CHECKS PASSED  ');
   console.log('===============================================================');
 }
 
