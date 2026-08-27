@@ -128,7 +128,7 @@ export default function CheckoutPage() {
 
     try {
       const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_test_ArthaTrade2026',
+        key: (order as any)?.razorpayKeyId || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || '',
         amount: order.totalAmount,
         currency: order.currency || 'INR',
         name: 'Aartha Network',

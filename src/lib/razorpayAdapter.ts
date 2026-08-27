@@ -93,7 +93,7 @@ export class RazorpayAdapter implements PaymentRail {
     return {
       intent,
       providerOrderId,
-      providerKeyId: this.keyId || 'rzp_test_ArthaTrade2026',
+      providerKeyId: this.keyId || '',
       isLiveGateway: isLive,
     };
   }
