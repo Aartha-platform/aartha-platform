@@ -1,0 +1,37 @@
+{
+  "name": "aartha-platform",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "npx tsx scripts/run_all_tests.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "framer-motion": "^11.11.17",
+    "lucide-react": "^0.454.0",
+    "next": "^16.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "recharts": "^2.13.0",
+    "resend": "^6.17.2",
+    "razorpay": "^2.9.4",
+    "zod": "^3.23.8"
+  },
+  "overrides": {
+    "postcss": "^8.4.47",
+    "sharp": "^0.35.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.1",
+    "@types/node": "^22.8.6",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^4.0.0-beta.1",
+    "typescript": "^5.6.3"
+  }
+}
