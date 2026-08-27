@@ -322,22 +322,27 @@ ALTER TABLE transaction_events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE feedback ENABLE ROW LEVEL SECURITY;
 
 -- 1. Suppliers Table: Publicly viewable by all
+DROP POLICY IF EXISTS "Public suppliers are readable by everyone" ON suppliers;
 CREATE POLICY "Public suppliers are readable by everyone" ON suppliers
     FOR SELECT USING (true);
 
 -- 2. RFQs: Public create, read restricted to owner/admin
+DROP POLICY IF EXISTS "Anyone can submit RFQ" ON rfqs;
 CREATE POLICY "Anyone can submit RFQ" ON rfqs
     FOR INSERT WITH CHECK (true);
 
 -- 3. Applications: Public create
+DROP POLICY IF EXISTS "Anyone can apply for verification" ON applications;
 CREATE POLICY "Anyone can apply for verification" ON applications
     FOR INSERT WITH CHECK (true);
 
 -- 4. Enquiries: Public create
+DROP POLICY IF EXISTS "Anyone can send enquiry" ON enquiries;
 CREATE POLICY "Anyone can send enquiry" ON enquiries
     FOR INSERT WITH CHECK (true);
 
 -- 5. Feedback: Public create
+DROP POLICY IF EXISTS "Anyone can submit feedback" ON feedback;
 CREATE POLICY "Anyone can submit feedback" ON feedback
     FOR INSERT WITH CHECK (true);
 
