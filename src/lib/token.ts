@@ -3,7 +3,7 @@ const SESSION_SECRET =
   'dev-only-secret-change-before-production-do-not-use';
 
 if (process.env.NODE_ENV === 'production' && !process.env.ARTHA_SESSION_SECRET) {
-  console.error('[ARTHA_SESSION_SECRET] Warning: ARTHA_SESSION_SECRET environment variable is not defined in production. Session security is compromised.');
+  throw new Error('[FATAL] ARTHA_SESSION_SECRET environment variable is not defined in production. Application aborted.');
 }
 
 // ── Cross-runtime HMAC-SHA256 (Edge & Node compatible without Node crypto module) ──

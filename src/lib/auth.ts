@@ -20,7 +20,7 @@ const SESSION_SECRET =
   'dev-only-secret-change-before-production-do-not-use';
 
 const ADMIN_SECRET =
-  process.env.ARTHA_ADMIN_SECRET || 'Artha#SecOps$2026!MasterAdmin';
+  process.env.ARTHA_ADMIN_SECRET || 'dev-only-admin-secret-change-in-production';
 
 if (process.env.NODE_ENV === 'production' && !process.env.ARTHA_SESSION_SECRET) {
   throw new Error('[FATAL] ARTHA_SESSION_SECRET environment variable is not defined in production. Application aborted.');
@@ -132,7 +132,7 @@ export async function createSupplierSession(
 
 export async function createAdminSession(secret: string): Promise<string | null> {
   const cleanSecret = (secret || '').trim();
-  const validSecret = process.env.ARTHA_ADMIN_SECRET || 'Artha#SecOps$2026!MasterAdmin';
+  const validSecret = process.env.ARTHA_ADMIN_SECRET || 'dev-only-admin-secret-change-in-production';
 
   if (!safeCompare(cleanSecret, validSecret)) return null;
 
