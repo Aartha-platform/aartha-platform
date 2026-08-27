@@ -43,9 +43,11 @@ async function runLiveVerification() {
   console.log(`  Supabase URL: ${supabaseUrl || 'MISSING ❌'}`);
   console.log(`  Supabase Secret Key: ${supabaseKey ? 'SET (' + supabaseKey.slice(0, 12) + '...)' : 'MISSING ❌'}`);
 
-  if (!supabaseUrl || !supabaseKey || supabaseUrl.includes('placeholder')) {
-    console.error('\n❌ ABORTED: Missing live Supabase credentials.');
-    console.error('Please populate .env.local with NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_SECRET_KEY).');
+  if (!supabaseUrl || !supabaseKey || supabaseUrl.includes('placeholder') || supabaseUrl.includes('your-project')) {
+    console.error('\n❌ ABORTED: Missing live Supabase credentials in .env.local.');
+    console.error('Please open .env.local and set:');
+    console.error('  NEXT_PUBLIC_SUPABASE_URL=https://igprhtpjqbjwcbsnllcy.supabase.co');
+    console.error('  SUPABASE_SECRET_KEY=sb_secret_...');
     process.exit(1);
   }
   console.log('  ✓ PASS: Configuration parameters detected.');
