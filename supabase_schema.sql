@@ -346,9 +346,13 @@ DROP POLICY IF EXISTS "Anyone can submit feedback" ON feedback;
 CREATE POLICY "Anyone can submit feedback" ON feedback
     FOR INSERT WITH CHECK (true);
 
--- 6. Storage Buckets Setup Note:
--- Create private storage buckets in Supabase Storage UI:
--- - 'factory-documents'
--- - 'audit-evidence'
--- - 'rfq-attachments'
--- - 'commercial-documents'
+-- 6. Role Permissions & Privileges (PostgREST API Roles)
+GRANT USAGE ON SCHEMA public TO anon, authenticated, service_role;
+GRANT ALL ON ALL TABLES IN SCHEMA public TO postgres, anon, authenticated, service_role;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO postgres, anon, authenticated, service_role;
+GRANT ALL ON ALL ROUTINES IN SCHEMA public TO postgres, anon, authenticated, service_role;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO postgres, anon, authenticated, service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO postgres, anon, authenticated, service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON ROUTINES TO postgres, anon, authenticated, service_role;
+
