@@ -192,11 +192,11 @@ export default function AutoTranslationBridge() {
         aria-hidden="true"
       />
 
-      {/* Load Translation Engine asynchronously */}
+      {/* Load Translation Engine lazily in background without blocking UI */}
       <Script
         id="google-translate-script"
         src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
-        strategy="afterInteractive"
+        strategy="lazyOnload"
       />
     </>
   );

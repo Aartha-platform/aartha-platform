@@ -18,45 +18,73 @@ interface UseSessionResult {
   logout: () => Promise<void>;
 }
 
+let cachedUser: SessionUser | null = null;
+let activeSessionPromise: Promise<SessionUser> | null = null;
+let lastFetchedAt = 0;
+const CACHE_TTL_MS = 60 * 1000; // 1 minute in-memory TTL
+
+async function fetchSessionDeduplicated(): Promise<SessionUser> {
+  const now = Date.now();
+  if (cachedUser && (now - lastFetchedAt) < CACHE_TTL_MS) {
+    return cachedUser;
+  }
+  if (activeSessionPromise) {
+    return activeSessionPromise;
+  }
+
+  activeSessionPromise = fetch('/api/auth/me', { credentials: 'same-origin' })
+    .then(res => {
+      if (!res.ok) {
+        if (res.status === 401 && typeof window !== 'undefined') {
+          const pathname = window.location.pathname;
+          const isProtectedRoute =
+            pathname.startsWith('/dashboard') ||
+            pathname.startsWith('/supplier-dashboard') ||
+            pathname.startsWith('/admin') ||
+            pathname.startsWith('/checkout');
+
+          if (isProtectedRoute) {
+            window.location.href = `/signin?redirect=${encodeURIComponent(pathname)}&error=session_expired`;
+          }
+        }
+        return { authenticated: false };
+      }
+      return res.json();
+    })
+    .then((data: SessionUser) => {
+      cachedUser = data;
+      lastFetchedAt = Date.now();
+      return data;
+    })
+    .catch(() => {
+      const fallback = { authenticated: false };
+      cachedUser = fallback;
+      return fallback;
+    })
+    .finally(() => {
+      activeSessionPromise = null;
+    });
+
+  return activeSessionPromise;
+}
+
 export function useSession(): UseSessionResult {
-  const [user, setUser] = useState<SessionUser | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<SessionUser | null>(cachedUser);
+  const [loading, setLoading] = useState(cachedUser === null);
 
   const checkSession = () => {
-    fetch('/api/auth/me', { credentials: 'same-origin' })
-      .then(res => {
-        if (!res.ok) {
-          if (res.status === 401) {
-            // If on a protected route, auto-redirect to signin on session loss
-            const pathname = window.location.pathname;
-            const isProtectedRoute =
-              pathname.startsWith('/dashboard') ||
-              pathname.startsWith('/supplier-dashboard') ||
-              pathname.startsWith('/admin') ||
-              pathname.startsWith('/checkout');
-
-            if (isProtectedRoute) {
-              window.location.href = `/signin?redirect=${encodeURIComponent(pathname)}&error=session_expired`;
-            }
-          }
-          return { authenticated: false };
-        }
-        return res.json();
-      })
-      .then((data: SessionUser) => {
-        setUser(data);
-      })
-      .catch(() => {
-        setUser({ authenticated: false });
-      })
-      .finally(() => setLoading(false));
+    fetchSessionDeduplicated().then(data => {
+      setUser(data);
+      setLoading(false);
+    });
   };
 
   useEffect(() => {
     checkSession();
-
-    // Check session every 5 minutes in background
-    const interval = setInterval(checkSession, 5 * 60 * 1000);
+    const interval = setInterval(() => {
+      lastFetchedAt = 0; // force fresh check
+      checkSession();
+    }, 5 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
 
