@@ -96,45 +96,32 @@ export default function ForBuyersPage() {
       name: 'Free Sourcing',
       price: '$0',
       period: 'Forever',
-      desc: 'Search directories, view verified tags, and submit basic inquiries.',
-      buttonText: 'Start Sourcing',
-      popular: false,
-      features: [
-        'Full access to verified supplier directory',
-        'Submit up to 3 RFQs / month',
-        'Basic 2-supplier side-by-side comparison',
-        'View supplier geolocated GPS trust scores',
-        'Email support (48-hour response time)'
-      ]
-    },
-    {
-      name: 'Sourcing Pro',
-      price: billingCycle === 'yearly' ? '$41.50' : '$49',
-      period: '/ month',
-      desc: 'Accelerated sourcing toolkit for active global trade procurement professionals.',
-      buttonText: 'Go Sourcing Pro',
+      desc: 'Search verified factories, inspect compliance credentials, and submit manufacturing RFQs.',
+      buttonText: 'Start Sourcing Free',
+      buttonHref: '/rfq',
       popular: true,
       features: [
-        'Unlimited RFQs submission & priority routing',
-        '5-way Supplier Comparison Matrix dashboard',
-        'Download complete physical verification GPS log audits',
-        'Organize and save custom supplier shortlists',
-        'Logistics & sample shipping quotation desk access'
+        'Full access to verified supplier directory',
+        'Submit manufacturing & sourcing RFQs',
+        'Direct communication with verified suppliers',
+        'Document dossier & certificate inspection',
+        'Standard response turnaround'
       ]
     },
     {
       name: 'Enterprise Sourcing',
-      price: billingCycle === 'yearly' ? '$166.50' : '$199',
-      period: '/ month',
-      desc: 'Enterprise-grade supplier compliance, custom sourcing management, and team tools.',
-      buttonText: 'Verify Enterprise',
+      price: 'Custom',
+      period: 'Tailored',
+      desc: 'Dedicated sourcing coordination, custom audit requests, and high-volume RFQ management.',
+      buttonText: 'Talk to Trade Desk',
+      buttonHref: '/contact?subject=Enterprise+Sourcing',
       popular: false,
       features: [
-        'Multi-user team workspace (up to 10 buyer seats)',
-        'Dedicated human sourcing manager at Aartha India',
-        'Compliance certificate vault & automated expiration tracking',
-        'Real-time Port Log data & Mandi commodity price indexes',
-        'Corporate invoice options with PO-based billing'
+        'Dedicated human sourcing coordinator',
+        'Custom factory inspection coordination',
+        'High-volume multi-category RFQ routing',
+        'Supplier background compliance validation',
+        'Priority trade support desk'
       ]
     }
   ];
@@ -319,63 +306,39 @@ export default function ForBuyersPage() {
             <p className="text-xs text-text-muted dark:text-slate-400 max-w-md mx-auto">
               Select a workspace plan built for your procurement volume. Cancel or adjust anytime.
             </p>
-
-            {/* Monthly / Yearly Toggle */}
-            <div className="inline-flex items-center justify-center bg-white dark:bg-navy-dark border border-black/10 dark:border-white/10 p-1.5 rounded-2xl shadow-premium-sm gap-1 mx-auto mt-4">
-              <button
-                type="button"
-                onClick={() => setBillingCycle('yearly')}
-                className={`px-4 py-2 text-xs font-bold rounded-xl transition-all duration-200 cursor-pointer select-none ${
-                  billingCycle === 'yearly'
-                    ? 'bg-amber-500 text-white shadow-sm'
-                    : 'text-text-secondary hover:text-text-primary dark:text-slate-300'
-                }`}
-              >
-                Yearly Billing
-                <span className="ml-1 text-[9px] bg-emerald-500 text-white px-1.5 py-0.5 rounded-md font-extrabold uppercase">Save ~15%</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setBillingCycle('monthly')}
-                className={`px-4 py-2 text-xs font-bold rounded-xl transition-all duration-200 cursor-pointer select-none ${
-                  billingCycle === 'monthly'
-                    ? 'bg-amber-500 text-white shadow-sm'
-                    : 'text-text-secondary hover:text-text-primary dark:text-slate-300'
-                }`}
-              >
-                Monthly Billing
-              </button>
-            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto items-stretch">
             {buyerTiers.map((plan) => (
               <div 
                 key={plan.name}
-                className={`bg-white dark:bg-navy-light border rounded-2xl p-6 space-y-5 relative flex flex-col justify-between transition-all duration-200 ${
+                className={`bg-white dark:bg-navy-light border rounded-2xl p-6 space-y-6 relative flex flex-col justify-between transition-all duration-200 ${
                   plan.popular 
-                    ? 'border-amber-500 shadow-xl ring-1 ring-amber-500/50 scale-[1.02]' 
+                    ? 'border-amber-500 shadow-xl ring-2 ring-amber-500/25 scale-[1.02]' 
                     : 'border-black/10 dark:border-white/10 shadow-sm'
                 }`}
               >
                 {plan.popular && (
-                  <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-amber-500 text-white text-[9px] font-black uppercase tracking-widest px-4 py-1 rounded-full shadow-md">
-                    Most Popular
+                  <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-amber-500 text-white text-[9px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full shadow-md">
+                    Recommended
                   </span>
                 )}
 
-                <div className="space-y-3">
-                  <h3 className="font-extrabold text-xs text-text-primary dark:text-white uppercase tracking-wider">{plan.name}</h3>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-2xl font-black text-amber-500">{plan.price}</span>
-                    <span className="text-[10px] text-text-muted dark:text-slate-400 font-bold uppercase tracking-wider">{plan.period}</span>
+                <div className="space-y-4">
+                  <div className="space-y-1">
+                    <h3 className="font-extrabold text-sm text-text-primary dark:text-white uppercase tracking-wider">{plan.name}</h3>
+                    <p className="text-xs text-text-secondary dark:text-slate-300 leading-normal min-h-[32px]">{plan.desc}</p>
                   </div>
-                  <p className="text-[11px] text-text-secondary dark:text-slate-300 leading-normal">{plan.desc}</p>
 
-                  <ul className="space-y-2 pt-3 border-t border-black/5 dark:border-white/10 text-[11px] leading-snug">
+                  <div className="flex items-baseline gap-1.5 py-2 border-y border-black/5 dark:border-white/10">
+                    <span className="text-2xl sm:text-3xl font-black text-amber-500">{plan.price}</span>
+                    <span className="text-[11px] text-text-muted dark:text-slate-400 font-bold uppercase tracking-wider">/ {plan.period}</span>
+                  </div>
+
+                  <ul className="space-y-2.5 pt-2 text-xs leading-snug">
                     {plan.features.map((f, fIdx) => (
                       <li key={fIdx} className="flex items-start gap-2 text-text-secondary dark:text-slate-300">
-                        <CheckCircle2 size={13} className="text-emerald-500 flex-shrink-0 mt-0.5" />
+                        <CheckCircle2 size={14} className="text-emerald-500 flex-shrink-0 mt-0.5" />
                         <span>{f}</span>
                       </li>
                     ))}
@@ -384,11 +347,11 @@ export default function ForBuyersPage() {
 
                 <div className="pt-4">
                   <Link
-                    href={plan.price === '$0' ? '/signup' : '/dashboard?upgrade=true'}
-                    className={`w-full py-2.5 rounded-xl text-xs font-extrabold uppercase tracking-wider text-center block transition-all ${
+                    href={plan.buttonHref}
+                    className={`w-full py-3 rounded-xl text-xs font-black uppercase tracking-widest text-center block transition-all ${
                       plan.popular
                         ? 'btn-amber shadow-md'
-                        : 'border border-black/10 dark:border-white/20 text-navy dark:text-white hover:bg-black/5 dark:hover:bg-white/5'
+                        : 'border border-black/15 dark:border-white/20 text-navy dark:text-white hover:bg-black/5 dark:hover:bg-white/5'
                     }`}
                   >
                     {plan.buttonText}
