@@ -75,6 +75,8 @@ export default function SignUpPage() {
   // Turnstile Injection
   useEffect(() => {
     if (otpSent) return; // No need for Turnstile during OTP input
+    const sitekey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+    if (!sitekey) return;
 
     if (!document.getElementById('turnstile-script')) {
       const script = document.createElement('script');
@@ -86,8 +88,6 @@ export default function SignUpPage() {
     }
 
     const checkTurnstile = setInterval(() => {
-      // Use standard testing sitekey 2x00000000000000000000AB if env var not set (always passes on localhost)
-      const sitekey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '2x00000000000000000000AB';
       if ((window as any).turnstile && turnstileRef.current) {
         clearInterval(checkTurnstile);
         try {

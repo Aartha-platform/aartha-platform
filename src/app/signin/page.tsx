@@ -55,7 +55,8 @@ export default function SignInPage() {
 
   // Turnstile Injection
   useEffect(() => {
-    if (showAdminLogin) return;
+    const sitekey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+    if (!sitekey) return;
 
     if (!document.getElementById('turnstile-script')) {
       const script = document.createElement('script');
@@ -67,7 +68,6 @@ export default function SignInPage() {
     }
 
     const checkTurnstile = setInterval(() => {
-      const sitekey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '2x00000000000000000000AB';
       if ((window as any).turnstile && turnstileRef.current) {
         clearInterval(checkTurnstile);
         try {
