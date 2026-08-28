@@ -170,10 +170,6 @@ export default function Header() {
               )
             )}
             <div className="pt-3 flex flex-col gap-2 border-t border-black/5 dark:border-white/10 mt-2">
-              <div className="flex items-center justify-between px-1 py-1">
-                <span className="text-xs font-semibold text-text-secondary dark:text-slate-400">Language:</span>
-                <LanguageToggle className="bg-slate-800 text-white" />
-              </div>
               {isAuthenticated ? (
                 <>
                   <Link

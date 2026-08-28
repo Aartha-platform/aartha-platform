@@ -1,31 +1,39 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { FeedbackSubmissionSchema } from '@/types/feedback';
+import { OpenFeedbackSchema, FeedbackSubmissionSchema } from '@/types/feedback';
 import { saveFeedback } from '@/lib/feedbackStore';
 import { saveAuditEvent } from '@/lib/storeAdapter';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const parsed = FeedbackSubmissionSchema.safeParse(body);
+    
+    // Support open feedback format first, fallback to structured legacy format
+    const openParsed = OpenFeedbackSchema.safeParse(body);
+    const legacyParsed = FeedbackSubmissionSchema.safeParse(body);
 
-    if (!parsed.success) {
+    if (!openParsed.success && !legacyParsed.success) {
       return NextResponse.json(
-        { error: 'Validation failed.', details: parsed.error.flatten().fieldErrors },
+        { 
+          error: 'Please provide a message describing your experience.',
+          details: openParsed.error.flatten().fieldErrors 
+        },
         { status: 400 }
       );
     }
+
+    const payload = openParsed.success ? openParsed.data : legacyParsed.data!;
 
     const userAgent = request.headers.get('user-agent') || 'unknown';
     const referrer = request.headers.get('referer') || 'unknown';
     const ip = request.headers.get('x-forwarded-for') || (request as any).ip || undefined;
 
-    const record = await saveFeedback(parsed.data, userAgent, referrer, ip);
+    const record = await saveFeedback(payload, userAgent, referrer, ip);
 
-    // Save to global audit log if available
+    // Save to global audit log
     try {
       saveAuditEvent({
         action: 'FEEDBACK_SUBMITTED',
-        details: `Feedback ${record.referenceId} submitted by user category: ${record.userCategory} for industry: ${record.industry}`,
+        details: `Feedback ${record.referenceId} submitted (${record.userCategory}): "${record.message.slice(0, 80)}"`,
       });
     } catch (auditError) {
       console.error('Failed to save audit log:', auditError);
@@ -35,6 +43,7 @@ export async function POST(request: NextRequest) {
       success: true,
       referenceId: record.referenceId,
       submittedAt: record.submittedAt,
+      aiAnalysis: record.aiAnalysis,
     }, { status: 201 });
   } catch (error) {
     console.error('Error submitting feedback:', error);

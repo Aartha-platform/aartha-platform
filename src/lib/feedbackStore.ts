@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-import { FeedbackSubmission, FeedbackSubmissionInput, FeedbackStats } from '@/types/feedback';
+import { FeedbackSubmission, OpenFeedbackInput, FeedbackSubmissionInput, FeedbackStats, AIFeedbackAnalysis } from '@/types/feedback';
 import { supabase } from './supabaseClient';
 
 const isSupabaseEnabled = !!(
@@ -56,17 +56,86 @@ export function generateFeedbackRefId(): string {
   return `FB-${year}${month}${day}-${rand}`;
 }
 
+/**
+ * Intelligent Structured Feedback Analyzer
+ * Categorizes raw feedback messages into actionable product issues without altering product autonomously.
+ */
+export function analyzeFeedbackText(text: string, role: string): AIFeedbackAnalysis {
+  const lower = text.toLowerCase();
+  
+  // Basic heuristic classifier
+  let sentiment: 'positive' | 'negative' | 'neutral' | 'mixed' = 'neutral';
+  if (lower.includes('great') || lower.includes('easy') || lower.includes('love') || lower.includes('good') || lower.includes('excellent')) {
+    sentiment = 'positive';
+  }
+  if (lower.includes('confused') || lower.includes('broken') || lower.includes('hard') || lower.includes('slow') || lower.includes('bug') || lower.includes('error') || lower.includes('cant') || lower.includes("can't") || lower.includes('failed')) {
+    sentiment = sentiment === 'positive' ? 'mixed' : 'negative';
+  }
+
+  const issues: Array<{ problem: string; category: string; severity: string }> = [];
+
+  if (lower.includes('verification') || lower.includes('badge') || lower.includes('gst') || lower.includes('iec')) {
+    issues.push({
+      category: 'supplier_verification',
+      problem: 'Verification process or badge status feedback',
+      severity: 'medium',
+    });
+  }
+  if (lower.includes('rfq') || lower.includes('quote') || lower.includes('price') || lower.includes('lead')) {
+    issues.push({
+      category: 'rfq_matching',
+      problem: 'RFQ sourcing or quote distribution feedback',
+      severity: 'high',
+    });
+  }
+  if (lower.includes('slow') || lower.includes('lag') || lower.includes('mobile') || lower.includes('load')) {
+    issues.push({
+      category: 'performance_ui',
+      problem: 'UI latency or mobile viewport experience',
+      severity: 'medium',
+    });
+  }
+  if (lower.includes('login') || lower.includes('otp') || lower.includes('signup') || lower.includes('register')) {
+    issues.push({
+      category: 'authentication',
+      problem: 'Sign-in, registration or OTP receipt feedback',
+      severity: 'high',
+    });
+  }
+
+  const primaryCategory = issues[0]?.category || 'general_feedback';
+  const severity = issues.some(i => i.severity === 'high') ? 'high' : 'medium';
+
+  return {
+    sentiment,
+    summary: text.slice(0, 160),
+    category: primaryCategory,
+    severity,
+    issues,
+    suggested_area: primaryCategory,
+  };
+}
+
 export async function saveFeedback(
-  input: FeedbackSubmissionInput,
+  input: OpenFeedbackInput | FeedbackSubmissionInput,
   userAgent: string,
   referrer: string,
   ip?: string
 ): Promise<FeedbackSubmission> {
+  const messageText = 'message' in input ? input.message : (input.problemDescription || '');
+  const userRole = 'userRole' in input ? input.userRole : (input.userCategory || 'other');
+  const contactInfo = ('contactInfo' in input ? input.contactInfo : 'email' in input ? input.email : '') || '';
+
+  const aiAnalysis = analyzeFeedbackText(messageText, userRole);
+
   const newSubmission: FeedbackSubmission = {
-    ...input,
     id: crypto.randomUUID(),
     referenceId: generateFeedbackRefId(),
+    userCategory: userRole,
+    message: messageText,
+    contactInfo: contactInfo || undefined,
     submittedAt: new Date().toISOString(),
+    aiAnalysis,
     metadata: {
       userAgent,
       referrer,
@@ -78,12 +147,12 @@ export async function saveFeedback(
     try {
       await supabase.from('feedback').insert([{
         id: newSubmission.id,
-        category: newSubmission.userCategory,
-        rating: newSubmission.urgency === 'critical' ? 5 : newSubmission.urgency === 'high' ? 4 : 3,
-        role: newSubmission.userCategory,
-        problems: newSubmission.painPoints,
-        comments: newSubmission.problemDescription,
-        email: newSubmission.contactInfo || null,
+        category: aiAnalysis.category || userRole,
+        rating: aiAnalysis.sentiment === 'positive' ? 5 : aiAnalysis.sentiment === 'negative' ? 2 : 4,
+        role: userRole,
+        problems: aiAnalysis.issues.map(i => i.problem),
+        comments: messageText,
+        email: contactInfo || null,
         created_at: newSubmission.submittedAt,
       }]);
     } catch (err) {
@@ -103,11 +172,8 @@ export async function getFeedbackStats(): Promise<FeedbackStats> {
   const stats: FeedbackStats = {
     totalCount: 0,
     byCategory: {},
-    byIndustry: {},
-    byUrgency: {},
+    byRole: {},
   };
-
-  let submissions: FeedbackSubmission[] = [];
 
   if (isSupabaseEnabled) {
     try {
@@ -115,8 +181,10 @@ export async function getFeedbackStats(): Promise<FeedbackStats> {
       if (!error && data) {
         stats.totalCount = data.length;
         data.forEach((row: any) => {
-          const cat = row.category || 'other';
+          const cat = row.category || 'general';
+          const r = row.role || 'other';
           stats.byCategory[cat] = (stats.byCategory[cat] || 0) + 1;
+          stats.byRole[r] = (stats.byRole[r] || 0) + 1;
         });
         return stats;
       }
@@ -125,14 +193,12 @@ export async function getFeedbackStats(): Promise<FeedbackStats> {
     }
   }
 
-  submissions = readFeedbackStore();
+  const submissions = readFeedbackStore();
   stats.totalCount = submissions.length;
   submissions.forEach((item) => {
-    stats.byCategory[item.userCategory] = (stats.byCategory[item.userCategory] || 0) + 1;
-    stats.byIndustry[item.industry] = (stats.byIndustry[item.industry] || 0) + 1;
-    stats.byUrgency[item.urgency] = (stats.byUrgency[item.urgency] || 0) + 1;
+    stats.byCategory[item.aiAnalysis?.category || 'general'] = (stats.byCategory[item.aiAnalysis?.category || 'general'] || 0) + 1;
+    stats.byRole[item.userCategory] = (stats.byRole[item.userCategory] || 0) + 1;
   });
 
   return stats;
 }
-

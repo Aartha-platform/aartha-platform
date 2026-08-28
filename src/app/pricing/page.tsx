@@ -2,153 +2,117 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ShieldCheck, CheckCircle2, Star, Sparkles, Building2, Globe, FileText, Lock, Users, HelpCircle, ArrowRight } from 'lucide-react';
+import { ShieldCheck, CheckCircle2, Sparkles, Building2, Globe, HelpCircle, ArrowRight, Clock } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 
 export default function PricingPage() {
   const { t } = useTranslation();
-  const [userRole, setUserRole] = useState<'buyer' | 'supplier'>('buyer');
-  const [billingCycle, setBillingCycle] = useState<'yearly' | 'monthly_quarterly'>('yearly');
+  const [userRole, setUserRole] = useState<'buyer' | 'supplier'>('supplier');
 
-  // Supplier Tiers
+  // Honest Supplier Tiers (3)
   const supplierTiers = [
     {
-      name: 'Basic Free',
+      name: 'Join Aartha',
       price: '₹0',
       period: 'Forever',
-      desc: 'Basic directory listing to establish your online presence in GIDC clusters.',
-      buttonText: 'List My Factory',
+      desc: 'Create your factory profile, upload business documentation, and begin onboarding.',
+      buttonText: 'Start Free Listing',
+      buttonHref: '/get-listed',
       popular: false,
+      isWaitlist: false,
       features: [
-        'GSTIN & IEC registration verification',
-        'Basic directory profile page',
-        'GIDC zone mapping & classification',
-        'Standard response tracking',
-        'View 3 incoming RFQs / month'
+        'Factory profile & industry classification',
+        'GSTIN & IEC document submission',
+        'Basic supplier dashboard access',
+        'Application status tracking',
+        'Standard email support'
       ]
     },
     {
-      name: 'Enhanced Profile',
-      price: billingCycle === 'yearly' ? '₹999' : '₹299',
-      period: billingCycle === 'yearly' ? '/ year' : '/ quarter',
-      desc: 'Active GSTIN & bank penny-drop validation fee + self-recorded video walkthrough review.',
-      buttonText: 'Apply for Enhanced Review',
-      popular: false,
-      features: [
-        'Active GSTIN & IEC API validation (Tier 1)',
-        'Bank account penny drop verification',
-        'Self-recorded video walkthrough with AI validation',
-        'Enhanced verification badge showing trust status',
-        'Access 6 incoming RFQs / month + reply to 4'
-      ]
-    },
-    {
-      name: 'Verification Review (Tier 3)',
-      price: billingCycle === 'yearly' ? '₹9,999' : '₹2,999',
-      period: billingCycle === 'yearly' ? '/ year' : '/ quarter',
-      desc: 'Covers manual document authentication and scheduled live facility video audit.',
+      name: 'Verified Supplier',
+      price: 'Free Review',
+      period: 'For Early Factories',
+      desc: 'Get discovered by international & domestic buyers with an official Aartha Verified Badge.',
       buttonText: 'Apply for Verification',
+      buttonHref: '/get-listed',
       popular: true,
+      isWaitlist: false,
       features: [
-        'Full document verification (Udyam, Trademarks, Licenses)',
-        'Scheduled live video walkthrough audit with regional staff',
-        'Verification of directors & active GST/IEC licenses',
-        'Earned verified supplier badge (when credentials pass)',
-        'Access 15 RFQs / month + reply to 10'
+        'Earned Aartha Verified Supplier Badge',
+        'Public directory active listing',
+        'Direct buyer enquiry routing',
+        'RFQ matching algorithm eligibility',
+        'Direct buyer contact desk access'
       ]
     },
     {
-      name: 'Export Pro (Physical Audit)',
-      price: billingCycle === 'yearly' ? '₹29,999' : '₹8,999',
-      period: billingCycle === 'yearly' ? '/ year' : '/ quarter',
-      desc: 'Covers on-site physical GPS plant inspection and continuous compliance monitoring.',
-      buttonText: 'Apply for Plant Audit',
+      name: 'Priority Growth',
+      price: 'Coming Soon',
+      period: 'Marketplace Phase',
+      desc: 'Advanced visibility, priority RFQ routing, and dedicated trade desk representation.',
+      buttonText: 'Join Waitlist',
+      buttonHref: '/contact?subject=Priority+Supplier+Waitlist',
       popular: false,
+      isWaitlist: true,
       features: [
-        'On-site physical plant inspection & GPS audit (Gujarat clusters)',
-        'AI-driven global buyer match routing',
-        'WHO-GMP / ISO standard certificate audits',
-        'Auto-translate profile (English, German, French, Arabic)',
-        'Access all RFQs with unlimited direct responses'
-      ]
-    },
-    {
-      name: 'Strategic Partner',
-      price: billingCycle === 'yearly' ? '₹59,999' : '₹17,999',
-      period: billingCycle === 'yearly' ? '/ year' : '/ quarter',
-      desc: 'Full-service co-marketing representation and custom integration.',
-      buttonText: 'Become Partner',
-      popular: false,
-      features: [
-        'Dedicated human Account Manager & Trade Desk representative',
-        'Co-marketing & direct representation at global trade fairs',
-        'Direct video introduction calls with verified buyers',
-        'Custom API integration with factory ERP systems',
-        'Priority dispute resolution & trade assurance protection'
+        'Top-tier corridor search visibility',
+        'Priority RFQ matching distribution',
+        'Dedicated Trade Desk coordinator',
+        'Multi-category product showcases',
+        'Early access to export initiatives'
       ]
     }
   ];
 
-  // Buyer Tiers
+  // Honest Buyer Tiers (2)
   const buyerTiers = [
     {
       name: 'Free Sourcing',
       price: '$0',
       period: 'Forever',
-      desc: 'Search directories, view verified tags, and submit basic inquiries.',
-      buttonText: 'Start Sourcing',
-      popular: false,
+      desc: 'Search verified factories, inspect compliance credentials, and submit manufacturing RFQs.',
+      buttonText: 'Start Sourcing Free',
+      buttonHref: '/rfq',
+      popular: true,
+      isWaitlist: false,
       features: [
         'Full access to verified supplier directory',
-        'Submit up to 3 RFQs / month',
-        'Basic 2-supplier side-by-side comparison',
-        'View supplier geolocated GPS trust scores',
-        'Email support (48-hour response time)'
-      ]
-    },
-    {
-      name: 'Sourcing Pro',
-      price: billingCycle === 'yearly' ? '$41.50' : '$49',
-      period: '/ month',
-      desc: 'Accelerated sourcing toolkit for active global trade procurement professionals.',
-      buttonText: 'Go Sourcing Pro',
-      popular: true,
-      features: [
-        'Unlimited RFQs submission & priority routing',
-        '5-way Supplier Comparison Matrix dashboard',
-        'Download complete physical verification GPS log audits',
-        'Organize and save custom supplier shortlists',
-        'Logistics & sample shipping quotation desk access'
+        'Submit manufacturing & sourcing RFQs',
+        'Direct communication with verified suppliers',
+        'Document dossier & certificate inspection',
+        'Standard response turnaround'
       ]
     },
     {
       name: 'Enterprise Sourcing',
-      price: billingCycle === 'yearly' ? '$166.50' : '$199',
-      period: '/ month',
-      desc: 'Enterprise-grade supplier compliance, custom sourcing management, and team tools.',
-      buttonText: 'Verify Enterprise',
+      price: 'Custom',
+      period: 'Tailored',
+      desc: 'Dedicated sourcing coordination, custom audit requests, and high-volume RFQ management.',
+      buttonText: 'Talk to Trade Desk',
+      buttonHref: '/contact?subject=Enterprise+Sourcing',
       popular: false,
+      isWaitlist: false,
       features: [
-        'Multi-user team workspace (up to 10 buyer seats)',
-        'Dedicated human sourcing manager at Aartha India',
-        'Compliance certificate vault & automated expiration tracking',
-        'Real-time Port Log data & Mandi commodity price indexes',
-        'Corporate invoice options with PO-based billing'
+        'Dedicated human sourcing coordinator',
+        'Custom factory inspection coordination',
+        'High-volume multi-category RFQ routing',
+        'Supplier background compliance validation',
+        'Priority trade support desk'
       ]
     }
   ];
 
   // FAQs by Role
   const buyerFAQs = [
-    { q: 'Is it completely free to search for suppliers?', a: 'Yes. Global buyers can search the entire GIDC database and view active compliance credentials for free. Paid tiers are only required for unlimited RFQs, downloading verification logs, and dedicated human account coordination.' },
-    { q: 'What is the GPS verification audit report?', a: 'Every verified supplier undergoes a physical site audit by our local engineers. We verify their production capacity, document machinery, and record GPS coordinates from the plant floor. As a Pro Buyer, you can download these full PDF validation reports to bypass manual vetting.' },
-    { q: 'How does payment by PO invoice work?', a: 'For Enterprise Sourcing, we support payment by bank wire or corporate ACH. Simply choose "PO Invoice" in checkout and our support desk will contact you to establish PO billing cycles.' }
+    { q: 'Is it completely free to search and contact suppliers?', a: 'Yes. Global buyers can search the entire verified manufacturer database, inspect compliance credentials, and submit RFQs for free.' },
+    { q: 'How does Aartha verify manufacturers?', a: 'Every supplier profile is verified against official government registries (GSTIN, IEC) and verified business documents before receiving a Verified Badge.' },
+    { q: 'How do I request custom sourcing assistance?', a: 'You can submit an RFQ directly on our platform or contact our Sourcing Desk via WhatsApp or email for custom procurement coordination.' }
   ];
 
   const supplierFAQs = [
-    { q: 'Why is physical verification required?', a: 'Global buyers from Europe and the Americas require audited proof of manufacturing before requesting samples or closing deals. By physically auditing GIDC factories, we eliminate middleman agents and guarantee genuine deals to buyers, boosting your conversion.' },
-    { q: 'How do you prevent price wars unlike IndiaMART?', a: 'IndiaMART sells one lead to 40+ competitors, creating a race to the bottom. Aartha matches RFQs to a maximum of 3-5 verified manufacturers based on capacity, quality certifications, and proximity. Zero spam, zero middleman brokers.' },
-    { q: 'Can I choose to pay quarterly?', a: 'Yes. We support quarterly billing cycles to align with your factory’s cash flow and seasonal cycles. Selecting yearly billing saves you ~15% overall.' }
+    { q: 'Does listing my factory cost anything?', a: 'No. Listing your manufacturing business and submitting your verification documents is completely free during our launch phase.' },
+    { q: 'How do buyers find my factory?', a: 'Once verified, your profile appears in our public directory and is automatically matched with incoming buyer RFQs in your category.' },
+    { q: 'How does Aartha differ from lead-selling directories?', a: 'Unlike directories that sell one lead to dozens of competitors, Aartha routes genuine buyer RFQs directly to verified, capacity-matched manufacturers without spam.' }
   ];
 
   const activeFAQs = userRole === 'buyer' ? buyerFAQs : supplierFAQs;
@@ -161,36 +125,19 @@ export default function PricingPage() {
         <div className="max-w-4xl mx-auto space-y-6 relative z-10">
           <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-3.5 py-1.5 rounded-full text-xs font-bold text-amber-400">
             <Sparkles size={14} className="animate-pulse" />
-            <span>Fair, Transparent & ROI-Focused Pricing</span>
+            <span>Transparent & Grounded Partnership</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tight">
-            Flexible Plans Built For Real Trade
+            Clear, Value-Driven Access
           </h1>
           <p className="text-slate-300 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
-            Choose your corridor workspace settings. Scale features up or down as your export contracts or manufacturing requirements expand.
+            Direct, verified manufacturing infrastructure for global buyers and Indian factories. Zero hidden fees.
           </p>
 
           {/* Role selector tab */}
           <div className="inline-flex bg-white/5 border border-white/10 p-1.5 rounded-2xl shadow-premium-lg gap-1 mx-auto mt-4">
             <button
-              onClick={() => {
-                setUserRole('buyer');
-                setBillingCycle('yearly');
-              }}
-              className={`flex items-center gap-2 px-6 py-3 text-xs font-black uppercase tracking-wider rounded-xl transition-all duration-200 cursor-pointer select-none ${
-                userRole === 'buyer'
-                  ? 'bg-amber-500 text-white shadow-md'
-                  : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              <Globe size={14} />
-              I am a Global Buyer
-            </button>
-            <button
-              onClick={() => {
-                setUserRole('supplier');
-                setBillingCycle('yearly');
-              }}
+              onClick={() => setUserRole('supplier')}
               className={`flex items-center gap-2 px-6 py-3 text-xs font-black uppercase tracking-wider rounded-xl transition-all duration-200 cursor-pointer select-none ${
                 userRole === 'supplier'
                   ? 'bg-amber-500 text-white shadow-md'
@@ -198,7 +145,18 @@ export default function PricingPage() {
               }`}
             >
               <Building2 size={14} />
-              I am an Indian Manufacturer
+              I am a Manufacturer
+            </button>
+            <button
+              onClick={() => setUserRole('buyer')}
+              className={`flex items-center gap-2 px-6 py-3 text-xs font-black uppercase tracking-wider rounded-xl transition-all duration-200 cursor-pointer select-none ${
+                userRole === 'buyer'
+                  ? 'bg-amber-500 text-white shadow-md'
+                  : 'text-slate-300 hover:text-white'
+              }`}
+            >
+              <Globe size={14} />
+              I am a Buyer
             </button>
           </div>
         </div>
@@ -206,38 +164,6 @@ export default function PricingPage() {
 
       {/* Grid section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
-        {/* Billing cycle toggle */}
-        <div className="flex flex-col items-center space-y-2">
-          <div className="inline-flex bg-white dark:bg-navy border border-black/10 dark:border-white/10 p-1.5 rounded-2xl shadow-premium-sm gap-1 mx-auto">
-            <button
-              onClick={() => setBillingCycle('yearly')}
-              className={`px-5 py-2 text-xs font-bold rounded-xl transition-all duration-200 cursor-pointer select-none ${
-                billingCycle === 'yearly'
-                  ? 'bg-navy dark:bg-amber-500 text-white shadow-sm'
-                  : 'text-text-secondary hover:text-text-primary dark:text-slate-300'
-              }`}
-            >
-              Yearly billing
-              <span className="ml-1.5 text-[8px] bg-emerald-500 text-white px-1.5 py-0.5 rounded-md font-extrabold uppercase">Save ~15%</span>
-            </button>
-            <button
-              onClick={() => setBillingCycle('monthly_quarterly')}
-              className={`px-5 py-2 text-xs font-bold rounded-xl transition-all duration-200 cursor-pointer select-none ${
-                billingCycle === 'monthly_quarterly'
-                  ? 'bg-navy dark:bg-amber-500 text-white shadow-sm'
-                  : 'text-text-secondary hover:text-text-primary dark:text-slate-300'
-              }`}
-            >
-              {userRole === 'buyer' ? 'Monthly billing' : 'Quarterly billing'}
-            </button>
-          </div>
-          <p className="text-[10px] text-text-muted font-bold uppercase tracking-wider">
-            {userRole === 'buyer' 
-              ? 'Prices listed in USD. Enterprise accounts support corporate purchase orders.'
-              : 'Prices listed in INR. Verified review fees cover independent verification processing.'}
-          </p>
-        </div>
-
         {/* Golden Trust Rule Banner */}
         <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 max-w-4xl mx-auto flex items-center gap-3.5 text-left shadow-sm">
           <div className="bg-amber-500 text-white p-2.5 rounded-xl flex-shrink-0">
@@ -245,17 +171,17 @@ export default function PricingPage() {
           </div>
           <div>
             <div className="text-xs font-black uppercase tracking-wider text-amber-600 dark:text-amber-400">
-              Core Trust Guarantee: You pay for the audit. You cannot pay for the ranking.
+              Core Trust Guarantee: Verification is strictly earned, never bought.
             </div>
             <div className="text-xs text-text-secondary dark:text-slate-300 mt-0.5 leading-relaxed">
-              Aartha Quality Scores and Verification Badges are strictly earned from validated government registries (GSTIN/IEC) and physical factory audits. Subscription fees cover operational audit costs and platform capabilities — higher subscription tiers cannot buy verification status or match ranking.
+              Aartha Verification Badges are strictly granted through validated government registries (GSTIN/IEC) and document authentication. Paid or priority features never buy verification status or alter quality scores.
             </div>
           </div>
         </div>
 
         {/* Pricing Cards Grid */}
-        <div className={`grid grid-cols-1 gap-6 items-stretch max-w-7xl mx-auto ${
-          userRole === 'buyer' ? 'md:grid-cols-3' : 'sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5'
+        <div className={`grid grid-cols-1 gap-6 items-stretch max-w-5xl mx-auto ${
+          userRole === 'buyer' ? 'md:grid-cols-2' : 'md:grid-cols-3'
         }`}>
           {(userRole === 'buyer' ? buyerTiers : supplierTiers).map((plan) => (
             <div
@@ -268,25 +194,32 @@ export default function PricingPage() {
             >
               {plan.popular && (
                 <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-amber-500 text-white text-[9px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full shadow-md">
-                  Most Popular
+                  Recommended
                 </span>
               )}
 
               <div className="space-y-4">
                 <div className="space-y-1">
-                  <h3 className="font-extrabold text-xs text-text-primary dark:text-white uppercase tracking-wider">{plan.name}</h3>
-                  <p className="text-[11px] text-text-secondary dark:text-slate-300 leading-normal min-h-[32px]">{plan.desc}</p>
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-extrabold text-sm text-text-primary dark:text-white uppercase tracking-wider">{plan.name}</h3>
+                    {plan.isWaitlist && (
+                      <span className="text-[9px] font-bold uppercase bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-400 px-2 py-0.5 rounded-md">
+                        Waitlist
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-text-secondary dark:text-slate-300 leading-normal min-h-[32px]">{plan.desc}</p>
                 </div>
 
-                <div className="flex items-baseline gap-1 py-1.5 border-y border-black/5 dark:border-white/10">
-                  <span className="text-3xl font-black text-amber-500">{plan.price}</span>
-                  <span className="text-[10px] text-text-muted dark:text-slate-400 font-bold uppercase tracking-wider">{plan.period}</span>
+                <div className="flex items-baseline gap-1.5 py-2 border-y border-black/5 dark:border-white/10">
+                  <span className="text-2xl sm:text-3xl font-black text-amber-500">{plan.price}</span>
+                  <span className="text-[11px] text-text-muted dark:text-slate-400 font-bold uppercase tracking-wider">/ {plan.period}</span>
                 </div>
 
-                <ul className="space-y-2.5 pt-2 text-[11px] leading-snug">
+                <ul className="space-y-2.5 pt-2 text-xs leading-snug">
                   {plan.features.map((feature, fIdx) => (
                     <li key={fIdx} className="flex items-start gap-2 text-text-secondary dark:text-slate-300">
-                      <CheckCircle2 size={13} className="text-emerald-500 flex-shrink-0 mt-0.5" />
+                      <CheckCircle2 size={14} className="text-emerald-500 flex-shrink-0 mt-0.5" />
                       <span>{feature}</span>
                     </li>
                   ))}
@@ -295,7 +228,7 @@ export default function PricingPage() {
 
               <div className="pt-5">
                 <Link
-                  href={userRole === 'buyer' ? '/dashboard?upgrade=true' : '/get-listed'}
+                  href={plan.buttonHref}
                   className={`w-full py-3 rounded-xl text-xs font-black uppercase tracking-widest text-center block transition-all ${
                     plan.popular
                       ? 'btn-amber shadow-md'
@@ -311,13 +244,13 @@ export default function PricingPage() {
       </section>
 
       {/* Feature comparison table */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
         <div className="text-center space-y-2">
           <h2 className="text-2xl font-black uppercase tracking-tight text-text-primary dark:text-white">
-            Plan Feature Comparison Matrix
+            Plan Feature Overview
           </h2>
           <p className="text-xs text-text-muted dark:text-slate-400 max-w-md mx-auto">
-            Review detailed technical features and limits side-by-side.
+            Review capabilities and workflows side-by-side.
           </p>
         </div>
 
@@ -326,19 +259,17 @@ export default function PricingPage() {
             <table className="w-full text-left border-collapse text-xs">
               <thead>
                 <tr className="bg-slate-100 dark:bg-navy-light text-text-secondary dark:text-slate-300 font-extrabold uppercase tracking-wider border-b border-black/10 dark:border-white/10">
-                  <th className="p-4 w-1/4">Core Features</th>
+                  <th className="p-4 w-1/3">Feature</th>
                   {userRole === 'buyer' ? (
                     <>
                       <th className="p-4">Free Sourcing</th>
-                      <th className="p-4">Sourcing Pro</th>
                       <th className="p-4">Enterprise</th>
                     </>
                   ) : (
                     <>
-                      <th className="p-4">Basic Free</th>
-                      <th className="p-4">Enhanced Profile</th>
-                      <th className="p-4">Verified</th>
-                      <th className="p-4">Export Pro / Partner</th>
+                      <th className="p-4">Join Aartha</th>
+                      <th className="p-4">Verified Supplier</th>
+                      <th className="p-4">Priority Growth</th>
                     </>
                   )}
                 </tr>
@@ -347,59 +278,40 @@ export default function PricingPage() {
                 {userRole === 'buyer' ? (
                   <>
                     <tr>
-                      <td className="p-4 font-bold text-text-primary dark:text-white">Monthly RFQ Limit</td>
-                      <td className="p-4">3 submissions</td>
-                      <td className="p-4 text-emerald-600 dark:text-emerald-400 font-bold">Unlimited</td>
-                      <td className="p-4 text-emerald-600 dark:text-emerald-400 font-bold">Unlimited</td>
+                      <td className="p-4 font-bold text-text-primary dark:text-white">RFQ Submissions</td>
+                      <td className="p-4 text-emerald-600 dark:text-emerald-400 font-bold">Included</td>
+                      <td className="p-4 text-emerald-600 dark:text-emerald-400 font-bold">Included (Priority Routing)</td>
                     </tr>
                     <tr>
-                      <td className="p-4 font-bold text-text-primary dark:text-white">Supplier Verification Log Access</td>
-                      <td className="p-4">Basic score only</td>
-                      <td className="p-4">Full GPS PDF download</td>
-                      <td className="p-4 text-emerald-600 dark:text-emerald-400 font-bold">Full GPS PDF + Video verification</td>
+                      <td className="p-4 font-bold text-text-primary dark:text-white">Directory & Badge Access</td>
+                      <td className="p-4">Full Access</td>
+                      <td className="p-4">Full Access</td>
                     </tr>
                     <tr>
-                      <td className="p-4 font-bold text-text-primary dark:text-white">Compare Matrix Limit</td>
-                      <td className="p-4">2 suppliers</td>
-                      <td className="p-4">5 suppliers</td>
-                      <td className="p-4 text-emerald-600 dark:text-emerald-400 font-bold">Unlimited comparative dashboards</td>
-                    </tr>
-                    <tr>
-                      <td className="p-4 font-bold text-text-primary dark:text-white">Sourcing Assistance</td>
-                      <td className="p-4">Self-service directory</td>
-                      <td className="p-4">Auto-matching assist</td>
-                      <td className="p-4 text-emerald-600 dark:text-emerald-400 font-bold">Dedicated human Trade desk coordinator</td>
+                      <td className="p-4 font-bold text-text-primary dark:text-white">Sourcing Support</td>
+                      <td className="p-4">Self-Service + Chat</td>
+                      <td className="p-4 text-emerald-600 dark:text-emerald-400 font-bold">Dedicated Coordinator</td>
                     </tr>
                   </>
                 ) : (
                   <>
                     <tr>
-                      <td className="p-4 font-bold text-text-primary dark:text-white">Product Categories Listed</td>
-                      <td className="p-4">1 Category (10 items)</td>
-                      <td className="p-4">2 Categories (20 items)</td>
-                      <td className="p-4">5 Categories (50 items)</td>
-                      <td className="p-4 text-emerald-600 dark:text-emerald-400 font-bold">Unlimited product showcase</td>
+                      <td className="p-4 font-bold text-text-primary dark:text-white">Factory Listing</td>
+                      <td className="p-4">Standard Profile</td>
+                      <td className="p-4 text-emerald-600 dark:text-emerald-400 font-bold">Verified Directory Profile</td>
+                      <td className="p-4 text-emerald-600 dark:text-emerald-400 font-bold">Priority Featured Profile</td>
                     </tr>
                     <tr>
-                      <td className="p-4 font-bold text-text-primary dark:text-white">RFQ Inbox Allocation</td>
-                      <td className="p-4">View 3 RFQs / month</td>
-                      <td className="p-4">View 6 RFQs / respond to 4</td>
-                      <td className="p-4">View 15 RFQs / respond to 10</td>
-                      <td className="p-4 text-emerald-600 dark:text-emerald-400 font-bold">Unlimited RFQ response dashboard</td>
+                      <td className="p-4 font-bold text-text-primary dark:text-white">Verification Status</td>
+                      <td className="p-4">Under Review</td>
+                      <td className="p-4 text-emerald-600 dark:text-emerald-400 font-bold">Official Verified Badge</td>
+                      <td className="p-4 text-emerald-600 dark:text-emerald-400 font-bold">Official Verified Badge</td>
                     </tr>
                     <tr>
-                      <td className="p-4 font-bold text-text-primary dark:text-white">Verification Level</td>
-                      <td className="p-4">GSTIN & IEC verification</td>
-                      <td className="p-4">Digital + AI Video Verification</td>
-                      <td className="p-4 text-emerald-600 dark:text-emerald-400">GST + GPS Site Visit Log</td>
-                      <td className="p-4 text-emerald-600 dark:text-emerald-400 font-bold">GST + GPS + WHO-GMP/ISO Audit report</td>
-                    </tr>
-                    <tr>
-                      <td className="p-4 font-bold text-text-primary dark:text-white">Multi-Lingual translation</td>
-                      <td className="p-4">English only</td>
-                      <td className="p-4">English only</td>
-                      <td className="p-4">English & Hindi</td>
-                      <td className="p-4 text-emerald-600 dark:text-emerald-400 font-bold">English, German, French, Spanish, Arabic</td>
+                      <td className="p-4 font-bold text-text-primary dark:text-white">RFQ Matching</td>
+                      <td className="p-4">Standard</td>
+                      <td className="p-4 text-emerald-600 dark:text-emerald-400 font-bold">Active Matching</td>
+                      <td className="p-4 text-emerald-600 dark:text-emerald-400 font-bold">Priority Distribution</td>
                     </tr>
                   </>
                 )}
@@ -413,8 +325,8 @@ export default function PricingPage() {
       <section className="max-w-4xl mx-auto px-4 py-10 space-y-6">
         <div className="text-center space-y-1">
           <HelpCircle size={32} className="text-amber-500 mx-auto" />
-          <h2 className="text-2xl font-black uppercase tracking-tight text-text-primary dark:text-white">Pricing FAQs</h2>
-          <p className="text-xs text-text-muted dark:text-slate-400">Common questions regarding trade validation, invoices, and subscriptions.</p>
+          <h2 className="text-2xl font-black uppercase tracking-tight text-text-primary dark:text-white">Frequently Asked Questions</h2>
+          <p className="text-xs text-text-muted dark:text-slate-400">Common questions regarding verification, listings, and sourcing.</p>
         </div>
 
         <div className="space-y-4">
@@ -424,7 +336,7 @@ export default function PricingPage() {
                 <span className="w-1.5 h-1.5 bg-amber-500 rounded-full flex-shrink-0"></span>
                 {faq.q}
               </h3>
-              <p className="text-[11px] text-text-secondary dark:text-slate-300 leading-relaxed pl-3.5 border-l border-amber-500/30">
+              <p className="text-xs text-text-secondary dark:text-slate-300 leading-relaxed pl-3.5 border-l border-amber-500/30">
                 {faq.a}
               </p>
             </div>
@@ -436,22 +348,22 @@ export default function PricingPage() {
       <section className="max-w-5xl mx-auto px-4 pt-10">
         <div className="bg-gradient-to-r from-navy via-navy-light to-navy-dark rounded-3xl p-8 text-white relative overflow-hidden text-center space-y-4 border border-white/10 shadow-premium-lg">
           <div className="absolute inset-0 bg-gold/5 mix-blend-overlay pointer-events-none"></div>
-          <h3 className="text-xl md:text-2xl font-black uppercase tracking-wide">Ready to Modernize Your Trade Operations?</h3>
+          <h3 className="text-xl md:text-2xl font-black uppercase tracking-wide">Ready to Join India's Verified Manufacturing Network?</h3>
           <p className="text-xs text-slate-300 max-w-md mx-auto leading-relaxed">
-            Get started on our basic free account today to list your factory or search GIDC industrial directories. Zero credit card or verification fees needed.
+            Get started today to list your factory or submit a sourcing RFQ. Zero credit card or listing fees needed.
           </p>
           <div className="pt-2 flex flex-wrap justify-center gap-4">
             <Link
-              href="/signup"
-              className="bg-amber-555 bg-amber-500 hover:bg-amber-600 text-white font-extrabold uppercase tracking-wider text-xs px-8 py-3.5 rounded-xl shadow-md transition-colors"
+              href="/get-listed"
+              className="bg-amber-500 hover:bg-amber-600 text-white font-extrabold uppercase tracking-wider text-xs px-8 py-3.5 rounded-xl shadow-md transition-colors"
             >
-              Create Free Account
+              List Your Factory
             </Link>
             <Link
-              href="/contact"
+              href="/rfq"
               className="border border-white/20 hover:bg-white/5 font-extrabold uppercase tracking-wider text-xs px-8 py-3.5 rounded-xl transition-all"
             >
-              Talk to Sourcing Desk
+              Submit an RFQ
             </Link>
           </div>
         </div>

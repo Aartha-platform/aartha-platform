@@ -247,34 +247,16 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* ── Minimal Hubs & Compliance Row ──────────────────────────────────── */}
-      <div className="border-t border-white/[0.06] bg-white/[0.01] py-3.5 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-center gap-3 text-xs">
-          
-          {/* Hubs */}
-          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-2 gap-y-1 text-slate-400 text-[11px]">
-            <span className="text-slate-300 font-semibold">{t('footer_hubs_title')}</span>
-            {regionalHubs.map((hub, idx) => (
-              <span key={idx} className="inline-flex items-center">
-                <Link href={`/suppliers?search=${hub.query}`} className="hover:text-amber-400 transition-colors">
-                  {hub.name}
-                </Link>
-                {idx < regionalHubs.length - 1 && <span className="text-white/20 ml-2">·</span>}
-              </span>
-            ))}
-          </div>
-
-          {/* Seals */}
-          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px] text-slate-400 font-medium">
-            <span>{t('footer_seal_iso')}</span>
-            <span className="text-white/20">·</span>
-            <span>{t('footer_seal_gstin')}</span>
-            <span className="text-white/20">·</span>
-            <span>{t('footer_seal_iec')}</span>
-            <span className="text-white/20">·</span>
-            <span>{t('footer_seal_ssl')}</span>
-          </div>
-
+      {/* ── Minimal Compliance & Trust Seals Row ───────────────────────────── */}
+      <div className="border-t border-white/[0.06] bg-white/[0.01] py-3 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[11px] text-slate-400 font-medium">
+          <span>{t('footer_seal_iso')}</span>
+          <span className="text-white/20">·</span>
+          <span>{t('footer_seal_gstin')}</span>
+          <span className="text-white/20">·</span>
+          <span>{t('footer_seal_iec')}</span>
+          <span className="text-white/20">·</span>
+          <span>{t('footer_seal_ssl')}</span>
         </div>
       </div>
 
@@ -293,11 +275,6 @@ export default function Footer() {
             <Link href="/legal/cookie-policy" className="hover:text-slate-200 transition-colors">{t('footer_link_cookies')}</Link>
             <Link href="/legal/dispute-resolution" className="hover:text-slate-200 transition-colors">{t('footer_link_dispute')}</Link>
             <Link href="/sitemap.xml" className="hover:text-slate-200 transition-colors">{t('footer_link_sitemap')}</Link>
-          </div>
-
-          {/* Language Selector */}
-          <div className="flex items-center gap-2 pr-2 md:pr-10 lg:pr-2">
-            <LanguageToggle className="bg-slate-800/80 border-white/15 text-white shadow-xs text-xs" />
           </div>
 
         </div>

@@ -37,11 +37,6 @@ export default function AnnouncementBar() {
           >
             {t('nav_resources')}
           </Link>
-
-          <span className="text-white/20">|</span>
-
-          {/* Language Selector */}
-          <LanguageToggle className="bg-white/10 border-white/20 text-white" />
         </div>
       </div>
     </div>
