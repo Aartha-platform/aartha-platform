@@ -29,15 +29,13 @@ export async function POST(request: NextRequest) {
 
     const record = await saveFeedback(payload, userAgent, referrer, ip);
 
-    // Save to global audit log safely
-    try {
-      await saveAuditEvent({
-        action: 'FEEDBACK_SUBMITTED',
-        details: `Feedback ${record.referenceId} submitted (${record.userCategory}): "${record.message.slice(0, 80)}"`,
-      });
-    } catch (auditError) {
-      console.error('Failed to save audit log:', auditError);
-    }
+    // Save to global audit log (non-blocking)
+    saveAuditEvent({
+      action: 'FEEDBACK_SUBMITTED',
+      details: `Feedback ${record.referenceId} submitted (${record.userCategory}): "${record.message.slice(0, 80)}"`,
+    }).catch((auditErr: any) => {
+      console.warn('[Audit Warning] Non-critical feedback audit log notice:', auditErr?.message || auditErr);
+    });
 
     return NextResponse.json({
       success: true,
