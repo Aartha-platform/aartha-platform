@@ -69,12 +69,19 @@ export async function POST(request: NextRequest) {
     });
 
     // Trigger verification email using centralized template
-    const emailData = getOtpEmail(secureOtp, email);
-    await sendEmail({
-      to: email,
-      subject: emailData.subject,
-      html: emailData.html,
-    });
+    try {
+      const emailData = getOtpEmail(secureOtp, email);
+      const emailRes = await sendEmail({
+        to: email,
+        subject: emailData.subject,
+        html: emailData.html,
+      });
+      if (!emailRes.success) {
+        console.warn('[Register] Email dispatch returned false, check Resend API key / verified domain.');
+      }
+    } catch (emailErr) {
+      console.error('[Register] Email delivery failed non-fatally:', emailErr);
+    }
 
     // Only log OTP in development — NEVER in production logs
     if (process.env.NODE_ENV !== 'production') {
