@@ -8,12 +8,22 @@ import {
   Check, Mail, Phone, Building2, AlertTriangle, ArrowLeft
 } from 'lucide-react';
 import { isBusinessEmail } from '@/lib/validation';
+import { useSession, getDashboardPath } from '@/hooks/useSession';
 
 export default function SignInPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams?.get('redirect') || '/dashboard';
   const errorParam = searchParams?.get('error');
+
+  const { user, loading: sessionLoading } = useSession();
+
+  // Auto-redirect already authenticated users to dashboard
+  useEffect(() => {
+    if (!sessionLoading && user?.authenticated) {
+      router.replace(redirectTo || getDashboardPath(user.role));
+    }
+  }, [user, sessionLoading, router, redirectTo]);
 
   const [activeTab, setActiveTab] = useState<'buyer' | 'supplier'>('buyer');
 

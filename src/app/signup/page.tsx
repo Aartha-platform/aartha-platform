@@ -8,9 +8,18 @@ import {
   Building2, AlertTriangle, ArrowLeft, User, KeyRound, Check
 } from 'lucide-react';
 import { isBusinessEmail } from '@/lib/validation';
+import { useSession, getDashboardPath } from '@/hooks/useSession';
 
 export default function SignUpPage() {
   const router = useRouter();
+  const { user, loading: sessionLoading } = useSession();
+
+  // Auto-redirect already authenticated users to dashboard
+  useEffect(() => {
+    if (!sessionLoading && user?.authenticated) {
+      router.replace(getDashboardPath(user.role));
+    }
+  }, [user, sessionLoading, router]);
 
   // Registration state
   const [email, setEmail] = useState('');
