@@ -29,9 +29,9 @@ export async function POST(request: NextRequest) {
 
     const record = await saveFeedback(payload, userAgent, referrer, ip);
 
-    // Save to global audit log
+    // Save to global audit log safely
     try {
-      saveAuditEvent({
+      await saveAuditEvent({
         action: 'FEEDBACK_SUBMITTED',
         details: `Feedback ${record.referenceId} submitted (${record.userCategory}): "${record.message.slice(0, 80)}"`,
       });
@@ -45,8 +45,8 @@ export async function POST(request: NextRequest) {
       submittedAt: record.submittedAt,
       aiAnalysis: record.aiAnalysis,
     }, { status: 201 });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error submitting feedback:', error);
-    return NextResponse.json({ error: 'Server error occurred during submission.' }, { status: 500 });
+    return NextResponse.json({ error: error?.message || 'Server error occurred during submission.' }, { status: 500 });
   }
 }
