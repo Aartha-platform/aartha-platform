@@ -94,8 +94,11 @@ export async function POST(request: NextRequest) {
       verificationCodeNeeded: true,
       email,
     }, { status: 201 });
-  } catch (err) {
+  } catch (err: any) {
     console.error('Registration failed:', err);
-    return NextResponse.json({ error: 'Server error during registration.' }, { status: 500 });
+    return NextResponse.json({ 
+      error: 'Server error during registration.',
+      details: err?.message || String(err)
+    }, { status: 500 });
   }
 }
