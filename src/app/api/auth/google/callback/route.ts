@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
 
   const clientId = process.env.GOOGLE_CLIENT_ID;
   const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-  const redirectUri = process.env.GOOGLE_REDIRECT_URI || 'http://localhost:3000/api/auth/google/callback';
+  const redirectUri = process.env.GOOGLE_REDIRECT_URI || (process.env.NODE_ENV === 'production' ? 'https://aartha.site/api/auth/google/callback' : 'http://localhost:3000/api/auth/google/callback');
 
   if (error) {
     console.error('[Google OAuth Callback Error]:', error);

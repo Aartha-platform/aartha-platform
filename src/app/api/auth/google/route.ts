@@ -3,7 +3,7 @@ import crypto from 'crypto';
 
 export async function GET(request: NextRequest) {
   const clientId = process.env.GOOGLE_CLIENT_ID;
-  const redirectUri = process.env.GOOGLE_REDIRECT_URI || 'http://localhost:3000/api/auth/google/callback';
+  const redirectUri = process.env.GOOGLE_REDIRECT_URI || (process.env.NODE_ENV === 'production' ? 'https://aartha.site/api/auth/google/callback' : 'http://localhost:3000/api/auth/google/callback');
 
   if (!clientId) {
     console.error('[Google OAuth Error] GOOGLE_CLIENT_ID env variable is not defined.');
