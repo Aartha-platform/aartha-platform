@@ -1,7 +1,12 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { X, Sparkles, Send, Bot, User, RefreshCw, RotateCcw } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
+import { 
+  X, Sparkles, Send, Bot, User, RefreshCw, RotateCcw, 
+  Building2, FileCheck2, FileEdit, TrendingUp, ShieldAlert, 
+  ExternalLink, CheckCircle2, AlertTriangle, ArrowRight, Shield
+} from 'lucide-react';
 import { generateAssistantReply } from '@/lib/assistantModes';
 
 interface AIAssistantPanelProps {
@@ -10,19 +15,19 @@ interface AIAssistantPanelProps {
 }
 
 const modes = [
-  { key: 'sourcing', label: 'Sourcing' },
-  { key: 'document', label: 'Doc Intel' },
-  { key: 'rfq', label: 'RFQ Copilot' },
-  { key: 'market', label: 'Market Intel' },
-  { key: 'risk', label: 'Risk Scan' }
+  { key: 'sourcing', label: 'Sourcing', icon: Building2, subtitle: 'Find verified factories' },
+  { key: 'document', label: 'Doc Intel', icon: FileCheck2, subtitle: 'Customs & compliance' },
+  { key: 'rfq', label: 'RFQ Copilot', icon: FileEdit, subtitle: 'Draft technical specs' },
+  { key: 'market', label: 'Market Intel', icon: TrendingUp, subtitle: 'Gujarat price benchmarks' },
+  { key: 'risk', label: 'Risk Scan', icon: ShieldAlert, subtitle: 'Audit & fraud screening' }
 ] as const;
 
 const initialGreetings: Record<string, string> = {
-  sourcing: 'Ask me to locate verified factories in Gujarat/India GIDC clusters, compare trust scores, or verify certifications.',
-  document: 'Ask me to scan your invoice, packing list, or Certificate of Origin to check customs readiness.',
-  rfq: 'Need help drafting specifications for your RFQ? I can write a detailed RFQ payload for Morbi or Ankleshwar.',
-  market: 'Ask me for Q2 market price ranges, shipping log forecasts, or capacity updates.',
-  risk: 'I check Identity, Behavior, Content, and Geography risk signals. Test a 5-day delivery claim.'
+  sourcing: '👋 **Welcome to Aartha Sourcing Intelligence!**\n\nAsk me to locate verified factories across Gujarat GIDC industrial clusters (Ankleshwar, Vatva, Morbi, Surat, Rajkot), compare trust scores, or inspect certifications.',
+  document: '📑 **Document Intelligence Copilot Ready.**\n\nPaste invoice details, packing list specs, or Certificate of Origin drafts to verify customs readiness for USA, EU, Germany, and UAE ports.',
+  rfq: '📝 **Smart RFQ Drafting Copilot Active.**\n\nTell me what product, volume, or GIDC cluster you need. I will structure a complete, machine-readable RFQ with exact technical parameters.',
+  market: '📈 **Gujarat Trade Intelligence Active.**\n\nAsk me for real-time commodity pricing ranges, container freight benchmarks, and capacity forecasts across Gujarat export corridors.',
+  risk: '🛡️ **Trade Risk & Integrity Scanner Active.**\n\nSubmit any supplier claim (such as a 5-day dispatch for chemical APIs) to verify audit feasibility and physical factory credibility.'
 };
 
 export default function AIAssistantPanel({ isOpen, onClose }: AIAssistantPanelProps) {
@@ -37,23 +42,51 @@ export default function AIAssistantPanel({ isOpen, onClose }: AIAssistantPanelPr
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([
-    'Show me verified Paracetamol manufacturers in Vatva GIDC.',
-    'Sourcing fabrics from Surat - top recommendations?'
+    'Verified Paracetamol API manufacturers in Vatva GIDC',
+    'Surat organic cotton textile mills with GOTS certification',
+    'Morbi ceramic tile exporters for EU markets'
   ]);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (activeMode === 'sourcing') {
-      setSuggestions(['Show me verified Paracetamol manufacturers in Vatva GIDC.', 'Show Surat Textile GOTS compliance status.']);
+      setSuggestions([
+        'Verified Paracetamol API manufacturers in Vatva GIDC',
+        'Surat organic cotton textile mills with GOTS certification',
+        'Morbi ceramic tile exporters for EU markets'
+      ]);
     } else if (activeMode === 'document') {
-      setSuggestions(['Scan commercial invoice INV-2026-098.', 'Check Certificate of Origin draft specifications.']);
+      setSuggestions([
+        'Check German customs rules for commercial invoice',
+        'Certificate of Origin common clearance risks',
+        'GSTIN & IEC verification checklist'
+      ]);
     } else if (activeMode === 'rfq') {
-      setSuggestions(['Draft an RFQ for GOTS cotton fabrics.', 'Draft a Paracetamol API bulk supply RFQ.']);
+      setSuggestions([
+        'Draft RFQ for 5,000 kg Paracetamol API bulk',
+        'Draft export RFQ for Morbi porcelain floor tiles',
+        'What Incoterms should I specify for CIF Hamburg?'
+      ]);
     } else if (activeMode === 'market') {
-      setSuggestions(['Show Specialty Chemical price forecasts.', 'Are raw material shipping rates to Germany increasing?']);
+      setSuggestions([
+        'Current Paracetamol API price benchmark USD/kg',
+        'Ankleshwar specialty chemical export lead times',
+        'Container shipping freight rates from Kandla/Mundra'
+      ]);
     } else if (activeMode === 'risk') {
-      setSuggestions(['Evaluate risk of 5-day chemical delivery offer.', 'How does GIDC geocoding screening prevent fraud?']);
+      setSuggestions([
+        'Analyze risk of 5-day delivery offer on pharma chemicals',
+        'How does GIDC physical geocoding audit work?',
+        'Red flags to detect trading intermediaries'
+      ]);
     }
   }, [activeMode]);
+
+  useEffect(() => {
+    if (isOpen) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages, activeMode, isOpen]);
 
   const handleClearChat = () => {
     setMessages(prev => ({
@@ -93,7 +126,9 @@ export default function AIAssistantPanel({ isOpen, onClose }: AIAssistantPanelPr
           ...prev,
           [activeMode]: [...prev[activeMode], { sender: 'bot', text: resp.reply }]
         }));
-        if (resp.suggestedPrompts) setSuggestions(resp.suggestedPrompts);
+        if (resp.suggestedPrompts && resp.suggestedPrompts.length > 0) {
+          setSuggestions(resp.suggestedPrompts);
+        }
         setLoading(false);
       })
       .catch(() => {
@@ -107,136 +142,284 @@ export default function AIAssistantPanel({ isOpen, onClose }: AIAssistantPanelPr
       });
   };
 
+  const renderFormattedMessage = (content: string) => {
+    const lines = content.split('\n');
+    return (
+      <div className="space-y-2 text-[13px] leading-relaxed">
+        {lines.map((line, idx) => {
+          const trimmed = line.trim();
+          if (!trimmed) return <div key={idx} className="h-1" />;
+
+          // Heading 3 / 4
+          if (trimmed.startsWith('### ') || trimmed.startsWith('## ')) {
+            const title = trimmed.replace(/^#{2,3}\s+/, '');
+            return (
+              <div key={idx} className="pt-1.5 pb-0.5">
+                <span className="inline-flex items-center gap-1.5 font-black text-[12px] uppercase tracking-wider text-amber-600 dark:text-amber-400 bg-amber-500/10 dark:bg-amber-400/10 px-2.5 py-1 rounded-md border border-amber-500/20">
+                  <Sparkles size={11} className="text-amber-500" />
+                  {title}
+                </span>
+              </div>
+            );
+          }
+
+          // Bullet point with bold prefix
+          if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+            const cleanText = trimmed.replace(/^[-*]\s+/, '');
+            const isWarning = cleanText.includes('⚠️') || cleanText.includes('Risk') || cleanText.includes('MISSING');
+            return (
+              <div 
+                key={idx} 
+                className={`pl-3 py-0.5 relative flex items-start gap-2 ${
+                  isWarning ? 'bg-amber-500/10 -mx-1 px-2.5 py-1 rounded-lg border-l-2 border-amber-500 text-amber-900 dark:text-amber-200' : ''
+                }`}
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-2 flex-shrink-0" />
+                <div className="flex-1">
+                  {cleanText.split('**').map((chunk, cIdx) => (
+                    cIdx % 2 === 1 ? (
+                      <strong key={cIdx} className="font-extrabold text-navy dark:text-white">
+                        {chunk}
+                      </strong>
+                    ) : (
+                      <span key={cIdx}>{chunk}</span>
+                    )
+                  ))}
+                </div>
+              </div>
+            );
+          }
+
+          // Numbered list
+          if (/^\d+\.\s/.test(trimmed)) {
+            const match = trimmed.match(/^(\d+)\.\s+(.*)$/);
+            if (match) {
+              return (
+                <div key={idx} className="flex items-start gap-2.5 pl-1 py-0.5">
+                  <span className="w-5 h-5 rounded-full bg-navy/10 dark:bg-white/10 text-navy dark:text-amber-400 font-extrabold text-[10px] flex items-center justify-center flex-shrink-0 mt-0.5 border border-black/10 dark:border-white/10">
+                    {match[1]}
+                  </span>
+                  <div className="flex-1">
+                    {match[2].split('**').map((chunk, cIdx) => (
+                      cIdx % 2 === 1 ? (
+                        <strong key={cIdx} className="font-extrabold text-navy dark:text-white">
+                          {chunk}
+                        </strong>
+                      ) : (
+                        <span key={cIdx}>{chunk}</span>
+                      )
+                    ))}
+                  </div>
+                </div>
+              );
+            }
+          }
+
+          // Regular paragraph with bold support
+          return (
+            <p key={idx}>
+              {trimmed.split('**').map((chunk, cIdx) => (
+                cIdx % 2 === 1 ? (
+                  <strong key={cIdx} className="font-extrabold text-navy dark:text-white">
+                    {chunk}
+                  </strong>
+                ) : (
+                  <span key={cIdx}>{chunk}</span>
+                )
+              ))}
+            </p>
+          );
+        })}
+      </div>
+    );
+  };
+
   return (
     <>
-      {/* Backdrop */}
+      {/* Dark Backdrop */}
       {isOpen && (
-        <div className="fixed inset-0 bg-black/60 z-[999] backdrop-blur-xs transition-opacity duration-300" onClick={onClose} />
+        <div 
+          className="fixed inset-0 bg-black/70 z-[999] backdrop-blur-sm transition-opacity duration-300" 
+          onClick={onClose} 
+        />
       )}
 
       {/* Slide-out Panel */}
       <div
-        className={`fixed top-0 right-0 h-full w-full sm:w-[460px] bg-white/95 dark:bg-[var(--surface)]/95 backdrop-blur-xl shadow-2xl z-[1000] transition-transform duration-300 overflow-hidden flex flex-col font-sans border-l border-black/10 dark:border-white/10 ${
+        className={`fixed top-0 right-0 h-full w-full sm:w-[480px] bg-slate-900 text-slate-100 shadow-2xl z-[1000] transition-transform duration-300 ease-out overflow-hidden flex flex-col font-sans border-l border-white/10 ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        {/* Header */}
-        <div className="bg-gradient-to-r from-navy via-navy-light to-navy text-white p-4 space-y-3 flex-shrink-0 relative border-b border-white/10">
-          <div className="absolute top-4 right-4 flex items-center gap-1.5">
-            <button
-              onClick={handleClearChat}
-              title="Reset conversation"
-              className="text-slate-300 hover:text-white transition-colors cursor-pointer select-none p-1.5 rounded-lg hover:bg-white/10 flex items-center gap-1 text-[11px]"
-            >
-              <RotateCcw size={14} />
-              <span className="hidden sm:inline text-[10px]">Reset</span>
-            </button>
-            <button
-              onClick={onClose}
-              title="Close panel"
-              className="text-slate-300 hover:text-white transition-colors cursor-pointer select-none p-1.5 rounded-lg hover:bg-white/10"
-            >
-              <X size={18} />
-            </button>
-          </div>
-
-          <div className="flex items-center gap-2.5">
-            <div className="bg-gradient-to-br from-amber-500 to-amber-600 p-2 rounded-xl text-white shadow-md">
-              <Sparkles size={18} />
-            </div>
-            <div>
-              <h3 className="font-extrabold text-xs uppercase tracking-wider text-white">Aartha Sourcing Intelligence</h3>
-              <p className="text-[10px] text-amber-400 font-semibold">Grounded in verified trade corridor registries</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Live Model Indicator */}
-        <div className="bg-emerald-500/10 border-b border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-[10px] font-extrabold px-4 py-2 flex items-center justify-between shadow-2xs">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>Verified Corridor Intelligence Active</span>
-          </div>
-          <span className="text-[10px] font-mono uppercase bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/30">
-            Real-time AI
-          </span>
-        </div>
-
-        {/* Mode Selector Tabs */}
-        <div className="flex border-b border-black/5 dark:border-white/10 bg-slate-50 dark:bg-slate-900 overflow-x-auto flex-shrink-0">
-          {modes.map((m) => (
-            <button
-              key={m.key}
-              onClick={() => setActiveMode(m.key)}
-              className={`flex-1 min-w-[85px] text-center py-3 text-[10px] font-extrabold uppercase tracking-wider transition-all border-b-2 cursor-pointer select-none ${
-                activeMode === m.key
-                  ? 'border-amber-500 text-amber-600 dark:text-amber-400 bg-amber-500/10'
-                  : 'border-transparent text-text-secondary dark:text-slate-400 hover:text-navy dark:hover:text-white'
-              }`}
-            >
-              {m.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Messaging Logs */}
-        <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50/50 dark:bg-slate-950/40">
-          {messages[activeMode].map((msg, idx) => (
-            <div key={idx} className={`flex gap-2.5 max-w-[88%] ${msg.sender === 'user' ? 'ml-auto flex-row-reverse' : ''}`}>
-              <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-white text-[10px] shadow-sm ${
-                msg.sender === 'user' ? 'bg-gradient-to-br from-amber-500 to-amber-600 font-bold' : 'bg-navy'
-              }`}>
-                {msg.sender === 'user' ? <User size={12} /> : <Bot size={12} />}
+        {/* Top Header */}
+        <div className="bg-gradient-to-r from-slate-950 via-navy to-slate-950 p-4 border-b border-white/10 flex-shrink-0">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 flex items-center justify-center text-slate-950 shadow-lg shadow-amber-500/20 ring-2 ring-amber-400/30">
+                <Sparkles size={18} className="animate-pulse" />
               </div>
-              <div className={`p-3.5 rounded-2xl text-xs leading-relaxed border shadow-xs ${
-                msg.sender === 'user'
-                  ? 'bg-amber-600 text-white border-amber-500 rounded-tr-none'
-                  : 'bg-white dark:bg-[var(--surface)] text-text-primary dark:text-slate-200 border-black/10 dark:border-white/10 rounded-tl-none'
-              }`}>
-                {msg.text.startsWith('###') || msg.text.includes('- **') ? (
-                  <div className="space-y-2 whitespace-pre-wrap">
-                    {msg.text.split('\n').map((line, lIdx) => {
-                      if (line.startsWith('### ')) {
-                        return <h4 key={lIdx} className="font-extrabold text-xs uppercase tracking-wide text-amber-600 dark:text-amber-400 mt-1 first:mt-0">{line.replace('### ', '')}</h4>;
-                      }
-                      if (line.startsWith('- **')) {
-                        const parts = line.substring(2).split('**');
-                        return (
-                          <div key={lIdx} className="pl-2.5 relative before:absolute before:left-0 before:top-[6px] before:w-1.5 before:h-1.5 before:rounded-full before:bg-amber-500">
-                            <strong className="text-text-primary dark:text-white font-extrabold">{parts[0]}</strong>{parts.slice(1).join('')}
-                          </div>
-                        );
-                      }
-                      return <p key={lIdx}>{line}</p>;
-                    })}
-                  </div>
-                ) : (
-                  msg.text
-                )}
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="font-extrabold text-sm tracking-wide text-white">
+                    Aartha Sourcing Copilot
+                  </h3>
+                  <span className="flex h-2 w-2 relative">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  </span>
+                </div>
+                <p className="text-[11px] text-amber-400/90 font-medium">
+                  Verified Gujarat Factory & Trade Intelligence
+                </p>
               </div>
             </div>
-          ))}
+
+            <div className="flex items-center gap-1.5">
+              <button
+                onClick={handleClearChat}
+                title="Reset conversation"
+                className="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-colors cursor-pointer flex items-center gap-1 text-xs"
+              >
+                <RotateCcw size={14} />
+                <span className="hidden sm:inline text-[11px] font-semibold">Reset</span>
+              </button>
+              <button
+                onClick={onClose}
+                title="Close panel"
+                className="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+            </div>
+          </div>
+
+          {/* Micro Moat Indicators */}
+          <div className="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between text-[10px] text-slate-400">
+            <span className="flex items-center gap-1 font-medium text-emerald-400">
+              <CheckCircle2 size={11} /> 100% GIDC Geocoded
+            </span>
+            <span className="flex items-center gap-1 font-medium text-amber-400">
+              <Shield size={11} /> GSTIN & IEC Verified
+            </span>
+            <span className="flex items-center gap-1 font-mono uppercase bg-white/5 px-2 py-0.5 rounded border border-white/10 text-slate-300">
+              Real-time AI
+            </span>
+          </div>
+        </div>
+
+        {/* Mode Selector Segmented Bar */}
+        <div className="p-2 bg-slate-950/80 border-b border-white/10 flex-shrink-0">
+          <div className="grid grid-cols-5 gap-1 bg-slate-900/90 p-1 rounded-xl border border-white/5">
+            {modes.map((m) => {
+              const Icon = m.icon;
+              const isActive = activeMode === m.key;
+              return (
+                <button
+                  key={m.key}
+                  onClick={() => setActiveMode(m.key)}
+                  className={`flex flex-col items-center justify-center py-2 px-1 rounded-lg text-center transition-all cursor-pointer select-none ${
+                    isActive
+                      ? 'bg-gradient-to-b from-amber-500 to-amber-600 text-slate-950 font-black shadow-md shadow-amber-500/20'
+                      : 'text-slate-400 hover:text-white hover:bg-white/5 font-semibold'
+                  }`}
+                >
+                  <Icon size={14} className={isActive ? 'text-slate-950' : 'text-slate-400'} />
+                  <span className="text-[10px] mt-1 tracking-tight truncate w-full">
+                    {m.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Message Stream */}
+        <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-gradient-to-b from-slate-900 via-slate-900/95 to-slate-950">
+          {messages[activeMode].map((msg, idx) => {
+            const isUser = msg.sender === 'user';
+            return (
+              <div 
+                key={idx} 
+                className={`flex gap-3 max-w-[90%] ${isUser ? 'ml-auto flex-row-reverse' : ''}`}
+              >
+                <div 
+                  className={`w-7 h-7 rounded-xl flex items-center justify-center flex-shrink-0 text-xs shadow-md ${
+                    isUser 
+                      ? 'bg-gradient-to-br from-amber-500 to-amber-600 text-slate-950 font-black ring-1 ring-amber-400/40' 
+                      : 'bg-slate-800 text-amber-400 border border-white/10 ring-1 ring-white/5'
+                  }`}
+                >
+                  {isUser ? <User size={13} /> : <Bot size={13} />}
+                </div>
+
+                <div 
+                  className={`p-4 rounded-2xl border shadow-md ${
+                    isUser
+                      ? 'bg-gradient-to-br from-amber-600 to-amber-700 text-white border-amber-500/50 rounded-tr-none'
+                      : 'bg-slate-800/90 text-slate-200 border-white/10 rounded-tl-none backdrop-blur-md'
+                  }`}
+                >
+                  {isUser ? (
+                    <p className="text-[13px] leading-relaxed font-medium">{msg.text}</p>
+                  ) : (
+                    renderFormattedMessage(msg.text)
+                  )}
+
+                  {/* Contextual Action Link for Sourcing / RFQ */}
+                  {!isUser && activeMode === 'sourcing' && idx > 0 && (
+                    <div className="mt-3 pt-3 border-t border-white/10 flex items-center gap-2">
+                      <Link 
+                        href="/suppliers"
+                        onClick={onClose}
+                        className="inline-flex items-center gap-1.5 text-[11px] font-bold text-amber-400 hover:text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 px-3 py-1.5 rounded-lg border border-amber-500/30 transition-all no-underline"
+                      >
+                        <Building2 size={12} />
+                        <span>Browse Verified Directory</span>
+                        <ExternalLink size={11} />
+                      </Link>
+                      <Link 
+                        href="/rfq"
+                        onClick={onClose}
+                        className="inline-flex items-center gap-1.5 text-[11px] font-bold text-white hover:text-amber-200 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg border border-white/10 transition-all no-underline"
+                      >
+                        <FileEdit size={12} />
+                        <span>Post Direct RFQ</span>
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
 
           {loading && (
-            <div className="flex items-center gap-2 text-xs text-amber-600 dark:text-amber-400 font-bold">
-              <RefreshCw size={14} className="animate-spin" />
-              <span>Analyzing verified corridor parameters...</span>
+            <div className="flex items-center gap-3 p-3.5 bg-slate-800/70 rounded-2xl border border-amber-500/30 text-amber-400 text-xs font-bold animate-pulse max-w-[80%]">
+              <RefreshCw size={14} className="animate-spin text-amber-500" />
+              <span>Analyzing verified Gujarat corridor parameters...</span>
             </div>
           )}
+
+          <div ref={messagesEndRef} />
         </div>
 
-        {/* Suggestions */}
+        {/* Interactive Suggested Prompts */}
         {suggestions.length > 0 && (
-          <div className="p-3 border-t border-black/5 dark:border-white/10 bg-slate-50 dark:bg-navy-light flex flex-wrap gap-1.5 flex-shrink-0">
-            {suggestions.map((s, idx) => (
-              <button
-                key={idx}
-                onClick={() => handleSend(s)}
-                className="bg-white dark:bg-[var(--surface)] text-text-secondary dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400 text-[10px] font-semibold px-2.5 py-1 rounded-lg border border-black/10 dark:border-white/10 hover:border-amber-500/40 transition-colors cursor-pointer"
-              >
-                {s}
-              </button>
-            ))}
+          <div className="p-3 bg-slate-950 border-t border-white/10 flex-shrink-0">
+            <div className="flex items-center gap-1.5 mb-2 text-[10px] uppercase font-bold text-amber-400 tracking-wider">
+              <Sparkles size={11} />
+              <span>Suggested Queries</span>
+            </div>
+            <div className="flex flex-wrap gap-1.5 max-h-[90px] overflow-y-auto">
+              {suggestions.map((s, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleSend(s)}
+                  className="bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-amber-400 text-[11px] font-medium px-3 py-1.5 rounded-xl border border-white/10 hover:border-amber-500/40 transition-all cursor-pointer text-left flex items-center gap-1.5 shadow-sm hover:scale-[1.01]"
+                >
+                  <span className="w-1 h-1 rounded-full bg-amber-400 flex-shrink-0" />
+                  <span className="truncate max-w-[380px]">{s}</span>
+                </button>
+              ))}
+            </div>
           </div>
         )}
 
@@ -246,21 +429,24 @@ export default function AIAssistantPanel({ isOpen, onClose }: AIAssistantPanelPr
             e.preventDefault();
             handleSend(input);
           }} 
-          className="p-3.5 border-t border-black/10 dark:border-white/10 bg-white dark:bg-[var(--surface)] flex gap-2 flex-shrink-0"
+          className="p-3.5 bg-slate-950 border-t border-white/10 flex gap-2 flex-shrink-0 items-center"
         >
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask AI Assistant about Gujarat factories, specs, MOQ..."
-            className="flex-1 bg-slate-100 dark:bg-slate-900 text-xs px-3.5 py-2.5 rounded-xl border border-black/10 dark:border-white/10 focus:outline-none focus:border-amber-500 text-text-primary dark:text-white font-medium"
-          />
+          <div className="relative flex-1">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder={`Ask ${modes.find(m => m.key === activeMode)?.label} about Gujarat factories, specs...`}
+              className="w-full bg-slate-900 text-white placeholder:text-slate-500 text-xs px-4 py-3 rounded-xl border border-white/15 focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 font-medium transition-all"
+            />
+          </div>
           <button
             type="submit"
             disabled={loading || !input.trim()}
-            className="btn-amber px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5 disabled:opacity-50 cursor-pointer shadow-md"
+            className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 p-3 rounded-xl font-bold flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer shadow-lg shadow-amber-500/20 transition-all hover:scale-105 active:scale-95"
+            title="Send query"
           >
-            <Send size={14} />
+            <Send size={15} />
           </button>
         </form>
       </div>
