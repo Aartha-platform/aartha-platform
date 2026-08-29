@@ -1,22 +1,23 @@
+import { getWhatsAppUrl, WhatsAppSource, DEFAULT_WHATSAPP_NUMBER } from '@/lib/whatsapp';
+
 interface WhatsAppButtonProps {
-  phoneNumber: string;
+  phoneNumber?: string;
   message?: string;
+  source?: WhatsAppSource;
   label?: string;
   className?: string;
   variant?: 'solid' | 'glass';
 }
 
 export default function WhatsAppButton({
-  phoneNumber,
-  message = 'Hello! I am interested in sourcing from your company.',
+  phoneNumber = DEFAULT_WHATSAPP_NUMBER,
+  message,
+  source = 'general',
   label = 'Chat on WhatsApp',
   className = '',
   variant = 'solid'
 }: WhatsAppButtonProps) {
-  // Clean phone number from non-numeric characters (except leading +)
-  const cleanNumber = phoneNumber.replace(/[^\d+]/g, '');
-  const encodedText = encodeURIComponent(message);
-  const waLink = `https://wa.me/${cleanNumber}?text=${encodedText}`;
+  const waLink = getWhatsAppUrl(source, message, phoneNumber);
 
   const variantStyles = variant === 'glass'
     ? 'bg-gradient-to-r from-emerald-500/20 via-emerald-600/10 to-emerald-700/5 text-emerald-400 hover:text-white border border-emerald-500/40 hover:border-emerald-400 hover:bg-emerald-500/30 backdrop-blur-md shadow-premium-sm hover:shadow-emerald-500/25 hover:scale-[1.03] transition-all duration-300 animate-glow-pulse'

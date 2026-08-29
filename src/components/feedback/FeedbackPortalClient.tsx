@@ -231,7 +231,7 @@ export default function FeedbackPortalClient() {
         {/* Footer note */}
         <div className="mt-8 text-center text-[11px] text-slate-400 flex items-center justify-center gap-1.5">
           <Shield size={13} className="text-emerald-500" />
-          <span>Your privacy is protected. Feedback is never shared publicly or sold.</span>
+          <span>Your privacy is protected. Feedback is never shared publicly or sold. Submissions are analyzed strictly to improve platform workflows and resolve bottlenecks.</span>
         </div>
       </div>
     </div>
