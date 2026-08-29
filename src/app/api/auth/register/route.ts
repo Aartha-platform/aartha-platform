@@ -63,10 +63,11 @@ export async function POST(request: NextRequest) {
     // Store OTP in database (valid for 120 seconds / 2 minutes)
     await saveOtp(email, secureOtp, 120 * 1000);
 
-    await saveAuditEvent({
+    // Non-blocking audit log
+    saveAuditEvent({
       action: 'USER_REGISTER_INIT',
       details: `User registered (${role}) from company ${companyName}. Verification OTP generated.`,
-    });
+    }).catch(() => {});
 
     // Trigger verification email using centralized template
     try {

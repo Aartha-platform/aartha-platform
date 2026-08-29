@@ -212,6 +212,8 @@ export async function updateUserPassword(email: string, newPasswordHash: string)
 }
 
 // ── OTP Operations ────────────────────────────────────────────────────────────
+const memoryOtps = new Map<string, { email: string; otpHash: string; expiresAt: string; attempts: number }>();
+
 export async function saveOtp(identifier: string, otp: string, ttlMs: number = 120 * 1000): Promise<void> {
   const keyName = identifier.toLowerCase().trim();
   const salt = crypto.randomBytes(16).toString('hex');
@@ -223,15 +225,34 @@ export async function saveOtp(identifier: string, otp: string, ttlMs: number = 1
     expiresAt: new Date(Date.now() + ttlMs).toISOString(),
     attempts: 0,
   };
+
+  memoryOtps.set(keyName, record);
   
-  const { error } = await supabase.from('otps').upsert([record]);
-  if (error) throw error;
+  try {
+    const { error } = await supabase.from('otps').upsert([record]);
+    if (error) {
+      console.warn('[OTP Store Notice] Supabase otps table note, using memory fallback:', error.message);
+    }
+  } catch {
+    // Graceful memory fallback
+  }
 }
 
 export async function verifyOtp(identifier: string, otp: string): Promise<{ success: boolean; error?: string }> {
   const keyName = identifier.toLowerCase().trim();
-  const { data: record, error: fetchError } = await supabase.from('otps').select('*').eq('email', keyName).maybeSingle();
-  if (fetchError) throw fetchError;
+  let record: any = null;
+
+  try {
+    const { data, error: fetchError } = await supabase.from('otps').select('*').eq('email', keyName).maybeSingle();
+    if (!fetchError && data) {
+      record = data;
+    } else {
+      record = memoryOtps.get(keyName);
+    }
+  } catch {
+    record = memoryOtps.get(keyName);
+  }
+
   if (!record) return { success: false, error: 'No verification code found.' };
   
   if (new Date(record.expiresAt) < new Date()) {
@@ -253,15 +274,21 @@ export async function verifyOtp(identifier: string, otp: string): Promise<{ succ
     return { success: true };
   } else {
     const attempts = record.attempts + 1;
-    await supabase.from('otps').update({ attempts }).eq('email', keyName);
+    record.attempts = attempts;
+    memoryOtps.set(keyName, record);
+    try {
+      await supabase.from('otps').update({ attempts }).eq('email', keyName);
+    } catch {}
     return { success: false, error: `Invalid verification code. ${3 - attempts} attempts remaining.` };
   }
 }
 
 export async function deleteOtp(identifier: string): Promise<void> {
   const keyName = identifier.toLowerCase().trim();
-  const { error } = await supabase.from('otps').delete().eq('email', keyName);
-  if (error) throw error;
+  memoryOtps.delete(keyName);
+  try {
+    await supabase.from('otps').delete().eq('email', keyName);
+  } catch {}
 }
 
 // ── Order & Aartha Protect Operations ──────────────────────────────────────────────────

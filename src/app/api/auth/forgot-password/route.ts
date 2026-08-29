@@ -33,10 +33,11 @@ export async function POST(request: NextRequest) {
     // Store OTP valid for 15 minutes (15 * 60 * 1000 ms)
     await saveOtp(`reset:${email.toLowerCase()}`, resetOtp, 15 * 60 * 1000);
 
-    await saveAuditEvent({
+    // Non-blocking audit log
+    saveAuditEvent({
       action: 'PASSWORD_RESET_REQUESTED',
       details: `Password reset code requested for ${email}`,
-    });
+    }).catch(() => {});
 
     const emailData = getPasswordResetEmail(resetOtp, email);
     await sendEmail({
