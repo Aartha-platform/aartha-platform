@@ -182,9 +182,15 @@ Any abnormalities will trigger account limits to protect trade routing.`,
   };
 }
 
+export interface ChatMessage {
+  sender: 'bot' | 'user';
+  text: string;
+}
+
 export async function generateLLMReply(
   mode: string,
-  input: string
+  input: string,
+  history: ChatMessage[] = []
 ): Promise<CopilotResponse> {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
@@ -192,24 +198,36 @@ export async function generateLLMReply(
   }
 
   const modePrompts: Record<string, string> = {
-    sourcing: 'You are a B2B sourcing copilot for verified Indian manufacturers. Match the buyer query to real suppliers from the database provided. Always cite trust scores and certifications. Use markdown format.',
-    document: 'You are a trade document validation copilot. Analyze the user query about export/import documents and provide specific field-level advice with customs rules for the destination country. Use markdown format.',
-    rfq: 'You are an RFQ drafting assistant. Help the buyer write a professional, complete sourcing request. Ask clarifying questions if needed. Use markdown format.',
-    market: 'You are a market intelligence copilot for B2B India-export trade. Provide pricing ranges, demand signals, and supply trends based on platform data. Use markdown format.',
-    risk: 'You are a trade risk assessment copilot. Evaluate supplier claims, lead times, and pricing against known industry benchmarks. Flag anything unusual. Use markdown format.',
+    sourcing: 'You are Aartha AI, an expert B2B sourcing copilot for verified Indian manufacturers (Gujarat/Pan-India). Provide concise, direct, professional recommendations citing real suppliers, cities, trust scores, and certifications. Format with clean markdown headers and bullet points.',
+    document: 'You are Aartha AI, an international trade documentation expert. Validate commercial invoices, packing lists, Certificate of Origin (CoO), GST, IEC, and L/C compliance. Point out exact missing fields and customs risks for destination countries. Format with clean markdown.',
+    rfq: 'You are Aartha AI, an RFQ drafting assistant. Formulate structured, professional procurement RFQs (Product, Grade, Quantity/MOQ, GIDC cluster preference, Incoterms, Compliance). Format with clean markdown.',
+    market: 'You are Aartha AI, a Gujarat B2B export market intelligence analyst. Provide realistic pricing benchmarks, raw material trends, capacity forecasts, and port logistics updates. Format with clean markdown.',
+    risk: 'You are Aartha AI, a trade risk & verification auditor. Screen supplier reliability, lead-time feasibility, geocoding compliance, and audit trail integrity. Flag potential red flags clearly. Format with clean markdown.',
   };
 
-  const supplierContext = suppliers.slice(0, 10).map(s => ({
-    id: s.id,
-    name: s.companyName,
-    category: s.category,
-    city: s.location.city,
-    certifications: s.certifications,
-    qualityScore: s.qualityScore.total,
-    responseRate: s.responseRate,
-    moq: s.moq,
-    exportMarkets: s.exportMarkets
+  // Only inject supplier context if mode is sourcing or rfq to save tokens
+  let contextualData = '';
+  if (mode === 'sourcing' || mode === 'rfq') {
+    const compactSuppliers = suppliers.slice(0, 8).map(s => 
+      `${s.companyName} | ${s.category} | ${s.location.city} (${s.location.gidcZone || 'GIDC'}) | Score: ${s.qualityScore.total}/100 | Certs: ${s.certifications.join(', ')} | MOQ: ${s.moq || 'N/A'}`
+    ).join('\n');
+    contextualData = `\n\nVerified Suppliers on Aartha Platform:\n${compactSuppliers}`;
+  }
+
+  // Convert previous messages into OpenAI format (last 6 messages max to save tokens)
+  const recentHistory = history.slice(-6).map(msg => ({
+    role: msg.sender === 'user' ? ('user' as const) : ('assistant' as const),
+    content: msg.text
   }));
+
+  const messages = [
+    { 
+      role: 'system' as const, 
+      content: `${modePrompts[mode] || modePrompts.sourcing}${contextualData}\n\nKeep answers informative, crisp, and under 250 words. Avoid generic fluff.` 
+    },
+    ...recentHistory,
+    { role: 'user' as const, content: input }
+  ];
 
   try {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -220,35 +238,36 @@ export async function generateLLMReply(
       },
       body: JSON.stringify({
         model: 'gpt-4o-mini',
-        messages: [
-          { role: 'system', content: `${modePrompts[mode] || modePrompts.sourcing}\n\nVerified Supplier Database Context:\n${JSON.stringify(supplierContext)}` },
-          { role: 'user', content: input }
-        ],
-        temperature: 0.3,
-        max_tokens: 1500,
+        messages,
+        temperature: 0.5,
+        max_tokens: 800,
       }),
     });
 
     if (!response.ok) {
-      console.warn('[AI Assistant] OpenAI API failed, falling back');
+      console.warn('[AI Assistant] OpenAI API returned non-OK status, using fallback');
       return generateAssistantReply(mode, input);
     }
 
     const data = await response.json();
-    const replyText = data.choices[0].message.content || '';
+    const replyText = data.choices?.[0]?.message?.content || '';
+
+    if (!replyText.trim()) {
+      return generateAssistantReply(mode, input);
+    }
     
-    // Simple heuristic for follow-up prompts
-    let suggestedPrompts = ['Ask a follow-up question', 'Request a quote'];
+    // Dynamic context-aware suggested prompts
+    let suggestedPrompts: string[] = [];
     if (mode === 'sourcing') {
-      suggestedPrompts = ['Verify WHO-GMP certification validity', 'Sourcing RFQ form'];
+      suggestedPrompts = ['Show factory certifications & audit score', 'Post an RFQ to these manufacturers', 'Find suppliers in Vadodara / Ankleshwar'];
     } else if (mode === 'document') {
-      suggestedPrompts = ['Scan a document now', 'View document validation rules'];
+      suggestedPrompts = ['Check Certificate of Origin requirements', 'What are German customs invoice rules?', 'Verify GSTIN compliance format'];
     } else if (mode === 'rfq') {
-      suggestedPrompts = ['Draft Morbi ceramic tiles RFQ', 'Export specifications guide'];
+      suggestedPrompts = ['Draft RFQ for Morbi ceramic tiles', 'Draft bulk pharma chemical RFQ', 'What Incoterms should I specify?'];
     } else if (mode === 'market') {
-      suggestedPrompts = ['Morbi tiles pricing trends', 'Freight rates to Germany'];
+      suggestedPrompts = ['Show Paracetamol API price trend', 'Ankleshwar chemical freight rates', 'Morbi export demand signals'];
     } else if (mode === 'risk') {
-      suggestedPrompts = ['Check supplier risk scorecard', 'GSTIN registry verify'];
+      suggestedPrompts = ['Verify supplier GSTIN & IEC record', 'Check risk scorecard for 5-day dispatch', 'How does GIDC audit verification work?'];
     }
 
     return {

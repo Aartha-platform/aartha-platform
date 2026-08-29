@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { Send, RefreshCw, Bot, User, ShieldCheck, Sparkles, HelpCircle, FileText, TrendingUp, AlertTriangle } from 'lucide-react';
+import { Send, RefreshCw, Bot, User, Sparkles, RotateCcw } from 'lucide-react';
 import { generateAssistantReply } from '@/lib/assistantModes';
 
 const modes = [
@@ -12,14 +12,22 @@ const modes = [
   { key: 'risk', label: 'Risk Scan', desc: 'Verify supplier claims' }
 ] as const;
 
+const initialGreetings: Record<string, string> = {
+  sourcing: 'Hi! I am the Sourcing Copilot. How can I help you find verified factories, analyze GIDC capacity logs, or georoute suppliers today?',
+  document: 'Hi! I am the Document Copilot. Send me invoice descriptions or draft parameters to verify German customs compliance.',
+  rfq: 'Hi! I am the RFQ Drafting Copilot. Tell me what product or GIDC cluster you are sourcing from, and I will draft a structured enquiry.',
+  market: 'Hi! I am the Market Intel Copilot. I track commodity rates (e.g. Jamnagar brass fittings, chemical raw materials) in Gujarat.',
+  risk: 'Hi! I am the Risk Detection Copilot. Post any unusual claims (e.g. 5-day dispatch for Paracetamol API) to verify safety.'
+};
+
 export default function AIAssistantPage() {
   const [activeMode, setActiveMode] = useState<typeof modes[number]['key']>('sourcing');
   const [messages, setMessages] = useState<Record<string, { sender: 'bot' | 'user'; text: string }[]>>({
-    sourcing: [{ sender: 'bot', text: 'Hi! I am the Sourcing Copilot. How can I help you find verified factories, analyze GIDC capacity logs, or georoute suppliers today?' }],
-    document: [{ sender: 'bot', text: 'Hi! I am the Document Copilot. Send me invoice descriptions or draft parameters to verify German customs compliance.' }],
-    rfq: [{ sender: 'bot', text: 'Hi! I am the RFQ Drafting Copilot. Tell me what product or GIDC cluster you are sourcing from, and I will draft a structured enquiry.' }],
-    market: [{ sender: 'bot', text: 'Hi! I am the Market Intel Copilot. I track commodity rates (e.g. Jamnagar brass fittings, chemical raw materials) in Gujarat.' }],
-    risk: [{ sender: 'bot', text: 'Hi! I am the Risk Detection Copilot. Post any unusual claims (e.g. 5-day dispatch for Paracetamol API) to verify safety.' }]
+    sourcing: [{ sender: 'bot', text: initialGreetings.sourcing }],
+    document: [{ sender: 'bot', text: initialGreetings.document }],
+    rfq: [{ sender: 'bot', text: initialGreetings.rfq }],
+    market: [{ sender: 'bot', text: initialGreetings.market }],
+    risk: [{ sender: 'bot', text: initialGreetings.risk }]
   });
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -39,12 +47,22 @@ export default function AIAssistantPage() {
     }
   }, [activeMode]);
 
+  const handleClearChat = () => {
+    setMessages(prev => ({
+      ...prev,
+      [activeMode]: [{ sender: 'bot', text: initialGreetings[activeMode] }]
+    }));
+  };
+
   const handleSend = (text: string) => {
     if (!text.trim()) return;
 
+    const currentHistory = messages[activeMode];
+    const updatedMessages = [...currentHistory, { sender: 'user' as const, text }];
+
     setMessages(prev => ({
       ...prev,
-      [activeMode]: [...prev[activeMode], { sender: 'user', text }]
+      [activeMode]: updatedMessages
     }));
     setInput('');
     setLoading(true);
@@ -52,7 +70,11 @@ export default function AIAssistantPage() {
     fetch('/api/ai-assistant', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ mode: activeMode, input: text })
+      body: JSON.stringify({ 
+        mode: activeMode, 
+        input: text,
+        history: currentHistory 
+      })
     })
       .then(res => {
         if (!res.ok) throw new Error('API failed');
@@ -132,19 +154,29 @@ export default function AIAssistantPage() {
                 <div className="text-[10px] text-amber-400 font-semibold">Grounded export corridor AI assistant</div>
               </div>
             </div>
-            <span className="bg-emerald-500/20 text-emerald-400 text-[9px] px-2.5 py-1 rounded-full font-extrabold uppercase border border-emerald-500/30">
-              Active Engine
-            </span>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleClearChat}
+                title="Reset conversation"
+                className="text-slate-300 hover:text-white transition-colors cursor-pointer select-none p-1.5 rounded-lg hover:bg-white/10 flex items-center gap-1 text-[11px]"
+              >
+                <RotateCcw size={13} />
+                <span className="text-[10px]">Reset</span>
+              </button>
+              <span className="bg-emerald-500/20 text-emerald-400 text-[9px] px-2.5 py-1 rounded-full font-extrabold uppercase border border-emerald-500/30">
+                Active Engine
+              </span>
+            </div>
           </div>
 
           {/* AI Live Engine Status Strip */}
           <div className="bg-emerald-500/10 border-b border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-[10px] sm:text-[11px] font-extrabold px-4 py-2 flex items-center justify-between shadow-2xs">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>GPT-4o Grounded B2B Intelligence Active</span>
+              <span>Verified Corridor Intelligence Active</span>
             </div>
             <span className="text-[9px] font-mono uppercase bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/30">
-              Live Model
+              Real-time AI
             </span>
           </div>
 
@@ -189,7 +221,7 @@ export default function AIAssistantPage() {
             {loading && (
               <div className="flex items-center gap-2 text-xs text-amber-600 dark:text-amber-400 font-bold">
                 <RefreshCw size={14} className="animate-spin" />
-                <span>GPT-4o model analyzing verified corridor data...</span>
+                <span>Analyzing verified corridor parameters...</span>
               </div>
             )}
           </div>

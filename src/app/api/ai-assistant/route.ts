@@ -7,12 +7,12 @@ export async function POST(request: NextRequest) {
   if (rateLimitResponse) return rateLimitResponse;
 
   try {
-    const { mode, input } = await request.json();
+    const { mode, input, history } = await request.json();
     if (!mode || !input) {
       return NextResponse.json({ error: 'mode and input are required.' }, { status: 400 });
     }
 
-    const response = await generateLLMReply(mode, input);
+    const response = await generateLLMReply(mode, input, Array.isArray(history) ? history : []);
     return NextResponse.json(response);
   } catch (error) {
     return NextResponse.json({ error: 'Internal server error.' }, { status: 500 });

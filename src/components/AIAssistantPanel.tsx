@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { X, Sparkles, Send, Bot, User, RefreshCw } from 'lucide-react';
-import { generateAssistantReply, CopilotResponse } from '@/lib/assistantModes';
+import { X, Sparkles, Send, Bot, User, RefreshCw, RotateCcw } from 'lucide-react';
+import { generateAssistantReply } from '@/lib/assistantModes';
 
 interface AIAssistantPanelProps {
   isOpen: boolean;
@@ -17,14 +17,22 @@ const modes = [
   { key: 'risk', label: 'Risk Scan' }
 ] as const;
 
+const initialGreetings: Record<string, string> = {
+  sourcing: 'Ask me to locate verified factories in Gujarat/India GIDC clusters, compare trust scores, or verify certifications.',
+  document: 'Ask me to scan your invoice, packing list, or Certificate of Origin to check customs readiness.',
+  rfq: 'Need help drafting specifications for your RFQ? I can write a detailed RFQ payload for Morbi or Ankleshwar.',
+  market: 'Ask me for Q2 market price ranges, shipping log forecasts, or capacity updates.',
+  risk: 'I check Identity, Behavior, Content, and Geography risk signals. Test a 5-day delivery claim.'
+};
+
 export default function AIAssistantPanel({ isOpen, onClose }: AIAssistantPanelProps) {
   const [activeMode, setActiveMode] = useState<typeof modes[number]['key']>('sourcing');
   const [messages, setMessages] = useState<Record<string, { sender: 'bot' | 'user'; text: string }[]>>({
-    sourcing: [{ sender: 'bot', text: 'Ask me to locate verified factories in specific GIDC clusters or map supplier details.' }],
-    document: [{ sender: 'bot', text: 'Ask me to scan your invoice, packing list, or Certificate of Origin to check customs readiness.' }],
-    rfq: [{ sender: 'bot', text: 'Need help drafting specifications for your RFQ? I can write a detailed RFQ payload for Morbi or Ankleshwar.' }],
-    market: [{ sender: 'bot', text: 'Ask me for Q2 market price ranges, shipping log forecasts, or capacity updates.' }],
-    risk: [{ sender: 'bot', text: 'I check Identity, Behavior, Content, and Geography risk signals. Test a 5-day delivery claim.' }]
+    sourcing: [{ sender: 'bot', text: initialGreetings.sourcing }],
+    document: [{ sender: 'bot', text: initialGreetings.document }],
+    rfq: [{ sender: 'bot', text: initialGreetings.rfq }],
+    market: [{ sender: 'bot', text: initialGreetings.market }],
+    risk: [{ sender: 'bot', text: initialGreetings.risk }]
   });
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -47,12 +55,22 @@ export default function AIAssistantPanel({ isOpen, onClose }: AIAssistantPanelPr
     }
   }, [activeMode]);
 
+  const handleClearChat = () => {
+    setMessages(prev => ({
+      ...prev,
+      [activeMode]: [{ sender: 'bot', text: initialGreetings[activeMode] }]
+    }));
+  };
+
   const handleSend = (text: string) => {
     if (!text.trim()) return;
 
+    const currentHistory = messages[activeMode];
+    const updatedMessages = [...currentHistory, { sender: 'user' as const, text }];
+
     setMessages(prev => ({
       ...prev,
-      [activeMode]: [...prev[activeMode], { sender: 'user', text }]
+      [activeMode]: updatedMessages
     }));
     setInput('');
     setLoading(true);
@@ -60,7 +78,11 @@ export default function AIAssistantPanel({ isOpen, onClose }: AIAssistantPanelPr
     fetch('/api/ai-assistant', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ mode: activeMode, input: text })
+      body: JSON.stringify({ 
+        mode: activeMode, 
+        input: text,
+        history: currentHistory 
+      })
     })
       .then(res => {
         if (!res.ok) throw new Error('API failed');
@@ -100,19 +122,30 @@ export default function AIAssistantPanel({ isOpen, onClose }: AIAssistantPanelPr
       >
         {/* Header */}
         <div className="bg-gradient-to-r from-navy via-navy-light to-navy text-white p-4 space-y-3 flex-shrink-0 relative border-b border-white/10">
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 text-slate-300 hover:text-white transition-colors cursor-pointer select-none p-1 rounded-lg hover:bg-white/10"
-          >
-            <X size={20} />
-          </button>
+          <div className="absolute top-4 right-4 flex items-center gap-1.5">
+            <button
+              onClick={handleClearChat}
+              title="Reset conversation"
+              className="text-slate-300 hover:text-white transition-colors cursor-pointer select-none p-1.5 rounded-lg hover:bg-white/10 flex items-center gap-1 text-[11px]"
+            >
+              <RotateCcw size={14} />
+              <span className="hidden sm:inline text-[10px]">Reset</span>
+            </button>
+            <button
+              onClick={onClose}
+              title="Close panel"
+              className="text-slate-300 hover:text-white transition-colors cursor-pointer select-none p-1.5 rounded-lg hover:bg-white/10"
+            >
+              <X size={18} />
+            </button>
+          </div>
 
           <div className="flex items-center gap-2.5">
             <div className="bg-gradient-to-br from-amber-500 to-amber-600 p-2 rounded-xl text-white shadow-md">
               <Sparkles size={18} />
             </div>
             <div>
-              <h3 className="font-extrabold text-xs uppercase tracking-wider text-white">Aartha Sourcing Assistant</h3>
+              <h3 className="font-extrabold text-xs uppercase tracking-wider text-white">Aartha Sourcing Intelligence</h3>
               <p className="text-[10px] text-amber-400 font-semibold">Grounded in verified trade corridor registries</p>
             </div>
           </div>
@@ -122,10 +155,10 @@ export default function AIAssistantPanel({ isOpen, onClose }: AIAssistantPanelPr
         <div className="bg-emerald-500/10 border-b border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-[10px] font-extrabold px-4 py-2 flex items-center justify-between shadow-2xs">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>GPT-4o Grounded B2B Intelligence</span>
+            <span>Verified Corridor Intelligence Active</span>
           </div>
           <span className="text-[10px] font-mono uppercase bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/30">
-            Active
+            Real-time AI
           </span>
         </div>
 
@@ -187,7 +220,7 @@ export default function AIAssistantPanel({ isOpen, onClose }: AIAssistantPanelPr
           {loading && (
             <div className="flex items-center gap-2 text-xs text-amber-600 dark:text-amber-400 font-bold">
               <RefreshCw size={14} className="animate-spin" />
-              <span>GPT-4o model analyzing verified corridor data...</span>
+              <span>Analyzing verified corridor parameters...</span>
             </div>
           )}
         </div>
@@ -219,7 +252,7 @@ export default function AIAssistantPanel({ isOpen, onClose }: AIAssistantPanelPr
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask AI Assistant..."
+            placeholder="Ask AI Assistant about Gujarat factories, specs, MOQ..."
             className="flex-1 bg-slate-100 dark:bg-slate-900 text-xs px-3.5 py-2.5 rounded-xl border border-black/10 dark:border-white/10 focus:outline-none focus:border-amber-500 text-text-primary dark:text-white font-medium"
           />
           <button
