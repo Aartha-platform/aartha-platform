@@ -242,12 +242,12 @@ export async function upsertContact(
   name?: string,
   sourcePage?: string
 ): Promise<string> {
-  const contactId = `wa-${phone}`;
+  const cleanPhone = phone.replace(/[^\d]/g, '');
   try {
     const { data: existing } = await supabase
       .from('whatsapp_contacts')
       .select('id')
-      .eq('phone_number', phone)
+      .eq('phone_number', cleanPhone)
       .maybeSingle();
 
     if (existing) {
@@ -258,19 +258,27 @@ export async function upsertContact(
       return existing.id;
     }
 
-    const { error } = await supabase.from('whatsapp_contacts').insert([{
-      id: contactId,
-      phone_number: phone,
-      display_name: name || '',
-      source_page: sourcePage || 'whatsapp_direct',
-      first_seen_at: new Date().toISOString(),
-      last_seen_at: new Date().toISOString(),
-    }]);
-    if (error) console.warn('[WA Contact Upsert]:', error.message);
+    const { data: inserted, error } = await supabase
+      .from('whatsapp_contacts')
+      .insert([{
+        phone_number: cleanPhone,
+        display_name: name || '',
+        source_page: sourcePage || 'whatsapp_direct',
+        first_seen_at: new Date().toISOString(),
+        last_seen_at: new Date().toISOString(),
+      }])
+      .select('id')
+      .single();
+
+    if (error) {
+      console.warn('[WA Contact Upsert]:', error.message);
+      return `wa-${cleanPhone}`;
+    }
+    return inserted?.id || `wa-${cleanPhone}`;
   } catch (err) {
     console.warn('[WA Contact Upsert Exception]:', err);
+    return `wa-${cleanPhone}`;
   }
-  return contactId;
 }
 
 // ── Database: Get or Create Active Conversation ───────────────────────────────
@@ -278,7 +286,6 @@ export async function getOrCreateConversation(
   contactId: string,
   sourcePage?: string
 ): Promise<string> {
-  const convId = `conv-${contactId}-${Date.now()}`;
   try {
     // Find active (non-closed) conversation for this contact
     const { data: existing } = await supabase
@@ -292,18 +299,26 @@ export async function getOrCreateConversation(
 
     if (existing) return existing.id;
 
-    const { error } = await supabase.from('whatsapp_conversations').insert([{
-      id: convId,
-      contact_id: contactId,
-      lead_stage: 'NEW',
-      source_page: sourcePage || 'whatsapp_direct',
-      opened_at: new Date().toISOString(),
-    }]);
-    if (error) console.warn('[WA Conversation Create]:', error.message);
+    const { data: inserted, error } = await supabase
+      .from('whatsapp_conversations')
+      .insert([{
+        contact_id: contactId,
+        lead_stage: 'NEW',
+        source_page: sourcePage || 'whatsapp_direct',
+        opened_at: new Date().toISOString(),
+      }])
+      .select('id')
+      .single();
+
+    if (error) {
+      console.warn('[WA Conversation Create]:', error.message);
+      return `conv-${Date.now()}`;
+    }
+    return inserted?.id || `conv-${Date.now()}`;
   } catch (err) {
     console.warn('[WA Conversation Create Exception]:', err);
+    return `conv-${Date.now()}`;
   }
-  return convId;
 }
 
 // ── Database: Save Message ────────────────────────────────────────────────────
@@ -314,7 +329,7 @@ export async function saveMessage(
   content: string,
   messageType: string = 'text'
 ): Promise<void> {
-  const msgId = `msg-${Date.now()}-${crypto.randomInt(1000, 9999)}`;
+  const fallbackMsgId = `msg-${Date.now()}-${crypto.randomInt(1000, 9999)}`;
   try {
     // Idempotency: skip if provider message ID already exists
     if (providerMessageId) {
@@ -327,9 +342,8 @@ export async function saveMessage(
     }
 
     await supabase.from('whatsapp_messages').insert([{
-      id: msgId,
       conversation_id: conversationId,
-      provider_message_id: providerMessageId || msgId,
+      provider_message_id: providerMessageId || fallbackMsgId,
       direction,
       message_type: messageType,
       content,
@@ -400,10 +414,8 @@ export async function saveFeedbackInsight(insight: {
   suggestedOpportunity?: string;
   analyzedBy?: string;
 }): Promise<string> {
-  const insightId = `fi-${Date.now()}-${crypto.randomInt(100, 999)}`;
   try {
-    await supabase.from('feedback_insights').insert([{
-      id: insightId,
+    const { data: inserted, error } = await supabase.from('feedback_insights').insert([{
       conversation_id: insight.conversationId || null,
       feedback_id: insight.feedbackId || null,
       primary_category: insight.primaryCategory,
@@ -418,11 +430,17 @@ export async function saveFeedbackInsight(insight: {
       raw_evidence: insight.rawEvidence || '',
       suggested_product_opportunity: insight.suggestedOpportunity || '',
       analyzed_by: insight.analyzedBy || 'heuristic',
-    }]);
+    }]).select('id').single();
+
+    if (error) {
+      console.warn('[Feedback Insight Save]:', error.message);
+      return `fi-${Date.now()}`;
+    }
+    return inserted?.id || `fi-${Date.now()}`;
   } catch (err) {
     console.warn('[Feedback Insight Save]:', err);
+    return `fi-${Date.now()}`;
   }
-  return insightId;
 }
 
 // ── Heuristic Conversation Analyzer (No OpenAI dependency) ────────────────────
