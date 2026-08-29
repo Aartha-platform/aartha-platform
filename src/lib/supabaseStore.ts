@@ -180,35 +180,62 @@ export async function saveUser(user: Omit<StoredUser, 'id' | 'createdAt'>): Prom
     id: `usr-${crypto.randomUUID()}`,
     createdAt: new Date().toISOString(),
   };
-  const { error } = await supabase.from('users').insert([record]);
-  if (error) throw error;
+  try {
+    const { error } = await supabase.from('users').insert([record]);
+    if (error) throw error;
+  } catch (err) {
+    console.error('[User Store Error] saveUser failed:', err);
+    throw err;
+  }
   return record;
 }
 
 export async function getUserByEmail(email: string): Promise<StoredUser | null> {
-  const { data, error } = await supabase.from('users').select('*').eq('email', email.toLowerCase()).maybeSingle();
-  if (error) throw error;
-  return data as StoredUser | null;
+  try {
+    const { data, error } = await supabase.from('users').select('*').eq('email', email.toLowerCase()).maybeSingle();
+    if (error) {
+      console.warn('[User Store Notice] Supabase getUserByEmail error:', error.message);
+      return null;
+    }
+    return data as StoredUser | null;
+  } catch (err) {
+    console.warn('[User Store Notice] Supabase getUserByEmail exception:', err);
+    return null;
+  }
 }
 
 export async function verifyUser(email: string): Promise<boolean> {
-  const { data, error } = await supabase
-    .from('users')
-    .update({ isVerified: true })
-    .eq('email', email.toLowerCase())
-    .select();
-  if (error) throw error;
-  return (data && data.length > 0) || false;
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .update({ isVerified: true })
+      .eq('email', email.toLowerCase())
+      .select();
+    if (error) {
+      console.warn('[User Store Notice] verifyUser error:', error.message);
+      return false;
+    }
+    return (data && data.length > 0) || false;
+  } catch {
+    return false;
+  }
 }
 
 export async function updateUserPassword(email: string, newPasswordHash: string): Promise<boolean> {
-  const { data, error } = await supabase
-    .from('users')
-    .update({ passwordHash: newPasswordHash, isVerified: true })
-    .eq('email', email.toLowerCase())
-    .select();
-  if (error) throw error;
-  return (data && data.length > 0) || false;
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .update({ passwordHash: newPasswordHash, isVerified: true })
+      .eq('email', email.toLowerCase())
+      .select();
+    if (error) {
+      console.warn('[User Store Notice] updateUserPassword error:', error.message);
+      return false;
+    }
+    return (data && data.length > 0) || false;
+  } catch {
+    return false;
+  }
 }
 
 // ── OTP Operations ────────────────────────────────────────────────────────────
