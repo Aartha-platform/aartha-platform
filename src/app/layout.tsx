@@ -50,6 +50,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://aartha.site',
   },
+  icons: {
+    icon: '/icon',
+    shortcut: '/icon',
+    apple: '/icon',
+  },
   openGraph: {
     title: "Aartha — India's Verified Manufacturing Network",
     description: "Connect directly with verified Indian manufacturers. Real GPS-audited factories, zero brokerage fees, and verified GSTIN/IEC credentials.",
