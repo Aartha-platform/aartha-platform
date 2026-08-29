@@ -2,7 +2,8 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Search, SlidersHorizontal, ChevronLeft, ChevronRight, X, GitCompare } from 'lucide-react';
+import Link from 'next/link';
+import { Search, SlidersHorizontal, ChevronLeft, ChevronRight, X, GitCompare, Building2 } from 'lucide-react';
 import SupplierCard from '@/components/SupplierCard';
 import SlideOutPanel from '@/components/SlideOutPanel';
 import SearchBar from '@/components/SearchBar';
@@ -399,6 +400,31 @@ function SuppliersDirectoryContent() {
                 </button>
               </div>
             )}
+
+            {/* ═══ Bottom Conversion CTA — "List Your Factory" ═══ */}
+            <div className="mt-10 border border-amber-500/20 rounded-2xl bg-gradient-to-br from-amber-50/80 via-white to-amber-50/40 dark:from-amber-900/10 dark:via-[var(--surface)] dark:to-amber-900/5 p-6 md:p-8 text-center space-y-4 shadow-premium">
+              <div className="flex items-center justify-center gap-2 text-amber-600 dark:text-amber-400">
+                <Building2 size={20} />
+                <span className="text-[10px] font-extrabold uppercase tracking-[0.15em]">Gujarat Manufacturing Directory</span>
+              </div>
+              <h3 className="text-lg md:text-xl font-extrabold text-navy dark:text-white leading-tight">
+                Is your factory in Gujarat?<br />
+                <span className="bg-gradient-to-r from-amber-600 to-amber-500 bg-clip-text text-transparent">Get listed for free.</span>
+              </h3>
+              <p className="text-xs text-text-secondary dark:text-slate-300 max-w-md mx-auto leading-relaxed">
+                Build a verified professional profile. Show your products, capabilities, and certifications. Let relevant businesses discover you directly.
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-1">
+                <Link
+                  href="/get-listed"
+                  className="btn-amber px-6 py-2.5 text-sm font-bold rounded-xl no-underline flex items-center gap-2 shadow-md hover:shadow-lg transition-all"
+                >
+                  <Building2 size={16} />
+                  List Your Factory — Free
+                </Link>
+                <span className="text-[10px] text-text-muted font-semibold uppercase tracking-wider">Zero listing fees · Launch phase</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

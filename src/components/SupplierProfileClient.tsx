@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { MapPin, Clock, Star, ShieldCheck, Mail, Phone, Calendar, Users, Briefcase, Award, CheckCircle, X, ExternalLink, ArrowRight, MessageSquare, FileText } from 'lucide-react';
+import { MapPin, Clock, Star, ShieldCheck, Mail, Phone, Calendar, Users, Briefcase, Award, CheckCircle, X, ExternalLink, ArrowRight, MessageSquare, FileText, Building2 } from 'lucide-react';
 import { Supplier, SupplierTab } from '@/types';
 import QualityScore from './QualityScore';
 import TrustBadge from './TrustBadge';
@@ -179,6 +179,34 @@ export default function SupplierProfileClient({ supplier }: SupplierProfileClien
           </div>
         </div>
       </section>
+
+      {/* ═══ CLAIM THIS FACTORY BANNER (Demo/Seed profiles only) ═══ */}
+      {supplier.isDemo && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+          <div className="bg-gradient-to-r from-amber-50 via-amber-50/80 to-orange-50 border border-amber-400/30 rounded-xl p-4 md:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-sm">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-lg bg-amber-100 border border-amber-300/40 flex items-center justify-center flex-shrink-0">
+                <Building2 size={20} className="text-amber-600" />
+              </div>
+              <div>
+                <h3 className="text-sm font-extrabold text-navy leading-tight">
+                  Is this your factory? Claim this profile.
+                </h3>
+                <p className="text-xs text-text-secondary mt-0.5 leading-relaxed max-w-lg">
+                  This is a benchmark listing for the <strong>{supplier.location.city}</strong> {supplier.category.toLowerCase()} cluster. Verify your GSTIN to take ownership, update your details, and start receiving direct buyer enquiries.
+                </p>
+              </div>
+            </div>
+            <Link
+              href="/get-listed"
+              className="btn-amber px-5 py-2.5 text-xs font-bold rounded-lg no-underline flex items-center gap-2 whitespace-nowrap shadow-md hover:shadow-lg transition-all"
+            >
+              <Building2 size={14} />
+              Claim & Verify GSTIN
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Main Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

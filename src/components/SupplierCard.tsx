@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { MapPin, Clock, Star, Shield, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { MapPin, Clock, Star, Shield, ArrowRight, CheckCircle2, Building2 } from 'lucide-react';
 import { Supplier } from '../types';
 import TrustBadge from './TrustBadge';
 import QualityScore from './QualityScore';
@@ -79,10 +79,18 @@ export default function SupplierCard({
           )}
         </div>
 
-        {supplier.isVerified && (
+        {supplier.isVerified && !supplier.isDemo && (
           <div className="absolute bottom-2 right-2 text-white/90 text-[10px] font-mono tracking-wider font-bold uppercase bg-navy/60 backdrop-blur-md px-1.5 py-0.5 rounded-full select-none z-10 flex items-center gap-1 border border-emerald-500/30">
             <CheckCircle2 size={9} className="text-emerald-400" />
             {t('trust_verified_badge')}
+          </div>
+        )}
+
+        {/* UNCLAIMED overlay for demo/seed profiles */}
+        {supplier.isDemo && (
+          <div className="absolute top-2 right-2 z-20 bg-amber-500/90 backdrop-blur-sm text-white text-[9px] font-extrabold uppercase tracking-[0.12em] px-2 py-1 rounded-md flex items-center gap-1 shadow-sm border border-amber-400/50">
+            <Building2 size={10} />
+            UNCLAIMED
           </div>
         )}
       </div>
@@ -193,12 +201,22 @@ export default function SupplierCard({
               >
                 {t('common_profile')}
               </Link>
-              <button
-                onClick={() => onEnquireClick?.(supplier)}
-                className="flex-1 btn-amber text-[11px] py-1.5 font-bold text-center cursor-pointer shadow-sm hover:shadow-md rounded-lg"
-              >
-                {t('common_enquire')}
-              </button>
+              {supplier.isDemo ? (
+                <Link
+                  href="/get-listed"
+                  className="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-[11px] py-1.5 font-bold text-center no-underline rounded-lg shadow-sm hover:shadow-md flex items-center justify-center gap-1 transition-all"
+                >
+                  <Building2 size={11} />
+                  Claim Factory
+                </Link>
+              ) : (
+                <button
+                  onClick={() => onEnquireClick?.(supplier)}
+                  className="flex-1 btn-amber text-[11px] py-1.5 font-bold text-center cursor-pointer shadow-sm hover:shadow-md rounded-lg"
+                >
+                  {t('common_enquire')}
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -274,12 +292,22 @@ export default function SupplierCard({
             >
               {t('common_profile')}
             </Link>
-            <button
-              onClick={() => onEnquireClick?.(supplier)}
-              className="btn-amber text-xs px-3.5 py-1.5 font-bold whitespace-nowrap cursor-pointer shadow-sm rounded-lg"
-            >
-              {t('common_enquire')}
-            </button>
+            {supplier.isDemo ? (
+              <Link
+                href="/get-listed"
+                className="bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs px-3.5 py-1.5 font-bold whitespace-nowrap no-underline rounded-lg shadow-sm flex items-center gap-1.5 transition-all hover:shadow-md"
+              >
+                <Building2 size={12} />
+                Claim This Factory
+              </Link>
+            ) : (
+              <button
+                onClick={() => onEnquireClick?.(supplier)}
+                className="btn-amber text-xs px-3.5 py-1.5 font-bold whitespace-nowrap cursor-pointer shadow-sm rounded-lg"
+              >
+                {t('common_enquire')}
+              </button>
+            )}
           </div>
         </div>
       </div>
