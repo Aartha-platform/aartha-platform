@@ -51,9 +51,9 @@ export const metadata: Metadata = {
     canonical: 'https://aartha.site',
   },
   icons: {
-    icon: '/icon',
-    shortcut: '/icon',
-    apple: '/icon',
+    icon: '/brand/aartha-logo.png',
+    shortcut: '/brand/aartha-logo.png',
+    apple: '/brand/aartha-logo.png',
   },
   openGraph: {
     title: "Aartha — India's Verified Manufacturing Network",
@@ -106,7 +106,7 @@ const structuredSchema = {
       "name": "Aartha",
       "legalName": "Aartha B2B Platform",
       "url": "https://aartha.site",
-      "logo": "https://aartha.site/icon.png",
+      "logo": "https://aartha.site/brand/aartha-logo.png",
       "description": "Evidence-grounded B2B manufacturing discovery & verification platform for Indian MSMEs and global industrial buyers.",
       "address": {
         "@type": "PostalAddress",
