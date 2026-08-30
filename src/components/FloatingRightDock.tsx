@@ -60,9 +60,7 @@ export default function FloatingRightDock() {
       badge: 'v2.4',
       badgeClass: 'bg-amber-500/20 text-amber-600 dark:text-amber-400 border-amber-500/30',
       hasGlow: true,
-      action: () => {
-        window.dispatchEvent(new CustomEvent('artha-toggle-ai-assistant'));
-      }
+      href: '/ai-assistant'
     },
     {
       id: 'rfq',

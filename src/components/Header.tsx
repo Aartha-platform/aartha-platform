@@ -16,7 +16,7 @@ const navLinks = [
   { label: 'Trust Center', to: '/verified', key: 'nav_trust_center' as const },
   { label: 'Document Intel', to: '/document-intelligence', key: 'nav_doc_intel' as const },
   { label: 'Blog', to: '/blog', key: 'nav_blog' as const },
-  { label: 'Ask AI', to: '#', triggerAssistant: true, key: 'nav_ask_ai' as const },
+  { label: 'Ask AI', to: '/ai-assistant', hasSparkle: true, key: 'nav_ask_ai' as const },
 ];
 
 export default function Header() {
@@ -49,31 +49,23 @@ export default function Header() {
 
           {/* Project 2 Desktop Nav Links */}
           <nav className="hidden xl:flex items-center xl:gap-x-1.5 2xl:gap-x-3">
-            {navLinks.map((link) => 
-              link.triggerAssistant ? (
-                <button
-                  key={link.label}
-                  onClick={() => window.dispatchEvent(new CustomEvent('artha-toggle-ai-assistant'))}
-                  className="inline-flex items-center gap-1 text-xs 2xl:text-sm uppercase tracking-wider font-bold transition-all px-2 py-1.5 rounded-lg text-text-secondary dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-500/10 cursor-pointer whitespace-nowrap"
-                >
-                  <Sparkles size={13} className="text-amber-500 animate-pulse" />
-                  {t(link.key)}
-                </button>
-              ) : (
-                <Link
-                  key={link.to}
-                  href={link.to}
-                  prefetch={false}
-                  className={`text-xs 2xl:text-sm uppercase tracking-wider font-bold transition-all px-2 py-1.5 rounded-lg whitespace-nowrap ${
-                    isActive(link.to)
-                      ? 'text-amber-600 dark:text-amber-400 bg-amber-500/10 font-extrabold'
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                href={link.to}
+                prefetch={false}
+                className={`inline-flex items-center gap-1 text-xs 2xl:text-sm uppercase tracking-wider font-bold transition-all px-2 py-1.5 rounded-lg whitespace-nowrap ${
+                  isActive(link.to)
+                    ? 'text-amber-600 dark:text-amber-400 bg-amber-500/10 font-extrabold'
+                    : link.hasSparkle
+                      ? 'text-text-secondary dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-500/10'
                       : 'text-text-secondary dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
-                  }`}
-                >
-                  {t(link.key)}
-                </Link>
-              )
-            )}
+                }`}
+              >
+                {link.hasSparkle && <Sparkles size={13} className="text-amber-500 animate-pulse" />}
+                {t(link.key)}
+              </Link>
+            ))}
           </nav>
 
           {/* User Actions + Highlighted Color-Graded RFQ Button */}
@@ -142,33 +134,24 @@ export default function Header() {
       {mobileMenuOpen && (
         <div className="xl:hidden absolute top-[56px] left-0 right-0 bg-white/95 dark:bg-[var(--surface)]/95 backdrop-blur-xl border-b border-black/10 dark:border-white/10 shadow-xl z-45 animate-fadeIn">
           <div className="px-4 py-4 space-y-1.5">
-            {navLinks.map((link) => 
-              link.triggerAssistant ? (
-                <button
-                  key={link.label}
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    window.dispatchEvent(new CustomEvent('artha-toggle-ai-assistant'));
-                  }}
-                  className="w-full text-left flex items-center gap-2 py-2.5 px-3 rounded-lg text-xs font-bold transition-colors text-amber-600 dark:text-amber-400 bg-amber-500/10 cursor-pointer"
-                >
-                  <Sparkles size={14} />
-                  {t(link.key)}
-                </button>
-              ) : (
-                <Link
-                  key={link.to}
-                  href={link.to}
-                  prefetch={false}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`block py-2.5 px-3 rounded-lg text-xs font-bold transition-colors ${
-                    isActive(link.to) ? 'text-amber-600 dark:text-amber-400 bg-amber-500/10' : 'text-text-secondary dark:text-slate-300 hover:text-navy hover:bg-black/5 dark:hover:bg-white/5'
-                  }`}
-                >
-                  {t(link.key)}
-                </Link>
-              )
-            )}
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                href={link.to}
+                prefetch={false}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`flex items-center gap-2 py-2.5 px-3 rounded-lg text-xs font-bold transition-colors ${
+                  isActive(link.to)
+                    ? 'text-amber-600 dark:text-amber-400 bg-amber-500/10 font-extrabold'
+                    : link.hasSparkle
+                      ? 'text-amber-600 dark:text-amber-400 hover:bg-amber-500/10'
+                      : 'text-text-secondary dark:text-slate-300 hover:text-navy hover:bg-black/5 dark:hover:bg-white/5'
+                }`}
+              >
+                {link.hasSparkle && <Sparkles size={14} className="text-amber-500" />}
+                {t(link.key)}
+              </Link>
+            ))}
             <div className="pt-3 flex flex-col gap-2 border-t border-black/5 dark:border-white/10 mt-2">
               {isAuthenticated ? (
                 <>
