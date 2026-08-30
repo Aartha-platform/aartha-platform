@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { 
   X, Sparkles, Send, Bot, User, RefreshCw, RotateCcw, 
   Building2, FileCheck2, FileEdit, TrendingUp, ShieldAlert, 
-  ExternalLink, CheckCircle2, Shield
+  ExternalLink, CheckCircle2, Shield, Maximize2
 } from 'lucide-react';
 import { generateAssistantReply } from '@/lib/assistantModes';
 
@@ -277,15 +277,24 @@ export default function AIAssistantPanel({ isOpen, onClose }: AIAssistantPanelPr
               <button
                 onClick={handleClearChat}
                 title="Reset conversation"
-                className="text-white/70 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-colors cursor-pointer flex items-center gap-1 text-xs select-none"
+                className="text-white/70 hover:text-white p-1.5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer flex items-center gap-1 text-xs select-none"
               >
                 <RotateCcw size={14} />
                 <span className="hidden sm:inline text-[11px] font-semibold">Reset</span>
               </button>
+              <Link
+                href="/ai-assistant"
+                onClick={onClose}
+                title="Open Full Workspace Studio"
+                className="text-white/80 hover:text-white p-1.5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer flex items-center gap-1 text-xs select-none no-underline border border-white/10 hover:border-white/20 bg-white/5"
+              >
+                <Maximize2 size={13} className="text-amber-400" />
+                <span className="hidden sm:inline text-[11px] font-semibold text-amber-300">Full Studio</span>
+              </Link>
               <button
                 onClick={onClose}
                 title="Close panel"
-                className="text-white/70 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-colors cursor-pointer select-none"
+                className="text-white/70 hover:text-white p-1.5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer select-none"
               >
                 <X size={18} />
               </button>

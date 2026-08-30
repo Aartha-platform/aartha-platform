@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Shield, Menu, X, LogOut, User, Sparkles, FileText } from 'lucide-react';
+import { Shield, Menu, X, LogOut, User, FileText } from 'lucide-react';
 import { useSession, getDashboardPath, getDashboardLabel } from '@/hooks/useSession';
 import { useTranslation } from '@/hooks/useTranslation';
 import LanguageToggle from '@/components/LanguageToggle';
@@ -16,7 +16,6 @@ const navLinks = [
   { label: 'Trust Center', to: '/verified', key: 'nav_trust_center' as const },
   { label: 'Document Intel', to: '/document-intelligence', key: 'nav_doc_intel' as const },
   { label: 'Blog', to: '/blog', key: 'nav_blog' as const },
-  { label: 'Ask AI', to: '/ai-assistant', hasSparkle: true, key: 'nav_ask_ai' as const },
 ];
 
 export default function Header() {
@@ -54,15 +53,12 @@ export default function Header() {
                 key={link.to}
                 href={link.to}
                 prefetch={false}
-                className={`inline-flex items-center gap-1 text-xs 2xl:text-sm uppercase tracking-wider font-bold transition-all px-2 py-1.5 rounded-lg whitespace-nowrap ${
+                className={`text-xs 2xl:text-sm uppercase tracking-wider font-bold transition-all px-2 py-1.5 rounded-lg whitespace-nowrap ${
                   isActive(link.to)
                     ? 'text-amber-600 dark:text-amber-400 bg-amber-500/10 font-extrabold'
-                    : link.hasSparkle
-                      ? 'text-text-secondary dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-500/10'
-                      : 'text-text-secondary dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
+                    : 'text-text-secondary dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
                 }`}
               >
-                {link.hasSparkle && <Sparkles size={13} className="text-amber-500 animate-pulse" />}
                 {t(link.key)}
               </Link>
             ))}
@@ -140,15 +136,12 @@ export default function Header() {
                 href={link.to}
                 prefetch={false}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center gap-2 py-2.5 px-3 rounded-lg text-xs font-bold transition-colors ${
+                className={`block py-2.5 px-3 rounded-lg text-xs font-bold transition-colors ${
                   isActive(link.to)
                     ? 'text-amber-600 dark:text-amber-400 bg-amber-500/10 font-extrabold'
-                    : link.hasSparkle
-                      ? 'text-amber-600 dark:text-amber-400 hover:bg-amber-500/10'
-                      : 'text-text-secondary dark:text-slate-300 hover:text-navy hover:bg-black/5 dark:hover:bg-white/5'
+                    : 'text-text-secondary dark:text-slate-300 hover:text-navy hover:bg-black/5 dark:hover:bg-white/5'
                 }`}
               >
-                {link.hasSparkle && <Sparkles size={14} className="text-amber-500" />}
                 {t(link.key)}
               </Link>
             ))}
