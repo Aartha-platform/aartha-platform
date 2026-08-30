@@ -26,10 +26,10 @@ interface DocumentReadinessPanelProps {
 }
 
 const severityBadges = {
-  critical: { bg: 'bg-rose-500/15 text-rose-300 border-rose-500/30', label: 'CRITICAL / गंभीर' },
-  high: { bg: 'bg-amber-500/15 text-amber-300 border-amber-500/30', label: 'HIGH PRIORITY / उच्च' },
-  medium: { bg: 'bg-sky-500/15 text-sky-300 border-sky-500/30', label: 'MEDIUM / मध्यम' },
-  low: { bg: 'bg-slate-500/15 text-slate-300 border-slate-500/30', label: 'LOW / सामान्य' }
+  critical: { bg: 'bg-rose-100 text-rose-700 border-rose-300', label: 'CRITICAL / गंभीर' },
+  high: { bg: 'bg-amber-100 text-amber-700 border-amber-300', label: 'HIGH PRIORITY / उच्च' },
+  medium: { bg: 'bg-sky-100 text-sky-700 border-sky-300', label: 'MEDIUM / मध्यम' },
+  low: { bg: 'bg-slate-100 text-slate-600 border-slate-300', label: 'LOW / सामान्य' }
 };
 
 function generatePdfReport(dossier: DocumentDossier): Blob {
@@ -168,63 +168,63 @@ export default function DocumentReadinessPanel({
   const scoreColor = dossier.scores.overall >= 90 ? '#10B981' : dossier.scores.overall >= 70 ? '#F59E0B' : '#EF4444';
 
   return (
-    <div className="space-y-6 text-slate-100 font-sans">
+    <div className="space-y-6 text-slate-900 font-sans">
       
-      {/* 1. Hero Summary Obsidian Glass Banner */}
-      <div className={`p-6 rounded-2xl border backdrop-blur-xl shadow-2xl transition-all ${
+      {/* 1. Hero Summary Banner — Enterprise Light with thick left border */}
+      <div className={`p-6 rounded-2xl border-l-4 border shadow-sm transition-all ${
         totalIssues === 0 
-          ? 'bg-emerald-950/40 border-emerald-500/30' 
+          ? 'bg-emerald-50/50 border-l-emerald-500 border-slate-200' 
           : criticalCount > 0 
-          ? 'bg-rose-950/40 border-rose-500/30' 
-          : 'bg-amber-950/30 border-amber-500/30'
+          ? 'bg-rose-50/50 border-l-rose-500 border-slate-200' 
+          : 'bg-amber-50/50 border-l-amber-500 border-slate-200'
       }`}>
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <div className="space-y-2 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs font-black uppercase tracking-wider px-3 py-1 rounded-md bg-amber-500/20 text-amber-400 border border-amber-500/30">
+              <span className="text-xs font-black uppercase tracking-wider px-3 py-1 rounded-md bg-amber-100 text-amber-700 border border-amber-300">
                 {meta.name}
               </span>
               <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full border ${
                 dossier.source === 'live-scan' 
-                  ? 'bg-blue-500/20 text-blue-300 border-blue-500/40' 
-                  : 'bg-white/10 text-slate-300 border-white/10'
+                  ? 'bg-blue-100 text-blue-700 border-blue-300' 
+                  : 'bg-slate-100 text-slate-600 border-slate-300'
               }`}>
                 {dossier.source === 'live-scan' ? '● Live Verified Scan' : '○ Verified Benchmark'}
               </span>
-              <span className="text-xs font-mono text-slate-400">
+              <span className="text-xs font-mono text-slate-500">
                 File: {dossier.name}
               </span>
             </div>
 
-            <h2 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2.5">
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2.5">
               {totalIssues === 0 ? (
                 <>
-                  <CheckCircle2 className="w-7 h-7 text-emerald-400 flex-shrink-0" />
+                  <CheckCircle2 className="w-7 h-7 text-emerald-600 flex-shrink-0" />
                   <span>100% Compliant — Clear to Ship</span>
                 </>
               ) : criticalCount > 0 ? (
                 <>
-                  <XCircle className="w-7 h-7 text-rose-400 flex-shrink-0" />
+                  <XCircle className="w-7 h-7 text-rose-600 flex-shrink-0" />
                   <span>{totalIssues} Critical Issue{totalIssues > 1 ? 's' : ''} Detected — Action Required</span>
                 </>
               ) : (
                 <>
-                  <AlertTriangle className="w-7 h-7 text-amber-400 flex-shrink-0" />
+                  <AlertTriangle className="w-7 h-7 text-amber-600 flex-shrink-0" />
                   <span>{totalIssues} Discrepanc{totalIssues > 1 ? 'ies' : 'y'} Detected — Fix Needed</span>
                 </>
               )}
             </h2>
 
-            <p className="text-sm text-slate-300 leading-relaxed font-medium">
+            <p className="text-sm text-slate-600 leading-relaxed font-medium">
               {dossier.summary}
             </p>
           </div>
 
-          {/* Overall Readiness Radial Score in Dark Glass */}
-          <div className="flex items-center gap-4 bg-slate-900/90 border border-white/10 p-4 rounded-xl shadow-xl flex-shrink-0 backdrop-blur-md">
+          {/* Overall Readiness Radial Score — Light */}
+          <div className="flex items-center gap-4 bg-white border border-slate-200/90 p-4 rounded-xl shadow-sm flex-shrink-0">
             <div className="relative flex items-center justify-center">
               <svg width="76" height="76" className="transform -rotate-90">
-                <circle cx="38" cy="38" r="32" stroke="rgba(255,255,255,0.06)" strokeWidth="6" fill="transparent" />
+                <circle cx="38" cy="38" r="32" stroke="#e2e8f0" strokeWidth="6" fill="transparent" />
                 <circle
                   cx="38"
                   cy="38"
@@ -239,24 +239,24 @@ export default function DocumentReadinessPanel({
                 />
               </svg>
               <div className="absolute text-center">
-                <span className="text-lg font-black font-mono text-white block leading-none">{dossier.scores.overall}%</span>
-                <span className="text-[9px] font-bold text-amber-400 uppercase tracking-widest">Score</span>
+                <span className="text-lg font-black font-mono text-slate-900 block leading-none">{dossier.scores.overall}%</span>
+                <span className="text-[9px] font-bold text-amber-600 uppercase tracking-widest">Score</span>
               </div>
             </div>
             <div>
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Statutory Status</span>
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Statutory Status</span>
               <span className={`text-sm font-black uppercase ${
-                dossier.scores.overall >= 90 ? 'text-emerald-400' : dossier.scores.overall >= 70 ? 'text-amber-400' : 'text-rose-400'
+                dossier.scores.overall >= 90 ? 'text-emerald-600' : dossier.scores.overall >= 70 ? 'text-amber-600' : 'text-rose-600'
               }`}>
                 {dossier.scores.overall >= 90 ? 'Ready for Export ✓' : dossier.scores.overall >= 70 ? 'Fix Recommended' : 'Border Risk'}
               </span>
-              <span className="text-xs text-slate-400 block mt-0.5">{passedAssertionsCount}/{dossier.assertions.length} audits passed</span>
+              <span className="text-xs text-slate-500 block mt-0.5">{passedAssertionsCount}/{dossier.assertions.length} audits passed</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 2. Corridor Readiness Score Cards (4 Pillars) in Obsidian Glass */}
+      {/* 2. Corridor Readiness Score Cards (4 Pillars) — Light */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
         {[
           { 
@@ -286,44 +286,43 @@ export default function DocumentReadinessPanel({
         ].map((item) => {
           const isGreen = item.score >= 90;
           const isAmber = item.score >= 70 && item.score < 90;
-          const colorClass = isGreen ? 'text-emerald-400' : isAmber ? 'text-amber-400' : 'text-rose-400';
-          const bgBadge = isGreen ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' : isAmber ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' : 'bg-rose-500/20 text-rose-300 border-rose-500/30';
+          const bgBadge = isGreen ? 'bg-emerald-100 text-emerald-700 border-emerald-300' : isAmber ? 'bg-amber-100 text-amber-700 border-amber-300' : 'bg-rose-100 text-rose-700 border-rose-300';
 
           return (
-            <div key={item.title} className="bg-slate-900/90 border border-white/10 rounded-2xl p-4 shadow-xl backdrop-blur-md hover:border-amber-500/30 transition-all">
+            <div key={item.title} className="bg-white border border-slate-200/90 rounded-2xl p-4 shadow-sm hover:shadow-md hover:border-amber-400/60 transition-all">
               <div className="flex justify-between items-start mb-2">
                 <div>
-                  <h4 className="text-xs font-bold text-white uppercase tracking-wider">{item.title}</h4>
-                  <span className="text-[10px] text-amber-400 font-medium block">{item.titleHi}</span>
+                  <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider">{item.title}</h4>
+                  <span className="text-[10px] text-amber-600 font-medium block">{item.titleHi}</span>
                 </div>
                 <span className={`text-xs font-mono font-black px-2 py-0.5 rounded-full border ${bgBadge}`}>
                   {item.score}%
                 </span>
               </div>
-              <div className="w-full bg-white/5 h-2 rounded-full overflow-hidden my-2 border border-white/5">
+              <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden my-2 border border-slate-200/60">
                 <div 
                   className={`h-full rounded-full transition-all duration-700 ${
-                    isGreen ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]' : isAmber ? 'bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]' : 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.5)]'
+                    isGreen ? 'bg-emerald-500' : isAmber ? 'bg-amber-500' : 'bg-rose-500'
                   }`} 
                   style={{ width: `${item.score}%` }} 
                 />
               </div>
-              <p className="text-[11px] text-slate-400 mt-1">{item.desc}</p>
+              <p className="text-[11px] text-slate-500 mt-1">{item.desc}</p>
             </div>
           );
         })}
       </div>
 
-      {/* 3. Found Compliance Issues Section with 1-Click Fix */}
+      {/* 3. Found Compliance Issues Section with 1-Click Fix — Light */}
       {dossier.exceptions.length > 0 && (
-        <div className="bg-slate-900/95 border border-amber-500/30 rounded-2xl p-6 shadow-2xl backdrop-blur-xl space-y-4">
+        <div className="bg-amber-50/50 border border-amber-200/80 rounded-2xl p-6 shadow-sm space-y-4">
           <div>
-            <h3 className="text-sm font-black text-amber-400 uppercase tracking-wider flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-amber-400" />
+            <h3 className="text-sm font-black text-amber-700 uppercase tracking-wider flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-amber-600" />
               <span>Found Compliance Issues ({dossier.exceptions.length}) — Action Needed</span>
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Click <strong>"Apply 1-Click Fix"</strong> to automatically update your document to international statutory standards.
+            <p className="text-xs text-slate-600 mt-0.5">
+              Click <strong>&quot;Apply 1-Click Fix&quot;</strong> to automatically update your document to international statutory standards.
             </p>
           </div>
 
@@ -331,30 +330,30 @@ export default function DocumentReadinessPanel({
             {dossier.exceptions.map((exc) => {
               const badge = severityBadges[exc.severity] || severityBadges.medium;
               return (
-                <div key={exc.id} className="border border-white/10 rounded-xl p-5 bg-slate-950/70 flex flex-col justify-between space-y-4 hover:border-amber-500/40 transition-all">
+                <div key={exc.id} className="border border-slate-200/90 rounded-xl p-5 bg-white flex flex-col justify-between space-y-4 hover:border-amber-300 hover:shadow-md transition-all shadow-xs">
                   <div className="space-y-2.5">
                     <div className="flex justify-between items-center">
                       <span className={`text-[11px] font-black px-2.5 py-0.5 rounded-full border ${badge.bg}`}>
                         {badge.label}
                       </span>
-                      <span className="text-xs font-mono font-bold text-amber-300 bg-white/5 px-2.5 py-0.5 rounded border border-white/10">
+                      <span className="text-xs font-mono font-bold text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded border border-amber-200">
                         {exc.field}
                       </span>
                     </div>
 
-                    <p className="text-xs font-bold text-white leading-relaxed">
+                    <p className="text-xs font-bold text-slate-800 leading-relaxed">
                       {exc.message}
                     </p>
 
                     {exc.hindiSummary && (
-                      <p className="text-[11px] text-amber-200 bg-amber-500/10 p-2.5 rounded-lg border border-amber-500/20 leading-relaxed font-medium">
+                      <p className="text-[11px] text-amber-900 bg-amber-50/80 p-2.5 rounded-lg border border-amber-200 leading-relaxed font-medium">
                         💡 <strong>सरल उपाय:</strong> {exc.hindiSummary}
                       </p>
                     )}
 
-                    <div className="text-[11px] text-slate-300 space-y-1.5 bg-white/5 p-3 rounded-lg border border-white/5">
-                      <div><strong className="text-rose-400 uppercase text-[10px] tracking-wide">Trade Risk:</strong> {exc.risk}</div>
-                      <div><strong className="text-sky-400 uppercase text-[10px] tracking-wide">Statutory Remedy:</strong> {exc.suggestion}</div>
+                    <div className="text-[11px] text-slate-600 space-y-1.5 bg-slate-50 p-3 rounded-lg border border-slate-200/80">
+                      <div><strong className="text-rose-600 uppercase text-[10px] tracking-wide">Trade Risk:</strong> {exc.risk}</div>
+                      <div><strong className="text-sky-600 uppercase text-[10px] tracking-wide">Statutory Remedy:</strong> {exc.suggestion}</div>
                     </div>
                   </div>
 
@@ -362,7 +361,7 @@ export default function DocumentReadinessPanel({
                     <button
                       type="button"
                       onClick={() => onFixApplied(exc.id, exc.autoFixValue || exc.suggestion)}
-                      className="w-full bg-gradient-to-r from-amber-500 via-amber-600 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs py-3 px-4 rounded-xl shadow-lg hover:shadow-amber-500/20 transition-all flex items-center justify-center gap-2 cursor-pointer uppercase tracking-wider"
+                      className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-yellow-500 text-slate-950 font-black text-xs py-3 px-4 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer uppercase tracking-wider"
                     >
                       <Sparkles className="w-4 h-4 text-slate-950" />
                       <span>✨ Apply 1-Click Fix ({exc.autoFixValue || 'Auto Correct'})</span>
@@ -375,16 +374,16 @@ export default function DocumentReadinessPanel({
         </div>
       )}
 
-      {/* 4. Tab Navigation (Extracted Parameters vs Statutory Verification Audits) */}
-      <div className="bg-slate-900/90 border border-white/10 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-xl">
-        <div className="flex border-b border-white/10 bg-slate-950/60">
+      {/* 4. Tab Navigation (Extracted Parameters vs Statutory Verification Audits) — Light */}
+      <div className="bg-white border border-slate-200/90 rounded-2xl shadow-sm overflow-hidden">
+        <div className="flex border-b border-slate-200 bg-slate-50/70">
           <button
             type="button"
             onClick={() => setActiveTab('overview')}
             className={`flex-1 py-3.5 px-4 text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 border-b-2 transition-all cursor-pointer ${
               activeTab === 'overview' 
-                ? 'border-amber-400 text-amber-400 bg-white/5' 
-                : 'border-transparent text-slate-400 hover:text-white hover:bg-white/5'
+                ? 'border-amber-500 text-amber-700 bg-white' 
+                : 'border-transparent text-slate-500 hover:text-slate-800 hover:bg-white/60'
             }`}
           >
             <Layers className="w-4 h-4" />
@@ -395,8 +394,8 @@ export default function DocumentReadinessPanel({
             onClick={() => setActiveTab('checks')}
             className={`flex-1 py-3.5 px-4 text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 border-b-2 transition-all cursor-pointer ${
               activeTab === 'checks' 
-                ? 'border-amber-400 text-amber-400 bg-white/5' 
-                : 'border-transparent text-slate-400 hover:text-white hover:bg-white/5'
+                ? 'border-amber-500 text-amber-700 bg-white' 
+                : 'border-transparent text-slate-500 hover:text-slate-800 hover:bg-white/60'
             }`}
           >
             <ShieldCheck className="w-4 h-4" />
@@ -407,7 +406,7 @@ export default function DocumentReadinessPanel({
         <div className="p-6">
           {activeTab === 'overview' && (
             <div className="space-y-4">
-              <div className="flex justify-between items-center text-xs text-slate-400 pb-2 border-b border-white/10">
+              <div className="flex justify-between items-center text-xs text-slate-500 pb-2 border-b border-slate-200">
                 <span>Extracted from statutory structure & document tokens</span>
                 <span>Confidence score</span>
               </div>
@@ -420,16 +419,16 @@ export default function DocumentReadinessPanel({
                       key={field.label} 
                       className={`p-4 rounded-xl border transition-all ${
                         field.highlight 
-                          ? 'bg-amber-500/10 border-amber-500/30' 
-                          : 'bg-slate-950/60 border-white/10 hover:border-white/20'
+                          ? 'bg-amber-50/60 border-amber-300' 
+                          : 'bg-slate-50/80 border-slate-200 hover:border-slate-300'
                       }`}
                     >
                       <div className="flex justify-between items-start mb-1.5">
-                        <span className="text-[11px] font-bold text-amber-400 uppercase tracking-wider">
+                        <span className="text-[11px] font-bold text-amber-600 uppercase tracking-wider">
                           {field.label}
                         </span>
                         <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-white/10 text-slate-300">
+                          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200">
                             {field.confidence}% Match
                           </span>
                           {onFieldUpdated && !isEditing && (
@@ -439,7 +438,7 @@ export default function DocumentReadinessPanel({
                                 setEditingField(field.label);
                                 setTempFieldValue(field.value);
                               }}
-                              className="text-slate-400 hover:text-amber-400 p-1 rounded cursor-pointer transition-colors"
+                              className="text-slate-400 hover:text-amber-600 p-1 rounded cursor-pointer transition-colors"
                               title="Edit Value"
                             >
                               <Edit3 className="w-3.5 h-3.5" />
@@ -454,7 +453,7 @@ export default function DocumentReadinessPanel({
                             type="text"
                             value={tempFieldValue}
                             onChange={(e) => setTempFieldValue(e.target.value)}
-                            className="flex-1 text-xs font-mono font-bold text-white bg-slate-900 px-3 py-1.5 border border-amber-400/50 rounded-lg focus:outline-none focus:ring-1 focus:ring-amber-400"
+                            className="flex-1 text-xs font-mono font-bold text-slate-900 bg-white px-3 py-1.5 border border-amber-400 rounded-lg focus:outline-none focus:ring-1 focus:ring-amber-400"
                             autoFocus
                           />
                           <button
@@ -465,14 +464,14 @@ export default function DocumentReadinessPanel({
                               }
                               setEditingField(null);
                             }}
-                            className="p-1.5 bg-emerald-500 text-slate-950 font-bold rounded-lg hover:bg-emerald-400 cursor-pointer"
+                            className="p-1.5 bg-emerald-500 text-white font-bold rounded-lg hover:bg-emerald-600 cursor-pointer"
                             title="Save"
                           >
                             <Check className="w-4 h-4" />
                           </button>
                         </div>
                       ) : (
-                        <div className="text-xs font-mono font-bold text-white break-all">
+                        <div className="text-xs font-mono font-bold text-slate-900 break-all">
                           {field.value}
                         </div>
                       )}
@@ -490,24 +489,24 @@ export default function DocumentReadinessPanel({
                   key={ast.name}
                   className={`p-4 rounded-xl border flex flex-col md:flex-row items-start md:items-center justify-between gap-3 ${
                     ast.passed 
-                      ? 'bg-emerald-950/20 border-emerald-500/20' 
-                      : 'bg-rose-950/20 border-rose-500/20'
+                      ? 'bg-emerald-50/60 border-emerald-200' 
+                      : 'bg-rose-50/60 border-rose-200'
                   }`}
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
                       {ast.passed ? (
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
                       ) : (
-                        <XCircle className="w-4 h-4 text-rose-400 flex-shrink-0" />
+                        <XCircle className="w-4 h-4 text-rose-600 flex-shrink-0" />
                       )}
-                      <h4 className="text-xs font-bold text-white">{ast.name}</h4>
+                      <h4 className="text-xs font-bold text-slate-800">{ast.name}</h4>
                     </div>
-                    <p className="text-xs text-slate-300 leading-relaxed font-medium pl-6">
+                    <p className="text-xs text-slate-600 leading-relaxed font-medium pl-6">
                       {ast.message}
                     </p>
                     {ast.hindiHint && (
-                      <p className="text-[11px] text-amber-400/90 pl-6 font-medium">
+                      <p className="text-[11px] text-amber-700 pl-6 font-medium">
                         🌐 {ast.hindiHint}
                       </p>
                     )}
@@ -515,8 +514,8 @@ export default function DocumentReadinessPanel({
 
                   <span className={`text-[11px] font-black px-3 py-1 rounded-full uppercase flex-shrink-0 ${
                     ast.passed 
-                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' 
-                      : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                      ? 'bg-emerald-100 text-emerald-700 border border-emerald-300' 
+                      : 'bg-rose-100 text-rose-700 border border-rose-300'
                   }`}>
                     {ast.passed ? 'PASSED / सफल' : 'FAILED / असफल'}
                   </span>
@@ -527,14 +526,14 @@ export default function DocumentReadinessPanel({
         </div>
       </div>
 
-      {/* 5. Export Report & Download Actions in Obsidian Gold */}
-      <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border border-amber-500/30 rounded-2xl p-6 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4">
+      {/* 5. Export Report & Download Actions — Navy footer */}
+      <div className="bg-gradient-to-r from-navy via-navy-light to-navy-dark border border-white/10 rounded-2xl p-6 shadow-lg flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="space-y-1 text-center md:text-left">
           <h4 className="text-sm font-black uppercase tracking-wider text-amber-400 flex items-center justify-center md:justify-start gap-2">
             <FileArchive className="w-4 h-4 text-amber-400" />
             <span>Download Verified Compliance Report</span>
           </h4>
-          <p className="text-xs text-slate-400 max-w-xl leading-relaxed">
+          <p className="text-xs text-slate-300 max-w-xl leading-relaxed">
             Export the official statutory compliance report to submit to your customs clearing agent, logistics forwarder, or international buyer.
           </p>
         </div>
