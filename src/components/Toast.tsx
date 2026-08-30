@@ -1,9 +1,9 @@
 'use client';
 
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import { X, CheckCircle, AlertTriangle, AlertCircle } from 'lucide-react';
+import { X, CheckCircle, AlertTriangle, AlertCircle, Info } from 'lucide-react';
 
-export type ToastType = 'success' | 'warning' | 'error';
+export type ToastType = 'success' | 'warning' | 'error' | 'info';
 
 export interface ToastMessage {
   id: string;
@@ -46,11 +46,14 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                 ? 'bg-emerald-500/10 dark:bg-emerald-950/40 border-emerald-500/30 text-emerald-700 dark:text-emerald-300'
                 : t.type === 'warning'
                 ? 'bg-amber-500/10 dark:bg-amber-950/40 border-amber-500/30 text-amber-700 dark:text-amber-300'
+                : t.type === 'info'
+                ? 'bg-sky-500/10 dark:bg-sky-950/40 border-sky-500/30 text-sky-700 dark:text-sky-300'
                 : 'bg-rose-500/10 dark:bg-rose-950/40 border-rose-500/30 text-rose-700 dark:text-rose-300'
             }`}
           >
             {t.type === 'success' && <CheckCircle size={18} className="text-emerald-500 flex-shrink-0 mt-0.5" />}
             {t.type === 'warning' && <AlertTriangle size={18} className="text-amber-500 flex-shrink-0 mt-0.5" />}
+            {t.type === 'info' && <Info size={18} className="text-sky-500 flex-shrink-0 mt-0.5" />}
             {t.type === 'error' && <AlertCircle size={18} className="text-rose-500 flex-shrink-0 mt-0.5" />}
             
             <div className="flex-1 text-xs font-bold leading-relaxed text-text-primary dark:text-white">
