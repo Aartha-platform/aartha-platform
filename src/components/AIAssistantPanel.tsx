@@ -285,11 +285,11 @@ export default function AIAssistantPanel({ isOpen, onClose }: AIAssistantPanelPr
               <Link
                 href="/ai-assistant"
                 onClick={onClose}
-                title="Open Full Workspace Studio"
+                title="Open Full Workspace"
                 className="text-white/80 hover:text-white p-1.5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer flex items-center gap-1 text-xs select-none no-underline border border-white/10 hover:border-white/20 bg-white/5"
               >
                 <Maximize2 size={13} className="text-amber-400" />
-                <span className="hidden sm:inline text-[11px] font-semibold text-amber-300">Full Studio</span>
+                <span className="hidden sm:inline text-[11px] font-semibold text-amber-300">Open Full Workspace</span>
               </Link>
               <button
                 onClick={onClose}
