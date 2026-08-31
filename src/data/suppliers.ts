@@ -48,16 +48,9 @@ const rawSuppliers: Omit<Supplier, 'qualityScore' | 'qualityScoreLastComputed'>[
     lastActiveAt: '2026-06-27T10:00:00Z',
     totalEnquiriesHandled: 345,
     verifiedConnectionsCount: 120,
-    facilityVideoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', // [DEMO] Replace with real factory video before production
-    facilityVideoDated: '2026-01-15',
-    reviewCount: 4,
-    reviewAvgScore: 4.8,
-    reviews: [
-      { id: 'r1', buyerName: 'Sarah Jenkins', buyerRole: 'Procurement Director', buyerCountry: 'USA', rating: 5, comment: 'Excellent tools, specs are exactly as described. Factory audit reports were very helpful.', date: '2026-03-10', category: 'Machinery & Industrial' },
-      { id: 'r2', buyerName: 'Dieter Müller', buyerRole: 'Senior Buyer', buyerCountry: 'Germany', rating: 4, comment: 'High quality precision components. Decent lead time.', date: '2026-04-05', category: 'Machinery & Industrial' },
-      { id: 'r3', buyerName: 'Ahmed Al-Mansoori', buyerRole: 'Import Head', buyerCountry: 'UAE', rating: 5, comment: 'Reliable supplier, outstanding response times on custom tool orders.', date: '2026-05-12', category: 'Machinery & Industrial' },
-      { id: 'r4', buyerName: 'Tan Min', buyerRole: 'Operations Manager', buyerCountry: 'Singapore', rating: 5, comment: 'Solid CNC tooling manufacturer. Transparent pricing.', date: '2026-06-01', category: 'Machinery & Industrial' }
-    ],
+    reviewCount: 0,
+    reviewAvgScore: 0,
+    reviews: [],
     agentProfile: {
       machineReadableName: 'ahmedabad_precision_tools_agent',
       sourcingApiEndpoint: 'https://api.ahmedabadprecision.example.com/sourcing',

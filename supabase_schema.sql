@@ -346,13 +346,24 @@ DROP POLICY IF EXISTS "Anyone can submit feedback" ON feedback;
 CREATE POLICY "Anyone can submit feedback" ON feedback
     FOR INSERT WITH CHECK (true);
 
--- 6. Role Permissions & Privileges (PostgREST API Roles)
+-- 6. Role Permissions & Privileges (Hardened PostgREST API Security)
+-- Default deny all direct public access; Next.js backend operates via service_role
 GRANT USAGE ON SCHEMA public TO anon, authenticated, service_role;
-GRANT ALL ON ALL TABLES IN SCHEMA public TO postgres, anon, authenticated, service_role;
-GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO postgres, anon, authenticated, service_role;
-GRANT ALL ON ALL ROUTINES IN SCHEMA public TO postgres, anon, authenticated, service_role;
 
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO postgres, anon, authenticated, service_role;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO postgres, anon, authenticated, service_role;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON ROUTINES TO postgres, anon, authenticated, service_role;
+-- Revoke dangerous blanket privileges from anon
+REVOKE ALL ON ALL TABLES IN SCHEMA public FROM anon;
+REVOKE ALL ON ALL SEQUENCES IN SCHEMA public FROM anon;
+REVOKE ALL ON ALL ROUTINES IN SCHEMA public FROM anon;
+
+-- Explicit Public Read/Write grants only on public-facing tables (guarded by RLS)
+GRANT SELECT ON suppliers TO anon, authenticated;
+GRANT INSERT ON rfqs TO anon, authenticated;
+GRANT INSERT ON applications TO anon, authenticated;
+GRANT INSERT ON enquiries TO anon, authenticated;
+GRANT INSERT ON feedback TO anon, authenticated;
+
+-- Service Role maintains full operational authority for server-side Next.js operations
+GRANT ALL ON ALL TABLES IN SCHEMA public TO postgres, service_role;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO postgres, service_role;
+GRANT ALL ON ALL ROUTINES IN SCHEMA public TO postgres, service_role;
 
