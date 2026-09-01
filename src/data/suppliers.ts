@@ -53,9 +53,9 @@ const rawSuppliers: Omit<Supplier, 'qualityScore' | 'qualityScoreLastComputed'>[
     reviews: [],
     agentProfile: {
       machineReadableName: 'ahmedabad_precision_tools_agent',
-      sourcingApiEndpoint: 'https://api.ahmedabadprecision.example.com/sourcing',
+      sourcingApiEndpoint: '',
       supportedProtocols: ['REST', 'MCP'],
-      capabilitiesManifestUrl: 'https://api.ahmedabadprecision.example.com/manifest.json',
+      capabilitiesManifestUrl: '',
     },
     structuredProducts: [
       {
@@ -129,20 +129,16 @@ const rawSuppliers: Omit<Supplier, 'qualityScore' | 'qualityScoreLastComputed'>[
     lastActiveAt: '2026-06-26T14:30:00Z',
     totalEnquiriesHandled: 890,
     verifiedConnectionsCount: 450,
-    facilityVideoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', // [DEMO] Replace with real factory video before production
-    facilityVideoDated: '2025-10-10',
-    reviewCount: 3,
-    reviewAvgScore: 4.7,
-    reviews: [
-      { id: 'r2-1', buyerName: 'Claire Laurent', buyerRole: 'Apparel Designer', buyerCountry: 'France', rating: 5, comment: 'Stunning woven organic fabrics. The GOTS certificate is fully verified and correct.', date: '2026-02-18', category: 'Textiles & Apparel' },
-      { id: 'r2-2', buyerName: 'John Smith', buyerRole: 'Sourcing Head', buyerCountry: 'USA', rating: 4, comment: 'Decent MOQ. Delivery times are consistent.', date: '2026-04-10', category: 'Textiles & Apparel' },
-      { id: 'r2-3', buyerName: 'Luca Rossi', buyerRole: 'Production Manager', buyerCountry: 'Italy', rating: 5, comment: 'High quality rayon blends. Very responsive on WhatsApp.', date: '2026-05-20', category: 'Textiles & Apparel' }
-    ],
+    facilityVideoUrl: '',
+    facilityVideoDated: '',
+    reviewCount: 0,
+    reviewAvgScore: 0,
+    reviews: [],
     agentProfile: {
       machineReadableName: 'surat_textiles_agent',
-      sourcingApiEndpoint: 'https://api.surattextiles.example.com/sourcing',
+      sourcingApiEndpoint: '',
       supportedProtocols: ['REST'],
-      capabilitiesManifestUrl: 'https://api.surattextiles.example.com/manifest.json',
+      capabilitiesManifestUrl: '',
     },
     structuredProducts: [
       {
@@ -218,18 +214,14 @@ const rawSuppliers: Omit<Supplier, 'qualityScore' | 'qualityScoreLastComputed'>[
     verifiedConnectionsCount: 88,
     facilityVideoUrl: '',
     facilityVideoDated: '',
-    reviewCount: 3,
-    reviewAvgScore: 4.6,
-    reviews: [
-      { id: 'r3-1', buyerName: 'Amit Patel', buyerRole: 'Import Lead', buyerCountry: 'Kenya', rating: 4, comment: 'Consistent machining castings. Standard delivery times.', date: '2026-04-12', category: 'Machinery & Industrial' },
-      { id: 'r3-2', buyerName: 'Tareq Al-Jamil', buyerRole: 'Procurement Specialist', buyerCountry: 'Saudi Arabia', rating: 5, comment: 'Good quality valve bodies. Foundries are well organized.', date: '2026-05-02', category: 'Machinery & Industrial' },
-      { id: 'r3-3', buyerName: 'Sanjay Nair', buyerRole: 'Buyer', buyerCountry: 'India', rating: 4.8, comment: 'Good local supply partner in Rajkot cluster.', date: '2026-06-15', category: 'Machinery & Industrial' }
-    ],
+    reviewCount: 0,
+    reviewAvgScore: 0,
+    reviews: [],
     agentProfile: {
       machineReadableName: 'rajkot_eng_agent',
-      sourcingApiEndpoint: 'https://api.rajkoteng.example.com/sourcing',
+      sourcingApiEndpoint: '',
       supportedProtocols: ['REST'],
-      capabilitiesManifestUrl: 'https://api.rajkoteng.example.com/manifest.json',
+      capabilitiesManifestUrl: '',
     },
     structuredProducts: [
       {
@@ -303,20 +295,16 @@ const rawSuppliers: Omit<Supplier, 'qualityScore' | 'qualityScoreLastComputed'>[
     lastActiveAt: '2026-06-27T08:30:00Z',
     totalEnquiriesHandled: 540,
     verifiedConnectionsCount: 210,
-    facilityVideoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', // [DEMO] Replace with real factory video before production
-    facilityVideoDated: '2026-02-10',
-    reviewCount: 3,
-    reviewAvgScore: 4.9,
-    reviews: [
-      { id: 'r4-1', buyerName: 'Hans Schmidt', buyerRole: 'Compliance Lead', buyerCountry: 'Germany', rating: 5, comment: 'Chemical parameters are highly consistent. REACH dossiers are valid.', date: '2026-03-15', category: 'Chemicals & Materials' },
-      { id: 'r4-2', buyerName: 'Emily Davis', buyerRole: 'Import Specialist', buyerCountry: 'USA', rating: 5, comment: 'Prompt response. Technical data sheet was precise.', date: '2026-05-01', category: 'Chemicals & Materials' },
-      { id: 'r4-3', buyerName: 'Kenji Sato', buyerRole: 'Sourcing Director', buyerCountry: 'Japan', rating: 4.7, comment: 'Excellent dyes. Reliable logistics support for exports.', date: '2026-06-20', category: 'Chemicals & Materials' }
-    ],
+    facilityVideoUrl: '',
+    facilityVideoDated: '',
+    reviewCount: 0,
+    reviewAvgScore: 0,
+    reviews: [],
     agentProfile: {
       machineReadableName: 'vadodara_chemicals_agent',
-      sourcingApiEndpoint: 'https://api.vadodarachemicals.example.com/sourcing',
+      sourcingApiEndpoint: '',
       supportedProtocols: ['REST', 'MCP'],
-      capabilitiesManifestUrl: 'https://api.vadodarachemicals.example.com/manifest.json',
+      capabilitiesManifestUrl: '',
     },
     structuredProducts: [
       {
@@ -392,18 +380,14 @@ const rawSuppliers: Omit<Supplier, 'qualityScore' | 'qualityScoreLastComputed'>[
     verifiedConnectionsCount: 65,
     facilityVideoUrl: '',
     facilityVideoDated: '',
-    reviewCount: 3,
-    reviewAvgScore: 4.5,
-    reviews: [
-      { id: 'r5-1', buyerName: 'Alex Mercer', buyerRole: 'Hardware Engineer', buyerCountry: 'USA', rating: 4, comment: 'Consistent PCB layouts. CE compliance documents checked.', date: '2026-04-30', category: 'Electronics & Electrical' },
-      { id: 'r5-2', buyerName: 'Nguyen Van Minh', buyerRole: 'Sourcing Lead', buyerCountry: 'Vietnam', rating: 5, comment: 'IoT modules were delivered on time. Good testing records.', date: '2026-05-15', category: 'Electronics & Electrical' },
-      { id: 'r5-3', buyerName: 'Somchai Prasert', buyerRole: 'Buyer', buyerCountry: 'Thailand', rating: 4.5, comment: 'Helpful tech support team for sensor calibration.', date: '2026-06-12', category: 'Electronics & Electrical' }
-    ],
+    reviewCount: 0,
+    reviewAvgScore: 0,
+    reviews: [],
     agentProfile: {
       machineReadableName: 'gandhinagar_elec_agent',
-      sourcingApiEndpoint: 'https://api.gandhinagarelec.example.com/sourcing',
+      sourcingApiEndpoint: '',
       supportedProtocols: ['REST'],
-      capabilitiesManifestUrl: 'https://api.gandhinagarelec.example.com/manifest.json',
+      capabilitiesManifestUrl: '',
     },
     structuredProducts: [
       {
@@ -477,20 +461,16 @@ const rawSuppliers: Omit<Supplier, 'qualityScore' | 'qualityScoreLastComputed'>[
     lastActiveAt: '2026-06-27T06:00:00Z',
     totalEnquiriesHandled: 445,
     verifiedConnectionsCount: 198,
-    facilityVideoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', // [DEMO] Replace with real factory video before production
-    facilityVideoDated: '2026-05-12',
-    reviewCount: 3,
-    reviewAvgScore: 4.7,
-    reviews: [
-      { id: 'r6-1', buyerName: 'Rashid Al-Khouri', buyerRole: 'Import Coordinator', buyerCountry: 'UAE', rating: 5, comment: 'Vitrified tiles are of excellent finish. Breakage rate in shipping was below 0.5%.', date: '2026-05-25', category: 'Home & Consumer' },
-      { id: 'r6-2', buyerName: 'Mark Johnson', buyerRole: 'Retail Distributor', buyerCountry: 'Australia', rating: 4, comment: 'Nice vitrified tile designs. Good packing in wooden pallets.', date: '2026-06-05', category: 'Home & Consumer' },
-      { id: 'r6-3', buyerName: 'David Botha', buyerRole: 'Project Manager', buyerCountry: 'South Africa', rating: 5, comment: 'Reliable supplier, tiles were of consistent shade matching specifications.', date: '2026-06-20', category: 'Home & Consumer' }
-    ],
+    facilityVideoUrl: '',
+    facilityVideoDated: '',
+    reviewCount: 0,
+    reviewAvgScore: 0,
+    reviews: [],
     agentProfile: {
       machineReadableName: 'morbi_ceramics_agent',
-      sourcingApiEndpoint: 'https://api.morbiceramics.example.com/sourcing',
+      sourcingApiEndpoint: '',
       supportedProtocols: ['REST'],
-      capabilitiesManifestUrl: 'https://api.morbiceramics.example.com/manifest.json',
+      capabilitiesManifestUrl: '',
     },
     structuredProducts: [
       {
@@ -564,20 +544,16 @@ const rawSuppliers: Omit<Supplier, 'qualityScore' | 'qualityScoreLastComputed'>[
     lastActiveAt: '2026-06-27T12:00:00Z',
     totalEnquiriesHandled: 420,
     verifiedConnectionsCount: 260,
-    facilityVideoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', // [DEMO] Replace with real factory video before production
-    facilityVideoDated: '2026-04-30',
-    reviewCount: 3,
-    reviewAvgScore: 4.9,
-    reviews: [
-      { id: 'r7-1', buyerName: 'Sarah Jenkins', buyerRole: 'Procurement Director', buyerCountry: 'USA', rating: 5, comment: 'Received exactly as specd. FDA documentation was complete and accurate.', date: '2026-05-15', category: 'Pharma & Healthcare' },
-      { id: 'r7-2', buyerName: 'Dieter Müller', buyerRole: 'Global Sourcing Head', buyerCountry: 'Germany', rating: 5, comment: 'Outstanding generic formulation batches. WHO-GMP certificate checks out clean.', date: '2026-05-25', category: 'Pharma & Healthcare' },
-      { id: 'r7-3', buyerName: 'Adewale Balogun', buyerRole: 'Regulatory Manager', buyerCountry: 'Nigeria', rating: 4.7, comment: 'Very reliable supply of Paracetamol API. Documentation is impeccable.', date: '2026-06-10', category: 'Pharma & Healthcare' }
-    ],
+    facilityVideoUrl: '',
+    facilityVideoDated: '',
+    reviewCount: 0,
+    reviewAvgScore: 0,
+    reviews: [],
     agentProfile: {
       machineReadableName: 'anand_pharma_agent',
-      sourcingApiEndpoint: 'https://api.anandpharma.example.com/sourcing',
+      sourcingApiEndpoint: '',
       supportedProtocols: ['REST', 'MCP'],
-      capabilitiesManifestUrl: 'https://api.anandpharma.example.com/manifest.json',
+      capabilitiesManifestUrl: '',
     },
     structuredProducts: [
       {

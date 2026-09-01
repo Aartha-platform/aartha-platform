@@ -394,62 +394,86 @@ export function deterministicFallbackMatch(
     .sort((a, b) => b.score - a.score);
 }
 
+// Re-export new hybrid pipeline components
+export * from './matching';
+
+/**
+ * Executes the state-of-the-art Hybrid Semantic Matching Pipeline
+ * and converts to the legacy MatchResult format for drop-in backward compatibility.
+ */
+export async function hybridMatch(
+  requirements: BuyerRequirements & { product?: string; rawQuery?: string },
+  supplierPool: Supplier[]
+): Promise<MatchResult[]> {
+  const { matchSuppliersHybridPipeline } = await import('./matching');
+
+  const pipelineRes = await matchSuppliersHybridPipeline(supplierPool, {
+    product: requirements.product || requirements.category,
+    category: requirements.category,
+    subcategory: requirements.subcategory,
+    certifications: requirements.certifications || [],
+    mandatoryCertifications: requirements.mandatoryCertifications || [],
+    maxMoq: requirements.maxMoq,
+    preferredGidcZone: requirements.gidcZone,
+    rawQuery: requirements.rawQuery,
+  });
+
+  return pipelineRes.matches.map(m => {
+    const rawSupplier = supplierPool.find(s => s.id === m.supplierId);
+    const legacy = rawSupplier ? calculateSupplierMatch(rawSupplier, requirements) : null;
+
+    return {
+      supplierId: m.supplierId,
+      companyName: m.companyName,
+      score: m.matchScore,
+      matchConfidence: m.matchScore,
+      confidenceLevel: m.matchScore >= 80 ? 'high' : m.matchScore >= 60 ? 'medium' : 'low',
+      procurementConfidence: legacy ? legacy.procurementConfidence : {
+        overall: m.matchScore,
+        identity: m.isVerified ? 95 : 40,
+        factory: m.evidenceConfidence >= 50 ? 90 : 50,
+        capability: m.matchScore,
+        compliance: m.evidenceConfidence,
+        performance: 85,
+        transaction: 80,
+        confidenceLevel: m.matchScore >= 80 ? 'high' : 'medium',
+        missingEvidence: m.explanation.missingEvidence,
+        staleEvidence: [],
+        risks: m.constraints.violations,
+        generatedAt: new Date().toISOString(),
+      },
+      reasons: m.explanation.whyRecommended,
+      evidenceReasons: legacy ? legacy.evidenceReasons : [],
+      missingEvidence: m.explanation.missingEvidence,
+      dataFreshness: legacy ? legacy.dataFreshness : {
+        identityVerifiedDaysAgo: null,
+        lastAuditDaysAgo: null,
+        lastActiveDaysAgo: null,
+      },
+      hardConstraintsPassed: m.constraints.passed,
+      hardConstraintViolations: m.constraints.violations,
+      isMatch: m.isRecommended,
+      corridorFit: m.location.state.toLowerCase() === 'gujarat',
+      explanation: m.explanation.summary,
+      whyRecommended: m.explanation.whyRecommended,
+      whyNotOthers: m.explanation.whyNotOthers,
+    };
+  });
+}
+
+/**
+ * LLM-Powered RFQ Match
+ * Uses structured intent extraction and hybrid semantic retrieval.
+ * Output is strictly schema-validated — never emits unvalidated LLM JSON.
+ */
 export async function llmMatch(
   rfq: { product: string; category: string; quantity: string; certifications: string[]; destination: string },
   supplierPool: Supplier[]
 ): Promise<MatchResult[]> {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    return supplierPool.map(s => {
-      const match = calculateSupplierMatch(s, { 
-        category: rfq.category, 
-        certifications: rfq.certifications 
-      });
-      return match;
-    });
-  }
-
-  const systemPrompt = `You are a precision B2B trade matching API for verified Indian manufacturers. 
-Given an RFQ and supplier profiles, return a JSON object with a "matches" key containing an array of matches ranked by fit.
-Each result must conform to the MatchResult structure. Only match suppliers whose category and certifications genuinely fit. Never fabricate data.`;
-
-  try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        response_format: { type: 'json_object' },
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: JSON.stringify({ rfq, suppliers: supplierPool.map(s => ({
-            id: s.id, name: s.companyName, category: s.category, 
-            subcategories: s.subcategories, certifications: s.certifications,
-            qualityScore: s.qualityScore.total, responseRate: s.responseRate,
-            avgResponseTime: s.avgResponseTimeHours, location: s.location,
-            moq: s.moq, exportMarkets: s.exportMarkets
-          }))}) }
-        ],
-        temperature: 0.1,
-        max_tokens: 2000,
-      }),
-    });
-
-    if (!response.ok) {
-      return supplierPool.map(s => calculateSupplierMatch(s, { 
-        category: rfq.category, certifications: rfq.certifications 
-      }));
-    }
-
-    const data = await response.json();
-    const parsed = JSON.parse(data.choices[0].message.content);
-    return parsed.matches || parsed.results || [];
-  } catch (error) {
-    return supplierPool.map(s => calculateSupplierMatch(s, { 
-        category: rfq.category, certifications: rfq.certifications 
-    }));
-  }
+  return hybridMatch({
+    product: rfq.product,
+    category: rfq.category,
+    certifications: rfq.certifications,
+    rawQuery: `${rfq.product} in ${rfq.category}, destination ${rfq.destination}`,
+  }, supplierPool);
 }

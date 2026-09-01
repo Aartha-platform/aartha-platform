@@ -12,13 +12,19 @@ export type VerificationTier =
   | 'verified_supplier'
   | 'premium_audited';
 
+export type VerificationSource = 'registry_api' | 'format_checksum' | 'unavailable';
+
 export interface GSTINValidationResult {
   valid: boolean;
+  isChecksumValid?: boolean;
   entityName?: string;
   stateCode?: string;
   stateName?: string;
   registrationType?: 'Manufacturer' | 'Trader' | 'Services' | 'Unknown';
   status?: 'Active' | 'Inactive' | 'Cancelled' | 'Suspended';
+  verificationSource?: VerificationSource;
+  verifiedAt?: string;
+  isLiveVerified?: boolean;
   error?: string;
   message?: string;
 }

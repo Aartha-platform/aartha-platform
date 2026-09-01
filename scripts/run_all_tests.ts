@@ -11,10 +11,11 @@ import { runPaymentRailTests } from '../tests/unit/paymentRail.test';
 import { runReleaseConditionTests } from '../tests/unit/releaseConditions.test';
 import { runReconciliationTests } from '../tests/unit/reconciliation.test';
 import { runE2ETests } from '../tests/e2e/full_transaction.test';
+import { runAIMatchingAndHardeningTests } from '../tests/unit/matching_runner';
 
 async function main() {
   console.log('===============================================================');
-  console.log('  ARTHA CORRIDOR — TRADE ASSURANCE & PAYMENT P0 TEST SUITE');
+  console.log('  ARTHA CORRIDOR — COMPREHENSIVE PRODUCTION TEST SUITE');
   console.log('===============================================================');
 
   try {
@@ -25,9 +26,10 @@ async function main() {
     runReleaseConditionTests();
     await runReconciliationTests();
     runE2ETests();
+    await runAIMatchingAndHardeningTests();
 
     console.log('\n===============================================================');
-    console.log('  ALL P0 FINANCIAL ORCHESTRATION & E2E TESTS PASSED (100%)');
+    console.log('  ALL P0 & P1 VERIFICATION, MATCHING & E2E TESTS PASSED (100%)');
     console.log('===============================================================');
   } catch (error) {
     console.error('\nTest execution failed:', error);

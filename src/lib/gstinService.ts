@@ -114,24 +114,30 @@ export function validateGSTIN(gstin: string, declaredCompanyName?: string): GSTI
   // Checksum validation
   const isChecksumValid = isValidGSTINChecksum(cleanGstin);
   if (!isChecksumValid) {
-    // For mock mode in development, if it matches regex but checksum fails, we log a warning but let it pass
-    // to avoid blocking developers typing mock GSTINs, but we still report it
-    console.warn(`GSTIN checksum mismatch for: ${cleanGstin}`);
+    console.warn(`GSTIN checksum mismatch for: ${cleanGstin} (expected ${calculateGSTINChecksum(cleanGstin.substring(0, 14))}, got ${cleanGstin[14]})`);
   }
 
-  // Simulate GSP API success payload
+  // Format passed offline
   return {
     valid: true,
-    entityName: declaredCompanyName ? declaredCompanyName.toUpperCase() : 'MOCK ENTERPRISE PVT LTD',
+    isChecksumValid,
+    entityName: declaredCompanyName ? declaredCompanyName.trim() : undefined,
     stateCode,
     stateName,
-    registrationType: 'Manufacturer', // Simulated API response type
-    status: 'Active'
+    registrationType: 'Unknown', // Offline check cannot determine business classification without live registry lookup
+    status: 'Active',
+    verificationSource: 'format_checksum',
+    verifiedAt: new Date().toISOString(),
+    isLiveVerified: false,
+    message: isChecksumValid
+      ? 'GSTIN conforms to official format and Luhn-based mod-36 checksum. Live government registry verification pending.'
+      : 'GSTIN conforms to 15-character statutory format. Check digit mismatch noted for development seed data.'
   };
 }
 
 /**
- * Performs a live GSP API lookup for a given GSTIN (using Sandbox.co.in or fallback provider).
+ * Performs a live GSP API lookup for a given GSTIN (using Sandbox.co.in or official GSTN GSP).
+ * Strictly reports 'unavailable' if credentials are not configured — never fabricates mock companies.
  */
 export async function validateGSTINLive(gstin: string): Promise<GSTINValidationResult> {
   const cleanGstin = gstin.trim().toUpperCase();
@@ -145,7 +151,7 @@ export async function validateGSTINLive(gstin: string): Promise<GSTINValidationR
   const apiSecret = process.env.SANDBOX_API_SECRET;
   const apiKey = process.env.SANDBOX_API_KEY;
 
-  if (apiSecret && apiKey) {
+  if (apiKey && apiSecret && !apiKey.includes('your_sandbox_api_key')) {
     try {
       const response = await fetch(`https://api.sandbox.co.in/gst/gstin/${cleanGstin}`, {
         method: 'GET',
@@ -160,35 +166,56 @@ export async function validateGSTINLive(gstin: string): Promise<GSTINValidationR
       if (response.ok) {
         const payload = await response.json();
         if (payload && payload.data) {
-          const legalName = payload.data.legal_name || payload.data.trade_name || 'REAL EXPORTER ENTERPRISE';
+          const legalName = payload.data.legal_name || payload.data.trade_name;
           return {
-            valid: true,
-            entityName: legalName.toUpperCase(),
+            valid: payload.data.status === 'Active',
+            entityName: legalName ? legalName.toUpperCase() : undefined,
             stateCode: cleanGstin.substring(0, 2),
             stateName: getStateNameByCode(cleanGstin.substring(0, 2)),
             registrationType: payload.data.registration_type || 'Manufacturer',
-            status: payload.data.status || 'Active'
+            status: payload.data.status || 'Active',
+            verificationSource: 'registry_api',
+            verifiedAt: new Date().toISOString(),
+            isLiveVerified: true,
+            message: 'Directly verified against official GST portal registry.'
           };
         }
+      } else {
+        const errData = await response.text();
+        return {
+          valid: false,
+          stateCode: cleanGstin.substring(0, 2),
+          stateName: getStateNameByCode(cleanGstin.substring(0, 2)),
+          verificationSource: 'registry_api',
+          verifiedAt: new Date().toISOString(),
+          isLiveVerified: false,
+          error: `GSTN Registry API rejected query: ${response.status} ${response.statusText} (${errData})`
+        };
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('[GSTIN Live API Error]:', error);
+      return {
+        valid: false,
+        stateCode: cleanGstin.substring(0, 2),
+        stateName: getStateNameByCode(cleanGstin.substring(0, 2)),
+        verificationSource: 'registry_api',
+        verifiedAt: new Date().toISOString(),
+        isLiveVerified: false,
+        error: `GSTN Registry API network failure: ${error?.message || 'Connection failed'}`
+      };
     }
   }
 
-  // Live Fallback when Sandbox credentials aren't set or fail:
-  // Dynamically resolve real names based on the state for realistic demo flow
-  const stateCode = cleanGstin.substring(0, 2);
-  const stateName = getStateNameByCode(stateCode);
-  const dynamicName = `${stateName.toUpperCase()} manufacturing company`.replace('& ', '').toUpperCase();
-
+  // Honest state: Format is verified, but live registry integration is not configured
   return {
     valid: true,
-    entityName: dynamicName || 'MOCK EXPORTER PVT LTD',
-    stateCode,
-    stateName,
-    registrationType: 'Manufacturer',
+    entityName: undefined,
+    stateCode: cleanGstin.substring(0, 2),
+    stateName: getStateNameByCode(cleanGstin.substring(0, 2)),
     status: 'Active',
-    message: 'Local format verified. Live connection fallback active.'
+    verificationSource: 'unavailable',
+    verifiedAt: new Date().toISOString(),
+    isLiveVerified: false,
+    message: 'GSTIN checksum verified locally. Live government registry lookup is offline (SANDBOX_API_KEY unconfigured).'
   };
 }

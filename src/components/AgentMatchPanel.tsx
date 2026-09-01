@@ -33,7 +33,7 @@ export default function AgentMatchPanel({ match, supplier }: AgentMatchPanelProp
       {/* Match Evidence Bullets */}
       <div className="space-y-1.5 pt-1">
         <span className="text-[9px] text-text-muted font-bold uppercase tracking-wider block">
-          Match Evidence Details:
+          Verified Evidence Details:
         </span>
         <div className="space-y-1">
           {match.reasons.map((r, idx) => (
@@ -44,6 +44,23 @@ export default function AgentMatchPanel({ match, supplier }: AgentMatchPanelProp
           ))}
         </div>
       </div>
+
+      {/* Missing Evidence / Verification Gaps */}
+      {match.missingEvidence && match.missingEvidence.length > 0 && (
+        <div className="space-y-1.5 pt-1">
+          <span className="text-[9px] text-amber-700 font-bold uppercase tracking-wider block">
+            Verification Gaps / Missing Proof:
+          </span>
+          <div className="space-y-1">
+            {match.missingEvidence.map((gap, idx) => (
+              <div key={idx} className="flex items-start gap-2 text-[11px] text-amber-800/90 leading-snug">
+                <span className="text-amber-500 mt-0.5 flex-shrink-0">⚠</span>
+                <span>{gap}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Geotrack Verification Status */}
       <div className="bg-cream-secondary p-3 rounded-lg border border-border-default/40 flex items-start gap-2">

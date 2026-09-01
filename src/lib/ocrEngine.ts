@@ -1,16 +1,41 @@
+import { z } from 'zod';
 import { ExtractedField, DocumentException, ValidationAssertion } from './documentIntel';
 
-export interface OCRResult {
-  extractedFields: ExtractedField[];
-  assertions: ValidationAssertion[];
-  exceptions: DocumentException[];
-  scores: {
-    customs: number;
-    bank: number;
-    freight: number;
-    inspection: number;
-  };
-}
+export const OCRResultSchema = z.object({
+  extractedFields: z.array(z.object({
+    label: z.string(),
+    value: z.string(),
+    confidence: z.number().default(90),
+    category: z.enum(['identity', 'commercial', 'logistics', 'compliance']).optional(),
+    highlight: z.boolean().optional(),
+    status: z.enum(['EXTRACTED', 'VALIDATED', 'VERIFIED']).default('EXTRACTED'),
+  })),
+  assertions: z.array(z.object({
+    name: z.string(),
+    passed: z.boolean(),
+    message: z.string(),
+    hindiHint: z.string().optional(),
+    severity: z.enum(['critical', 'high', 'medium', 'low']).optional(),
+  })),
+  exceptions: z.array(z.object({
+    id: z.string(),
+    field: z.string(),
+    message: z.string(),
+    severity: z.enum(['critical', 'high', 'medium', 'low']),
+    risk: z.string(),
+    suggestion: z.string(),
+    autoFixValue: z.string().optional(),
+    hindiSummary: z.string().optional(),
+  })),
+  scores: z.object({
+    customs: z.number(),
+    bank: z.number(),
+    freight: z.number(),
+    inspection: z.number(),
+  }),
+});
+
+export type OCRResult = z.infer<typeof OCRResultSchema>;
 
 export async function parseDocumentWithOCR(
   fileBuffer: Buffer,
@@ -19,8 +44,8 @@ export async function parseDocumentWithOCR(
   classifiedType: string
 ): Promise<OCRResult | null> {
   const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    return null; // fallback to simulation
+  if (!apiKey || apiKey.includes('your_openai_key') || apiKey.includes('your_resend_key')) {
+    return null; // fallback to deterministic rule-based analysis
   }
 
   // Convert buffer to base64 for Vision API
@@ -33,12 +58,12 @@ Also perform verification checks (format validation, state match, entity active)
 Identify any compliance exceptions (missing fields, signatures, mismatching rules).
 Score the document readiness for Customs, Bank, Freight, and Inspection (each out of 100).
 
-Return ONLY a JSON object matching this TypeScript interface:
-interface OCRResult {
-  extractedFields: Array<{ label: string; value: string; confidence: number }>;
-  assertions: Array<{ name: string; passed: boolean; message: string }>;
-  exceptions: Array<{ id: string; field: string; message: string; severity: 'critical' | 'high' | 'medium' | 'low'; risk: string; suggestion: string }>;
-  scores: { customs: number; bank: number; freight: number; inspection: number };
+Return ONLY a JSON object matching this schema:
+{
+  "extractedFields": [{ "label": string, "value": string, "confidence": number, "status": "EXTRACTED" }],
+  "assertions": [{ "name": string, "passed": boolean, "message": string }],
+  "exceptions": [{ "id": string, "field": string, "message": string, "severity": "critical"|"high"|"medium"|"low", "risk": string, "suggestion": string }],
+  "scores": { "customs": number, "bank": number, "freight": number, "inspection": number }
 }`;
 
   try {
@@ -58,20 +83,31 @@ interface OCRResult {
             { type: 'image_url', image_url: { url: `data:${mimeType};base64,${base64Data}` } }
           ] }
         ],
-        temperature: 0.1,
+        temperature: 0.0,
         max_tokens: 1500,
       }),
     });
 
     if (!response.ok) {
-      console.error('[OCR Engine] Vision API call failed', response.statusText);
+      console.warn('[OCR Engine] Vision API call failed with status:', response.status);
       return null;
     }
 
     const data = await response.json();
-    return JSON.parse(data.choices[0].message.content) as OCRResult;
+    const rawContent = data.choices?.[0]?.message?.content;
+    if (!rawContent) return null;
+
+    const parsedJson = JSON.parse(rawContent);
+    const validated = OCRResultSchema.safeParse(parsedJson);
+
+    if (validated.success) {
+      return validated.data;
+    } else {
+      console.warn('[OCR Engine] Output failed schema validation:', validated.error.issues);
+      return null;
+    }
   } catch (error) {
-    console.error('[OCR Engine] Exception in vision OCR parsing', error);
+    console.error('[OCR Engine] Exception in vision OCR parsing:', error);
     return null;
   }
 }
