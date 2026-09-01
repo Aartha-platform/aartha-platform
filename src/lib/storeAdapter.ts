@@ -11,7 +11,10 @@ const isProduction = process.env.NODE_ENV === 'production';
 const isBuildPhase = process.env.NEXT_PHASE === 'phase-production-build' || process.env.npm_lifecycle_event === 'build';
 const isSupabaseEnabled = !!(
   process.env.NEXT_PUBLIC_SUPABASE_URL && 
-  (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY)
+  !process.env.NEXT_PUBLIC_SUPABASE_URL.includes('your-project-id') &&
+  !process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder') &&
+  (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY) &&
+  !process.env.SUPABASE_SECRET_KEY?.includes('your_supabase_secret')
 );
 
 // In production runtime (not build phase), fail closed if PostgreSQL is missing

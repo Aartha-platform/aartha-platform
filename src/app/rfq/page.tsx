@@ -5,11 +5,9 @@ import Link from 'next/link';
 import { ShieldCheck, Award, Clock, Lock, CheckCircle, Copy, Check, MapPin, Sparkles } from 'lucide-react';
 import ProgressBar from '@/components/ProgressBar';
 import MultiStepForm from '@/components/MultiStepForm';
-import QuoteComparisonTable from '@/components/QuoteComparisonTable';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import MarketPriceIntel from '@/components/MarketPriceIntel';
 import { calculateSupplierMatch } from '@/lib/aiMatching';
-import { rfqQuotes } from '@/data/rfqQuotes';
 import { suppliers } from '@/data/suppliers';
 import { RFQFormData } from '@/types';
 
@@ -35,6 +33,9 @@ export default function RFQPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [rfqId, setRfqId] = useState('');
+  const [dealId, setDealId] = useState<string | null>(null);
+  const [liveMatches, setLiveMatches] = useState<any[]>([]);
+  const [qualifiedCount, setQualifiedCount] = useState<number>(0);
   const [copied, setCopied] = useState(false);
 
   const suggestedSuppliers = suppliers.filter(s => s.isVerified).slice(0, 3);
@@ -73,6 +74,9 @@ export default function RFQPage() {
         return;
       }
       setRfqId(data.id);
+      if (data.dealId) setDealId(data.dealId);
+      if (Array.isArray(data.matches)) setLiveMatches(data.matches);
+      if (typeof data.qualifiedCount === 'number') setQualifiedCount(data.qualifiedCount);
       setIsSubmitted(true);
     } catch {
       setSubmitError('Network error. Please check your connection and try again.');
@@ -175,7 +179,7 @@ export default function RFQPage() {
                       </div>
                       <div>
                         <div className="text-[10px] text-text-muted font-bold uppercase tracking-wider">Notified</div>
-                        <div className="font-bold text-xs text-navy mt-0.5">8 plants</div>
+                        <div className="font-bold text-xs text-navy mt-0.5">{qualifiedCount > 0 ? `${qualifiedCount} verified plants` : 'Under Review'}</div>
                       </div>
                       <div>
                         <div className="text-[10px] text-text-muted font-bold uppercase tracking-wider">State</div>
@@ -186,6 +190,15 @@ export default function RFQPage() {
 
                   {/* Actions */}
                   <div className="flex flex-wrap items-center gap-3 pt-2">
+                    {dealId && (
+                      <Link
+                        href={`/deals/${dealId}`}
+                        className="bg-amber-500 hover:bg-amber-600 text-slate-950 px-5 py-2.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all no-underline text-center shadow-md flex items-center gap-1.5"
+                      >
+                        <Sparkles size={14} className="text-slate-950" />
+                        Enter Deal Room →
+                      </Link>
+                    )}
                     <Link href="/dashboard" className="bg-navy hover:bg-navy-light text-white px-5 py-2.5 rounded-lg text-xs font-bold transition-all no-underline text-center">
                       Go to Buyer Workspace
                     </Link>
@@ -206,14 +219,80 @@ export default function RFQPage() {
                   targetPrice={formData.targetPrice ? parseFloat(formData.targetPrice.replace(/[^0-9.]/g, '')) : undefined} 
                 />
 
-                {/* Pre-Match Quotes Table */}
+                {/* Real Matched Factories from Hybrid Semantic Retrieval */}
                 <div className="space-y-3">
-                  <h3 className="font-bold text-xs uppercase tracking-wider text-text-primary pl-1">Pre-Match Quote Simulations ({rfqQuotes.length})</h3>
-                  <QuoteComparisonTable
-                    quotes={rfqQuotes}
-                    onQuoteView={(quote) => alert(`Viewing details for quote from ${quote.supplier.companyName}`)}
-                    onChatClick={(name) => alert(`Opening chat with ${name}`)}
-                  />
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-bold text-xs uppercase tracking-wider text-text-primary pl-1 flex items-center gap-2">
+                      <Sparkles size={14} className="text-amber-500" />
+                      Top Matched Gujarat Factories ({liveMatches.length})
+                    </h3>
+                    <span className="text-[10px] text-text-muted font-mono uppercase font-bold tracking-wider">Evidence Grounded</span>
+                  </div>
+
+                  {liveMatches.length > 0 ? (
+                    <div className="grid grid-cols-1 gap-3">
+                      {liveMatches.map((m, idx) => (
+                        <div key={m.supplierId || idx} className="bg-white border border-border-default rounded-xl p-4 shadow-2xs hover:border-amber-500/30 transition-all space-y-3">
+                          <div className="flex items-start justify-between gap-3">
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <h4 className="font-bold text-sm text-text-primary">{m.companyName}</h4>
+                                <span className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-500/20">
+                                  ✓ Verified Factory
+                                </span>
+                              </div>
+                              <div className="text-xs text-text-muted mt-0.5 flex items-center gap-1">
+                                <MapPin size={11} className="text-amber-500" />
+                                {m.location?.city || 'Gujarat'}, {m.location?.gidcZone || 'Industrial Hub'}
+                              </div>
+                            </div>
+                            <div className="text-right flex-shrink-0">
+                              <div className="text-[10px] font-bold text-navy uppercase font-mono tracking-wider">Match Score</div>
+                              <div className="text-base font-black text-amber-500 font-mono">{m.matchScore}/100</div>
+                            </div>
+                          </div>
+
+                          {/* Evidence bullet points */}
+                          <div className="bg-cream-secondary/40 rounded-lg p-2.5 text-xs space-y-1.5 border border-border-default/40">
+                            {m.explanation?.whyRecommended && m.explanation.whyRecommended.length > 0 && (
+                              <div className="text-emerald-700 dark:text-emerald-400 font-medium flex items-start gap-1.5">
+                                <span className="text-emerald-500 font-bold">✓</span>
+                                <span>{m.explanation.whyRecommended[0]}</span>
+                              </div>
+                            )}
+                            {m.explanation?.missingEvidence && m.explanation.missingEvidence.length > 0 && (
+                              <div className="text-amber-700 dark:text-amber-400 text-[11px] flex items-start gap-1.5">
+                                <span className="text-amber-500 font-bold">ℹ</span>
+                                <span>Verification notice: {m.explanation.missingEvidence[0]}</span>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Actions for this match */}
+                          <div className="flex items-center justify-between pt-1 flex-wrap gap-2">
+                            <Link
+                              href={`/suppliers/${m.supplierSlug || m.supplierId}`}
+                              className="text-xs font-bold text-navy hover:underline flex items-center gap-1"
+                            >
+                              View Factory Profile →
+                            </Link>
+                            {dealId && idx === 0 && (
+                              <Link
+                                href={`/deals/${dealId}`}
+                                className="bg-navy text-white text-xs font-bold px-3.5 py-1.5 rounded-lg hover:bg-navy-light transition-all no-underline flex items-center gap-1"
+                              >
+                                Enter Deal Room →
+                              </Link>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="bg-white border border-border-default rounded-xl p-4 text-center text-xs text-text-muted">
+                      Requirement logged. Matching with verified Gujarat factories.
+                    </div>
+                  )}
                 </div>
               </div>
             )}

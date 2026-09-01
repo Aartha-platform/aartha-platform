@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from '@/lib/session';
-import { getRfqById } from '@/lib/storeAdapter';
-import { rfqQuotes } from '@/data/rfqQuotes';
+import { getRfqById, getDeals } from '@/lib/storeAdapter';
+import { suppliers } from '@/data/suppliers';
 
 export async function GET(
   request: NextRequest,
@@ -25,18 +25,31 @@ export async function GET(
       return NextResponse.json({ error: 'Forbidden.' }, { status: 403 });
     }
 
-    // Simulated matching logic: filter quotes that correspond to the GIDC category or return a subset
-    const matchedQuotes = rfqQuotes.filter((q) => {
-      const qCat = q.supplier.companyName.toLowerCase();
-      // Match some suppliers based on category keywords
-      if (rfq.category.includes('pharma') && (qCat.includes('chemical') || qCat.includes('bhavnagar'))) return true;
-      if (rfq.category.includes('textile') && qCat.includes('textile')) return true;
-      if (rfq.category.includes('machinery') && qCat.includes('precision')) return true;
-      return Math.random() > 0.3; // fallback randomized matching
-    });
-
-    // Make sure we have at least 2 quotes to compare
-    const quotes = matchedQuotes.length >= 2 ? matchedQuotes : rfqQuotes.slice(0, 3);
+    // Retrieve active Deal Room records for this RFQ
+    const deals = await getDeals({ rfqId: id });
+    const quotes = deals
+      .filter((d: any) => d.commercials?.quotePrice)
+      .map((d: any, idx: number) => {
+        const s = suppliers.find((sup) => sup.id === d.supplierId);
+        return {
+          id: `q-${d.id}`,
+          supplier: {
+            id: d.supplierId,
+            companyName: d.supplierCompanyName,
+            location: s?.location || { city: 'Gujarat', state: 'Gujarat', country: 'India', fullAddress: 'Gujarat, India' },
+            isVerified: s?.isVerified ?? true,
+            reviewAvgScore: s?.rating ?? 4.8,
+          },
+          trustScore: d.evidence?.supplierQualityScore ?? s?.qualityScore?.total ?? 90,
+          quotePrice: d.commercials.quotePrice,
+          quotePriceDisplay: `${d.commercials.currency || '$'}${d.commercials.quotePrice} / unit`,
+          moq: d.commercials.moq || s?.moq || '100 units',
+          leadTime: `${d.commercials.leadTimeDays || 14} days`,
+          responseTime: '2 hours',
+          certifications: d.evidence?.certificationsVerified || s?.certifications || ['ISO 9001'],
+          isBestPrice: idx === 0,
+        };
+      });
 
     return NextResponse.json({
       success: true,

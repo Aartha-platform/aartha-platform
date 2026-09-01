@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { saveRfq, getRfqs, saveAuditEvent } from '@/lib/storeAdapter';
+import { saveRfq, getRfqs, saveAuditEvent, saveDeal, saveDealEvent } from '@/lib/storeAdapter';
 import { getServerSession } from '@/lib/session';
 import { isBusinessEmail } from '@/lib/validation';
 import { z } from 'zod';
 import { checkRateLimit } from '@/lib/rateLimit';
 import { sendEmail } from '@/lib/email';
 import { getRfqSubmittedEmail } from '@/lib/emailTemplates';
+import { matchSuppliersHybridPipeline } from '@/lib/matching';
+import { suppliers } from '@/data/suppliers';
 
 const rfqInputSchema = z.object({
   product: z.string().min(3, 'Product name must be at least 3 characters.'),
@@ -56,6 +58,75 @@ export async function POST(request: NextRequest) {
       details: `RFQ ${record.id} submitted for "${record.product}" by ${record.companyName} (${record.email})`,
     });
 
+    // ── Execute Real Hybrid Matching Pipeline ───────────────────────────────
+    let topDeal: any = null;
+    let topMatches: any[] = [];
+    let qualifiedCount = 0;
+
+    try {
+      const matchResult = await matchSuppliersHybridPipeline(suppliers, {
+        product: data.product,
+        category: data.category,
+        rawQuery: `${data.product} in ${data.category} ${data.specifications || ''}`.trim(),
+      }, {
+        topK: 5,
+        buyerEmail: data.email,
+      });
+
+      topMatches = matchResult.matches;
+      qualifiedCount = matchResult.qualifiedCount;
+
+      if (topMatches.length > 0) {
+        const primaryMatch = topMatches[0];
+        const supplierObj = suppliers.find((s) => s.id === primaryMatch.supplierId);
+
+        const dealRecord = await saveDeal({
+          buyerOrgId: data.email,
+          buyerEmail: data.email,
+          buyerCompanyName: data.companyName,
+          supplierId: primaryMatch.supplierId,
+          supplierSlug: supplierObj?.slug || primaryMatch.supplierId,
+          supplierCompanyName: primaryMatch.companyName,
+          rfqId: record.id,
+          status: 'matching',
+          requirements: {
+            productName: data.product,
+            category: data.category,
+            specification: data.specifications || '',
+            quantity: `${data.quantity} ${data.unit}`,
+            targetPrice: data.targetPrice || '',
+            currency: 'USD',
+            destination: data.country || 'India',
+          },
+          evidence: {
+            supplierQualityScore: primaryMatch.matchScore,
+            verificationTier: supplierObj?.verificationTier || 'verified_supplier',
+            gstinVerified: !!supplierObj?.verificationDetails?.gstin,
+            physicalAuditPassed: (supplierObj?.auditRecords?.length ?? 0) > 0,
+            auditGrade: supplierObj?.auditRecords?.[0]?.grade || 'A',
+            certificationsVerified: supplierObj?.certifications || [],
+            evidenceTimestamp: new Date().toISOString(),
+          },
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        });
+
+        topDeal = dealRecord;
+
+        await saveDealEvent({
+          dealId: dealRecord.id,
+          eventType: 'REQUIREMENT_LOCKED',
+          title: 'RFQ Submitted & Matched to Factory',
+          description: `RFQ ${record.id} for "${record.product}" matched to ${primaryMatch.companyName} (${primaryMatch.matchScore}/100 match score) via Hybrid Retrieval Engine.`,
+          actorRole: 'buyer',
+          actorId: data.email,
+          evidenceAttached: true,
+        });
+      }
+    } catch (matchErr) {
+      console.warn('[RFQ Pipeline] Hybrid matching on submit warning:', matchErr);
+    }
+
     // Trigger confirmation email using centralized template
     const emailData = getRfqSubmittedEmail({
       contactName: record.contactName,
@@ -76,10 +147,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       id: record.id,
-      status: record.status,
+      status: 'routed',
       submittedAt: record.submittedAt,
+      dealId: topDeal ? topDeal.id : null,
+      matches: topMatches.slice(0, 3),
+      qualifiedCount,
     }, { status: 201 });
-  } catch {
+  } catch (err: any) {
+    console.error('[API /api/rfq POST] Error:', err);
     return NextResponse.json({ error: 'Server error.' }, { status: 500 });
   }
 }

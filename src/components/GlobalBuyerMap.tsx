@@ -30,12 +30,12 @@ export default function GlobalBuyerMap() {
       {/* Header */}
       <div className="flex items-center justify-between mb-1">
         <div>
-          <span className="text-[7px] font-bold text-amber-400/70 uppercase tracking-[0.2em] block font-mono">Live Sourcing Telemetry</span>
+          <span className="text-[7px] font-bold text-amber-400/70 uppercase tracking-[0.2em] block font-mono">Gujarat Manufacturing Corridors</span>
           <h4 className="text-white text-[11px] font-bold font-sans leading-tight">Global Trade Corridor Map</h4>
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-[7px] font-mono text-emerald-400/70 uppercase tracking-wider">Live</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+          <span className="text-[7px] font-mono text-emerald-400/80 uppercase tracking-wider">Gujarat → World</span>
         </div>
       </div>
 

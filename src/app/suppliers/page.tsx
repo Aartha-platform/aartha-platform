@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Search, SlidersHorizontal, ChevronLeft, ChevronRight, X, GitCompare, Building2 } from 'lucide-react';
+import { Search, SlidersHorizontal, ChevronLeft, ChevronRight, X, GitCompare, Building2, Sparkles } from 'lucide-react';
 import SupplierCard from '@/components/SupplierCard';
 import SlideOutPanel from '@/components/SlideOutPanel';
 import SearchBar from '@/components/SearchBar';
@@ -65,6 +65,7 @@ function SuppliersDirectoryContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [selectedSubcategory, setSelectedSubcategory] = useState('All');
+  const [hybridMatchScores, setHybridMatchScores] = useState<Record<string, { score: number; reason: string }>>({});
 
   useEffect(() => {
     setSelectedSubcategory('All');
@@ -88,17 +89,53 @@ function SuppliersDirectoryContent() {
     }
   }, [searchParamQuery, categoryParamQuery]);
 
+  // Fetch Hybrid Semantic Matching rankings when search query is active
+  useEffect(() => {
+    if (!appliedKeyword.trim()) {
+      setHybridMatchScores({});
+      return;
+    }
+
+    let isCurrent = true;
+    const categoryParam = appliedFilter.countries[0] || categoryParamQuery || '';
+    const queryUrl = `/api/matching?q=${encodeURIComponent(appliedKeyword.trim())}${categoryParam ? `&category=${encodeURIComponent(categoryParam)}` : ''}`;
+
+    fetch(queryUrl)
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (!isCurrent || !data || !Array.isArray(data.matches)) return;
+        const scoreMap: Record<string, { score: number; reason: string }> = {};
+        data.matches.forEach((m: any) => {
+          scoreMap[m.supplierId] = {
+            score: m.matchScore,
+            reason: m.explanation?.whyRecommended?.[0] || 'Direct requirement match',
+          };
+        });
+        setHybridMatchScores(scoreMap);
+      })
+      .catch(() => {});
+
+    return () => { isCurrent = false; };
+  }, [appliedKeyword, appliedFilter.countries, categoryParamQuery]);
+
   const filteredSuppliers = useSupplierFilter(suppliers, appliedFilter, appliedKeyword);
   
   // ═══════════════════════════════════════════════════════════════════
   // PERMANENT RULE (AARTHA Architecture Directive):
   // Sort NEVER includes subscription tier, payment amount, or ad spend.
-  // Quality Score formula: identity(25) + reputation(20) + certifications(25)
-  // + behavior(20) + auditBonus(10) = 100
-  // This is a STRUCTURAL decision, not a temporary choice.
+  // When a search keyword is active, rank by Hybrid Semantic Match Score.
+  // When no keyword, rank by evidence-based Dynamic Quality Score.
   // ═══════════════════════════════════════════════════════════════════
-  // Sort by Dynamic Quality Score (Default sort rule!)
-  const sortedSuppliers = [...filteredSuppliers].sort((a, b) => b.qualityScore.total - a.qualityScore.total);
+  const sortedSuppliers = [...filteredSuppliers].sort((a, b) => {
+    if (appliedKeyword.trim() && Object.keys(hybridMatchScores).length > 0) {
+      const scoreA = hybridMatchScores[a.id]?.score ?? 0;
+      const scoreB = hybridMatchScores[b.id]?.score ?? 0;
+      if (scoreB !== scoreA) {
+        return scoreB - scoreA;
+      }
+    }
+    return b.qualityScore.total - a.qualityScore.total;
+  });
 
   const subcategoryFiltered = selectedSubcategory === 'All'
     ? sortedSuppliers
@@ -287,9 +324,16 @@ function SuppliersDirectoryContent() {
               <p className="text-sm font-semibold text-text-primary">
                 Showing <strong className="text-navy">{subcategoryFiltered.length}</strong> verified suppliers{categoryParamQuery ? ` in ${categoryParamQuery.replace('-', ' ').replace(/\b\w/g, c => c.toUpperCase())}` : ''}
               </p>
-              <span className="text-[10px] text-text-muted bg-white border border-border-default px-2.5 py-1.5 rounded-lg font-bold uppercase tracking-wider select-none">
-                Default: Quality Score sorted
-              </span>
+              {appliedKeyword.trim() && Object.keys(hybridMatchScores).length > 0 ? (
+                <span className="text-[10px] text-amber-700 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1.5 rounded-lg font-bold uppercase tracking-wider select-none flex items-center gap-1.5 shadow-2xs">
+                  <Sparkles size={11} className="text-amber-500" />
+                  Hybrid Semantic Match Active
+                </span>
+              ) : (
+                <span className="text-[10px] text-text-muted bg-white border border-border-default px-2.5 py-1.5 rounded-lg font-bold uppercase tracking-wider select-none">
+                  Default: Quality Score sorted
+                </span>
+              )}
             </div>
 
             {/* Subcategory Chips Row */}

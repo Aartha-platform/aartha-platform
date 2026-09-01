@@ -193,7 +193,7 @@ export async function generateLLMReply(
   history: ChatMessage[] = []
 ): Promise<CopilotResponse> {
   const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
+  if (!apiKey || apiKey.includes('your_') || apiKey.includes('placeholder') || apiKey.length < 20) {
     return generateAssistantReply(mode, input);
   }
 
