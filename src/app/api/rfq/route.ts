@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { saveRfq, getRfqs, saveAuditEvent, saveDeal, saveDealEvent } from '@/lib/storeAdapter';
 import { getServerSession } from '@/lib/session';
-import { isBusinessEmail } from '@/lib/validation';
 import { z } from 'zod';
 import { checkRateLimit } from '@/lib/rateLimit';
 import { sendEmail } from '@/lib/email';
@@ -43,14 +42,6 @@ export async function POST(request: NextRequest) {
     }
 
     const data = parsed.data;
-
-    if (!isBusinessEmail(data.email)) {
-      return NextResponse.json(
-        { error: 'Free email addresses are not allowed. Use a corporate email.' },
-        { status: 400 }
-      );
-    }
-
     const record = await saveRfq(data);
 
     await saveAuditEvent({

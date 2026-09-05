@@ -99,7 +99,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="w-full bg-gradient-to-b from-[#dfe4f8] via-[#f7f8fd] to-white dark:from-[#0a1020] dark:via-[#0e1524] dark:to-[#060b13] min-h-screen text-[#0a1020] dark:text-[#f0f4fa]">
+    <div className="w-full bg-[#f8fafc] min-h-screen text-[#0f172a]">
       
       {/* Operating Signal Strip */}
       <SignalStrip />
@@ -114,20 +114,57 @@ export default function HomePage() {
             <span className="eyebrow">
               <i></i> Managed sourcing for custom precision parts
             </span>
-            <span className="text-[11px] font-black tracking-widest uppercase text-[#5a6480] dark:text-slate-400">
+            <span className="text-[11px] font-black tracking-widest uppercase text-[#5a6480]">
               AARTHA / 001 / GUJARAT INDUSTRIAL CLUSTER
             </span>
           </div>
 
           <div className="max-w-4xl">
-            <h1 className="text-5xl sm:text-7xl lg:text-[92px] font-black leading-[0.92] tracking-tighter text-[#0a1020] dark:text-white">
+            <h1 className="text-5xl sm:text-7xl lg:text-[92px] font-black leading-[0.92] tracking-tighter text-[#0a1020]">
               Send us your <br />
-              <span className="text-[#27187e] dark:text-[#82aaff] italic font-serif">drawing.</span> <br />
+              <span className="text-[#27187e] italic font-serif">drawing.</span> <br />
               We handle the rest.
             </h1>
-            <p className="mt-6 text-base sm:text-xl text-[#5a6480] dark:text-slate-300 max-w-2xl font-normal leading-relaxed">
+            <p className="mt-6 text-base sm:text-xl text-[#5a6480] max-w-2xl font-normal leading-relaxed">
               Aartha manages custom sheet-metal brackets, mounting plates, covers and small housings from technical review to supplier selection, production coordination, and documented inspection.
             </p>
+
+            {/* Starting Point Intent Strip */}
+            <div className="mt-6 space-y-2">
+              <span className="text-[10px] font-black uppercase tracking-widest text-[#64748b]">
+                Select your starting point:
+              </span>
+              <div className="flex flex-wrap gap-2">
+                <Link
+                  href="/rfq?intent=cad"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-white border border-[#27187e]/15 text-[#0a1020] hover:border-[#27187e] hover:bg-[#eff2ff] transition-all shadow-2xs cursor-pointer"
+                >
+                  <FileText size={13} className="text-[#2563eb]" />
+                  <span>I have a 2D/3D CAD drawing</span>
+                </Link>
+                <Link
+                  href="/rfq?intent=idea"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-white border border-[#27187e]/15 text-[#0a1020] hover:border-[#27187e] hover:bg-[#eff2ff] transition-all shadow-2xs cursor-pointer"
+                >
+                  <Sparkles size={13} className="text-[#f97316]" />
+                  <span>I have a product idea or sketch</span>
+                </Link>
+                <Link
+                  href="/rfq?intent=prototype"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-white border border-[#27187e]/15 text-[#0a1020] hover:border-[#27187e] hover:bg-[#eff2ff] transition-all shadow-2xs cursor-pointer"
+                >
+                  <Cpu size={13} className="text-[#059669]" />
+                  <span>Prototype batch (5–50 pcs)</span>
+                </Link>
+                <Link
+                  href="/rfq?intent=repeat"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-white border border-[#27187e]/15 text-[#0a1020] hover:border-[#27187e] hover:bg-[#eff2ff] transition-all shadow-2xs cursor-pointer"
+                >
+                  <Layers size={13} className="text-[#6366f1]" />
+                  <span>Production repeat</span>
+                </Link>
+              </div>
+            </div>
 
             <div className="flex flex-wrap items-center gap-3.5 mt-8">
               <button
@@ -140,13 +177,13 @@ export default function HomePage() {
               </button>
               <a
                 href="#how"
-                className="pill pill-light text-sm px-6 py-3.5 text-[#0a1020] dark:text-white dark:bg-white/10 dark:border-white/10"
+                className="pill pill-light text-sm px-6 py-3.5 text-[#0a1020]"
               >
                 See the workflow
               </a>
               <Link
                 href="/suppliers"
-                className="text-xs font-extrabold text-[#27187e] dark:text-[#82aaff] hover:underline px-3 py-2"
+                className="text-xs font-extrabold text-[#27187e] hover:underline px-3 py-2"
               >
                 Explore Gujarat factory network →
               </Link>
@@ -154,26 +191,26 @@ export default function HomePage() {
           </div>
 
           {/* Proof Numbers Strip */}
-          <div className="grid grid-cols-2 md:grid-cols-4 border-y border-[#27187e]/15 dark:border-white/10 mt-12 divide-x divide-[#27187e]/15 dark:divide-white/10">
+          <div className="grid grid-cols-2 md:grid-cols-4 border-y border-[#27187e]/15 mt-12 divide-x divide-[#27187e]/15">
             <div className="py-4 px-4 sm:px-6">
               <strong className="block text-xs font-black tracking-widest text-[#ff685c]">01</strong>
-              <span className="block text-xs sm:text-sm font-extrabold text-[#0a1020] dark:text-white mt-1">Engineering review</span>
-              <small className="text-[11px] text-[#5a6480] dark:text-slate-400">DFM check before quote</small>
+              <span className="block text-xs sm:text-sm font-extrabold text-[#0a1020] mt-1">Engineering review</span>
+              <small className="text-[11px] text-[#5a6480]">DFM check before quote</small>
             </div>
             <div className="py-4 px-4 sm:px-6">
               <strong className="block text-xs font-black tracking-widest text-[#ff685c]">02</strong>
-              <span className="block text-xs sm:text-sm font-extrabold text-[#0a1020] dark:text-white mt-1">Supplier selection</span>
-              <small className="text-[11px] text-[#5a6480] dark:text-slate-400">Audited shop capability</small>
+              <span className="block text-xs sm:text-sm font-extrabold text-[#0a1020] mt-1">Supplier selection</span>
+              <small className="text-[11px] text-[#5a6480]">Audited shop capability</small>
             </div>
             <div className="py-4 px-4 sm:px-6">
               <strong className="block text-xs font-black tracking-widest text-[#ff685c]">03</strong>
-              <span className="block text-xs sm:text-sm font-extrabold text-[#0a1020] dark:text-white mt-1">Production + QA</span>
-              <small className="text-[11px] text-[#5a6480] dark:text-slate-400">Pre-dispatch dimensional log</small>
+              <span className="block text-xs sm:text-sm font-extrabold text-[#0a1020] mt-1">Production + QA</span>
+              <small className="text-[11px] text-[#5a6480]">Pre-dispatch dimensional log</small>
             </div>
             <div className="py-4 px-4 sm:px-6">
               <strong className="block text-xs font-black tracking-widest text-[#ff685c]">04</strong>
-              <span className="block text-xs sm:text-sm font-extrabold text-[#0a1020] dark:text-white mt-1">Delivered part</span>
-              <small className="text-[11px] text-[#5a6480] dark:text-slate-400">One commercial interface</small>
+              <span className="block text-xs sm:text-sm font-extrabold text-[#0a1020] mt-1">Delivered part</span>
+              <small className="text-[11px] text-[#5a6480]">One commercial interface</small>
             </div>
           </div>
 
@@ -181,10 +218,10 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
             
             {/* Card 1: Blueprint Drawing */}
-            <div className="lg:col-span-2 relative rounded-3xl p-6 bg-gradient-to-br from-[#eff2ff] to-[#d9e2ff] dark:from-[#142035] dark:to-[#1a2d4a] border border-[#27187e]/15 dark:border-white/10 shadow-[0_20px_50px_rgba(39,24,126,0.08)] overflow-hidden min-h-[250px] flex flex-col justify-between">
+            <div className="lg:col-span-2 relative rounded-3xl p-6 bg-gradient-to-br from-[#eff2ff] to-[#d9e2ff] border border-[#27187e]/15 shadow-[0_20px_50px_rgba(39,24,126,0.08)] overflow-hidden min-h-[250px] flex flex-col justify-between">
               <div className="flex items-center justify-between">
                 <span className="micro">PART / BRACKET-001</span>
-                <span className="text-[10px] font-bold text-[#5a6480] dark:text-slate-400">TOLERANCE ±0.2 mm</span>
+                <span className="text-[10px] font-bold text-[#5a6480]">TOLERANCE ±0.2 mm</span>
               </div>
               
               <div className="my-auto py-2 flex items-center justify-center">
@@ -205,7 +242,7 @@ export default function HomePage() {
                 </svg>
               </div>
 
-              <div className="flex items-center justify-between text-[11px] font-extrabold text-[#27187e] dark:text-[#82aaff] pt-2 border-t border-[#27187e]/10 dark:border-white/10">
+              <div className="flex items-center justify-between text-[11px] font-extrabold text-[#27187e] pt-2 border-t border-[#27187e]/10">
                 <span>CAD → GIDC Laser Cut Loop</span>
                 <span>SS304 · 2.0 mm</span>
               </div>
@@ -249,22 +286,22 @@ export default function HomePage() {
             </div>
 
             {/* Card 3: Material & Finish Swatch */}
-            <div className="relative rounded-3xl p-6 bg-white dark:bg-[#0e1524] border border-[#27187e]/15 dark:border-white/10 shadow-[0_20px_50px_rgba(39,24,126,0.08)] flex flex-col justify-between">
+            <div className="relative rounded-3xl p-6 bg-white border border-[#27187e]/15 shadow-[0_20px_50px_rgba(39,24,126,0.08)] flex flex-col justify-between">
               <div>
                 <div className="micro">MATERIAL / FINISH</div>
-                <div className="mt-3 p-4 rounded-2xl bg-gradient-to-r from-[#e4e7ef] via-[#ffffff] to-[#cfd4df] dark:from-[#142035] dark:to-[#1e2e4a] border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white shadow-inner">
+                <div className="mt-3 p-4 rounded-2xl bg-gradient-to-r from-[#e4e7ef] via-[#ffffff] to-[#cfd4df] border border-slate-200 text-slate-900 shadow-inner">
                   <span className="block text-2xl font-black tracking-tight">SS304</span>
                   <b className="block text-xs font-bold mt-1">1.5 mm – 3.0 mm</b>
-                  <small className="block text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Brushed / Deburred edges</small>
+                  <small className="block text-[10px] text-slate-500 mt-0.5">Brushed / Deburred edges</small>
                 </div>
                 <div className="grid grid-cols-4 gap-1.5 mt-3 text-[10px] font-bold text-center">
-                  <span className="p-1.5 rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5">MS</span>
-                  <span className="p-1.5 rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5">AL</span>
-                  <span className="p-1.5 rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5">SS</span>
-                  <span className="p-1.5 rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5">+COAT</span>
+                  <span className="p-1.5 rounded-lg border border-slate-200 bg-slate-50">MS</span>
+                  <span className="p-1.5 rounded-lg border border-slate-200 bg-slate-50">AL</span>
+                  <span className="p-1.5 rounded-lg border border-slate-200 bg-slate-50">SS</span>
+                  <span className="p-1.5 rounded-lg border border-slate-200 bg-slate-50">+COAT</span>
                 </div>
               </div>
-              <div className="text-[11px] text-[#5a6480] dark:text-slate-400 pt-3 border-t border-slate-100 dark:border-white/10">
+              <div className="text-[11px] text-[#5a6480] pt-3 border-t border-slate-100">
                 Powder coating & anodizing
               </div>
             </div>
@@ -275,11 +312,11 @@ export default function HomePage() {
         {/* =========================================================
             SECTION 2: BUILT FOR TEAMS THAT BUILD MACHINES
             ========================================================= */}
-        <section className="py-6 border-b border-[#27187e]/12 dark:border-white/10">
+        <section className="py-6 border-b border-[#27187e]/12">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
               <span className="micro">BUILT FOR</span>
-              <h2 className="text-xl font-black text-[#0a1020] dark:text-white">Teams that build physical machines.</h2>
+              <h2 className="text-xl font-black text-[#0a1020]">Teams that build physical machines.</h2>
             </div>
             <div className="flex flex-wrap items-center gap-2">
               {[
@@ -291,7 +328,7 @@ export default function HomePage() {
               ].map((item, i) => (
                 <span
                   key={i}
-                  className="text-xs font-extrabold px-3 py-1.5 rounded-full bg-white/70 dark:bg-white/5 border border-[#27187e]/15 dark:border-white/10 text-[#48506b] dark:text-slate-300"
+                  className="text-xs font-extrabold px-3 py-1.5 rounded-full bg-white/70 border border-[#27187e]/15 text-[#48506b]"
                 >
                   {item}
                 </span>
@@ -304,7 +341,7 @@ export default function HomePage() {
             SECTION 3: INTERACTIVE SERVICE STRIP
             ========================================================= */}
         <section className="py-8">
-          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#27187e]/15 dark:border-white/10 pb-4">
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#27187e]/15 pb-4">
             <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0">
               {(
                 [
@@ -322,7 +359,7 @@ export default function HomePage() {
                   className={`px-4 py-2 rounded-full text-xs font-black transition-all cursor-pointer whitespace-nowrap ${
                     activeService === step.id
                       ? 'bg-[#27187e] text-white shadow-sm'
-                      : 'bg-white/60 dark:bg-white/5 text-[#5a6480] dark:text-slate-400 border border-[#27187e]/10 dark:border-white/10 hover:bg-white dark:hover:bg-white/10'
+                      : 'bg-white/60 text-[#5a6480] border border-[#27187e]/10 hover:bg-white'
                   }`}
                 >
                   <span className="opacity-60 mr-1.5">{step.no}</span>
@@ -330,7 +367,7 @@ export default function HomePage() {
                 </button>
               ))}
             </div>
-            <div className="text-xs font-semibold text-[#5a6480] dark:text-slate-300 max-w-md text-right">
+            <div className="text-xs font-semibold text-[#5a6480] max-w-md text-right">
               {serviceDescriptions[activeService]}
             </div>
           </div>
@@ -343,16 +380,16 @@ export default function HomePage() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
             <div>
               <span className="micro">01 / PART FAMILIES</span>
-              <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-[#0a1020] dark:text-white mt-1">
+              <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-[#0a1020] mt-1">
                 What we make, starting small.
               </h2>
             </div>
-            <p className="text-sm text-[#5a6480] dark:text-slate-300 max-w-md font-normal leading-relaxed">
+            <p className="text-sm text-[#5a6480] max-w-md font-normal leading-relaxed">
               Built around the first commercial wedge: low-to-medium volume fabricated sheet-metal parts where inspection is practical and inventory stays at zero.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6 bg-white/70 dark:bg-[#0e1524]/70 backdrop-blur-xl border border-[#27187e]/15 dark:border-white/10 rounded-3xl p-5 sm:p-7 shadow-[0_25px_60px_rgba(39,24,126,0.06)]">
+          <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6 bg-white/70 backdrop-blur-xl border border-[#27187e]/15 rounded-3xl p-5 sm:p-7 shadow-[0_25px_60px_rgba(39,24,126,0.06)]">
             
             {/* Left Rail */}
             <aside className="rounded-2xl p-6 bg-gradient-to-br from-[#0a1020] to-[#27187e] text-white flex flex-col justify-between min-h-[300px]">
@@ -387,7 +424,7 @@ export default function HomePage() {
               {/* Part 1: Brackets */}
               <div 
                 onClick={scrollToRfq}
-                className="cursor-pointer group p-4 rounded-2xl bg-white dark:bg-[#142035] border border-slate-200 dark:border-white/10 hover:border-[#ff685c] hover:-translate-y-1 transition-all shadow-xs"
+                className="cursor-pointer group p-4 rounded-2xl bg-white border border-slate-200 hover:border-[#ff685c] hover:-translate-y-1 transition-all shadow-xs"
               >
                 <div className="part-art">
                   <span className="hole h1"></span>
@@ -397,10 +434,10 @@ export default function HomePage() {
                 <div className="mt-4 flex items-start gap-2.5">
                   <span className="text-xs font-black text-[#ff685c]">01</span>
                   <div>
-                    <strong className="block text-sm font-bold text-[#0a1020] dark:text-white group-hover:text-[#27187e] dark:group-hover:text-[#ff685c]">
+                    <strong className="block text-sm font-bold text-[#0a1020] group-hover:text-[#27187e]">
                       Brackets
                     </strong>
-                    <small className="text-[11px] text-[#5a6480] dark:text-slate-400">
+                    <small className="text-[11px] text-[#5a6480]">
                       Mounting, L-bends & structural supports
                     </small>
                   </div>
@@ -410,7 +447,7 @@ export default function HomePage() {
               {/* Part 2: Mounting Plates */}
               <div 
                 onClick={scrollToRfq}
-                className="cursor-pointer group p-4 rounded-2xl bg-white dark:bg-[#142035] border border-slate-200 dark:border-white/10 hover:border-[#ff685c] hover:-translate-y-1 transition-all shadow-xs"
+                className="cursor-pointer group p-4 rounded-2xl bg-white border border-slate-200 hover:border-[#ff685c] hover:-translate-y-1 transition-all shadow-xs"
               >
                 <div className="part-art art-plate">
                   <span className="plate-hole a"></span>
@@ -421,10 +458,10 @@ export default function HomePage() {
                 <div className="mt-4 flex items-start gap-2.5">
                   <span className="text-xs font-black text-[#ff685c]">02</span>
                   <div>
-                    <strong className="block text-sm font-bold text-[#0a1020] dark:text-white group-hover:text-[#27187e] dark:group-hover:text-[#ff685c]">
+                    <strong className="block text-sm font-bold text-[#0a1020] group-hover:text-[#27187e]">
                       Mounting Plates
                     </strong>
-                    <small className="text-[11px] text-[#5a6480] dark:text-slate-400">
+                    <small className="text-[11px] text-[#5a6480]">
                       Drilled, tapped & slotted patterns
                     </small>
                   </div>
@@ -434,7 +471,7 @@ export default function HomePage() {
               {/* Part 3: Covers */}
               <div 
                 onClick={scrollToRfq}
-                className="cursor-pointer group p-4 rounded-2xl bg-white dark:bg-[#142035] border border-slate-200 dark:border-white/10 hover:border-[#ff685c] hover:-translate-y-1 transition-all shadow-xs"
+                className="cursor-pointer group p-4 rounded-2xl bg-white border border-slate-200 hover:border-[#ff685c] hover:-translate-y-1 transition-all shadow-xs"
               >
                 <div className="part-art art-cover">
                   <span className="cover-edge"></span>
@@ -443,10 +480,10 @@ export default function HomePage() {
                 <div className="mt-4 flex items-start gap-2.5">
                   <span className="text-xs font-black text-[#ff685c]">03</span>
                   <div>
-                    <strong className="block text-sm font-bold text-[#0a1020] dark:text-white group-hover:text-[#27187e] dark:group-hover:text-[#ff685c]">
+                    <strong className="block text-sm font-bold text-[#0a1020] group-hover:text-[#27187e]">
                       Covers & Panels
                     </strong>
-                    <small className="text-[11px] text-[#5a6480] dark:text-slate-400">
+                    <small className="text-[11px] text-[#5a6480]">
                       Equipment guards & access panels
                     </small>
                   </div>
@@ -456,7 +493,7 @@ export default function HomePage() {
               {/* Part 4: Housings */}
               <div 
                 onClick={scrollToRfq}
-                className="cursor-pointer group p-4 rounded-2xl bg-white dark:bg-[#142035] border border-slate-200 dark:border-white/10 hover:border-[#ff685c] hover:-translate-y-1 transition-all shadow-xs"
+                className="cursor-pointer group p-4 rounded-2xl bg-white border border-slate-200 hover:border-[#ff685c] hover:-translate-y-1 transition-all shadow-xs"
               >
                 <div className="part-art art-housing">
                   <span className="housing-face"></span>
@@ -465,10 +502,10 @@ export default function HomePage() {
                 <div className="mt-4 flex items-start gap-2.5">
                   <span className="text-xs font-black text-[#ff685c]">04</span>
                   <div>
-                    <strong className="block text-sm font-bold text-[#0a1020] dark:text-white group-hover:text-[#27187e] dark:group-hover:text-[#ff685c]">
+                    <strong className="block text-sm font-bold text-[#0a1020] group-hover:text-[#27187e]">
                       Housings
                     </strong>
-                    <small className="text-[11px] text-[#5a6480] dark:text-slate-400">
+                    <small className="text-[11px] text-[#5a6480]">
                       Small instrument & equipment shells
                     </small>
                   </div>
@@ -478,7 +515,7 @@ export default function HomePage() {
               {/* Part 5: Enclosures */}
               <div 
                 onClick={scrollToRfq}
-                className="cursor-pointer group p-4 rounded-2xl bg-white dark:bg-[#142035] border border-slate-200 dark:border-white/10 hover:border-[#ff685c] hover:-translate-y-1 transition-all shadow-xs"
+                className="cursor-pointer group p-4 rounded-2xl bg-white border border-slate-200 hover:border-[#ff685c] hover:-translate-y-1 transition-all shadow-xs"
               >
                 <div className="part-art art-enclosure">
                   <span className="door"></span>
@@ -488,10 +525,10 @@ export default function HomePage() {
                 <div className="mt-4 flex items-start gap-2.5">
                   <span className="text-xs font-black text-[#ff685c]">05</span>
                   <div>
-                    <strong className="block text-sm font-bold text-[#0a1020] dark:text-white group-hover:text-[#27187e] dark:group-hover:text-[#ff685c]">
+                    <strong className="block text-sm font-bold text-[#0a1020] group-hover:text-[#27187e]">
                       Enclosures
                     </strong>
-                    <small className="text-[11px] text-[#5a6480] dark:text-slate-400">
+                    <small className="text-[11px] text-[#5a6480]">
                       Simple electrical & hardware cabinets
                     </small>
                   </div>
@@ -533,12 +570,12 @@ export default function HomePage() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
             <div>
               <span className="micro">02 / WHY THIS EXISTS</span>
-              <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-[#0a1020] dark:text-white mt-1">
+              <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-[#0a1020] mt-1">
                 The problem is not finding a factory.<br />
                 It is getting the part right.
               </h2>
             </div>
-            <p className="text-sm text-[#5a6480] dark:text-slate-300 max-w-md font-normal leading-relaxed">
+            <p className="text-sm text-[#5a6480] max-w-md font-normal leading-relaxed">
               Directories create introductions. Aartha is designed around the work that starts after the introduction: technical review, coordination, inspection, and delivered accountability.
             </p>
           </div>
@@ -546,27 +583,27 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* Story Card: BEFORE */}
-            <article className="p-8 rounded-3xl bg-[#f7f5f7] dark:bg-[#141b2a] border border-[#27187e]/15 dark:border-white/10 relative overflow-hidden flex flex-col justify-between min-h-[380px]">
+            <article className="p-8 rounded-3xl bg-[#f7f5f7] border border-[#27187e]/15 relative overflow-hidden flex flex-col justify-between min-h-[380px]">
               <div>
                 <span className="text-xs font-black uppercase tracking-widest text-[#5a6480]">BEFORE</span>
-                <h3 className="text-3xl sm:text-4xl font-black text-[#0a1020] dark:text-white mt-2 leading-tight">
+                <h3 className="text-3xl sm:text-4xl font-black text-[#0a1020] mt-2 leading-tight">
                   Five quotes.<br />Three WhatsApps.<br />Still no certainty.
                 </h3>
-                <p className="text-xs sm:text-sm text-[#5a6480] dark:text-slate-400 mt-4 leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#5a6480] mt-4 leading-relaxed">
                   Supplier discovery turns into repeated follow-ups, inconsistent quotes, unclear quality ownership, and production surprises when the box arrives.
                 </p>
               </div>
 
               <div className="space-y-2 mt-8">
-                <div className="flex items-center gap-2.5 text-xs font-bold text-[#0a1020] dark:text-white">
+                <div className="flex items-center gap-2.5 text-xs font-bold text-[#0a1020]">
                   <span className="w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-black">×</span>
                   <span>Fragmented supplier communication & chasing</span>
                 </div>
-                <div className="flex items-center gap-2.5 text-xs font-bold text-[#0a1020] dark:text-white">
+                <div className="flex items-center gap-2.5 text-xs font-bold text-[#0a1020]">
                   <span className="w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-black">×</span>
                   <span>Unclear quality ownership & missing DFM</span>
                 </div>
-                <div className="flex items-center gap-2.5 text-xs font-bold text-[#0a1020] dark:text-white">
+                <div className="flex items-center gap-2.5 text-xs font-bold text-[#0a1020]">
                   <span className="w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-black">×</span>
                   <span>No documented pre-dispatch inspection</span>
                 </div>
@@ -611,44 +648,44 @@ export default function HomePage() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
             <div>
               <span className="micro">03 / HOW IT WORKS</span>
-              <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-[#0a1020] dark:text-white mt-1">
+              <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-[#0a1020] mt-1">
                 From drawing to delivered part.
               </h2>
             </div>
-            <p className="text-sm text-[#5a6480] dark:text-slate-300 max-w-md font-normal leading-relaxed">
+            <p className="text-sm text-[#5a6480] max-w-md font-normal leading-relaxed">
               A deliberately human workflow today. Software becomes more useful after repeat orders prove the precision and quality of the execution loop.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <article className="p-6 rounded-3xl bg-white/80 dark:bg-[#0e1524] border border-[#27187e]/15 dark:border-white/10 shadow-xs hover:-translate-y-1 transition-all">
+            <article className="p-6 rounded-3xl bg-white/80 border border-[#27187e]/15 shadow-xs hover:-translate-y-1 transition-all">
               <div className="text-3xl font-black text-[#ff685c]">01</div>
-              <h3 className="text-base font-bold text-[#0a1020] dark:text-white mt-4 mb-2">Share your RFQ</h3>
-              <p className="text-xs text-[#5a6480] dark:text-slate-400 leading-relaxed">
+              <h3 className="text-base font-bold text-[#0a1020] mt-4 mb-2">Share your RFQ</h3>
+              <p className="text-xs text-[#5a6480] leading-relaxed">
                 Upload a 2D drawing (PDF/DXF) or 3D STEP. We clarify material grade, thickness, bend tolerances, surface finish, and quantity before quoting.
               </p>
             </article>
 
-            <article className="p-6 rounded-3xl bg-white/80 dark:bg-[#0e1524] border border-[#27187e]/15 dark:border-white/10 shadow-xs hover:-translate-y-1 transition-all">
+            <article className="p-6 rounded-3xl bg-white/80 border border-[#27187e]/15 shadow-xs hover:-translate-y-1 transition-all">
               <div className="text-3xl font-black text-[#ff685c]">02</div>
-              <h3 className="text-base font-bold text-[#0a1020] dark:text-white mt-4 mb-2">Engineering review</h3>
-              <p className="text-xs text-[#5a6480] dark:text-slate-400 leading-relaxed">
+              <h3 className="text-base font-bold text-[#0a1020] mt-4 mb-2">Engineering review</h3>
+              <p className="text-xs text-[#5a6480] leading-relaxed">
                 We perform a practical DFM review, flag bend radius or hole-to-edge conflicts, and route the job to shops that match the part geometry.
               </p>
             </article>
 
-            <article className="p-6 rounded-3xl bg-white/80 dark:bg-[#0e1524] border border-[#27187e]/15 dark:border-white/10 shadow-xs hover:-translate-y-1 transition-all">
+            <article className="p-6 rounded-3xl bg-white/80 border border-[#27187e]/15 shadow-xs hover:-translate-y-1 transition-all">
               <div className="text-3xl font-black text-[#ff685c]">03</div>
-              <h3 className="text-base font-bold text-[#0a1020] dark:text-white mt-4 mb-2">Production + QA</h3>
-              <p className="text-xs text-[#5a6480] dark:text-slate-400 leading-relaxed">
+              <h3 className="text-base font-bold text-[#0a1020] mt-4 mb-2">Production + QA</h3>
+              <p className="text-xs text-[#5a6480] leading-relaxed">
                 We coordinate laser cutting, press brake bending, and finishing. Before dispatch, parts are dimensionally checked and photograph-logged.
               </p>
             </article>
 
-            <article className="p-6 rounded-3xl bg-white/80 dark:bg-[#0e1524] border border-[#27187e]/15 dark:border-white/10 shadow-xs hover:-translate-y-1 transition-all">
+            <article className="p-6 rounded-3xl bg-white/80 border border-[#27187e]/15 shadow-xs hover:-translate-y-1 transition-all">
               <div className="text-3xl font-black text-[#ff685c]">04</div>
-              <h3 className="text-base font-bold text-[#0a1020] dark:text-white mt-4 mb-2">Delivered part</h3>
-              <p className="text-xs text-[#5a6480] dark:text-slate-400 leading-relaxed">
+              <h3 className="text-base font-bold text-[#0a1020] mt-4 mb-2">Delivered part</h3>
+              <p className="text-xs text-[#5a6480] leading-relaxed">
                 You receive inspected parts with an inspection sheet and a single GST-compliant commercial invoice — not a loose chain of suppliers to chase.
               </p>
             </article>
@@ -694,26 +731,26 @@ export default function HomePage() {
 
             {/* Scope Side Cards: Best Fit vs Not in V1 */}
             <div className="flex flex-col gap-4">
-              <article className="p-6 rounded-3xl bg-white dark:bg-[#0e1524] border border-[#27187e]/15 dark:border-white/10 shadow-xs">
-                <span className="text-[10px] font-black uppercase tracking-wider text-[#27187e] dark:text-[#82aaff]">
+              <article className="p-6 rounded-3xl bg-white border border-[#27187e]/15 shadow-xs">
+                <span className="text-[10px] font-black uppercase tracking-wider text-[#27187e]">
                   BEST-FIT BUYERS
                 </span>
-                <h4 className="text-lg font-bold text-[#0a1020] dark:text-white mt-1">
+                <h4 className="text-lg font-bold text-[#0a1020] mt-1">
                   Industrial hardware & equipment teams
                 </h4>
-                <p className="text-xs text-[#5a6480] dark:text-slate-400 mt-2 leading-relaxed">
+                <p className="text-xs text-[#5a6480] mt-2 leading-relaxed">
                   Automation builders, robotics teams, electrical test bench manufacturers, instrumentation makers, and EV-adjacent hardware startups.
                 </p>
               </article>
 
-              <article className="p-6 rounded-3xl bg-white dark:bg-[#0e1524] border border-[#27187e]/15 dark:border-white/10 shadow-xs">
+              <article className="p-6 rounded-3xl bg-white border border-[#27187e]/15 shadow-xs">
                 <span className="text-[10px] font-black uppercase tracking-wider text-[#ff685c]">
                   NOT IN THE FIRST RELEASE
                 </span>
-                <h4 className="text-lg font-bold text-[#0a1020] dark:text-white mt-1">
+                <h4 className="text-lg font-bold text-[#0a1020] mt-1">
                   No battery cells. No BMS. No live high-voltage assemblies.
                 </h4>
-                <p className="text-xs text-[#5a6480] dark:text-slate-400 mt-2 leading-relaxed">
+                <p className="text-xs text-[#5a6480] mt-2 leading-relaxed">
                   Safety-critical electrical work comes later, only after quality telemetry and repeat-order evidence justify the expanded operating liability.
                 </p>
               </article>
@@ -729,36 +766,36 @@ export default function HomePage() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
             <div>
               <span className="micro">04 / QUALITY SYSTEM</span>
-              <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-[#0a1020] dark:text-white mt-1">
+              <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-[#0a1020] mt-1">
                 Trust is the product layer.
               </h2>
             </div>
-            <p className="text-sm text-[#5a6480] dark:text-slate-300 max-w-md font-normal leading-relaxed">
+            <p className="text-sm text-[#5a6480] max-w-md font-normal leading-relaxed">
               No empty “zero-defect” slogans. The value is a defined acceptance process, supplier capability qualification, and traceable photo documentation.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <article className="p-7 rounded-3xl bg-white/90 dark:bg-[#0e1524] border border-[#27187e]/15 dark:border-white/10 shadow-xs">
-              <span className="text-xs font-black text-[#27187e] dark:text-[#82aaff] tracking-wider">01 / SUPPLIER FIT</span>
-              <h3 className="text-xl font-bold text-[#0a1020] dark:text-white mt-3 mb-2">Capability first.</h3>
-              <p className="text-xs text-[#5a6480] dark:text-slate-400 leading-relaxed">
+            <article className="p-7 rounded-3xl bg-white/90 border border-[#27187e]/15 shadow-xs">
+              <span className="text-xs font-black text-[#27187e] tracking-wider">01 / SUPPLIER FIT</span>
+              <h3 className="text-xl font-bold text-[#0a1020] mt-3 mb-2">Capability first.</h3>
+              <p className="text-xs text-[#5a6480] leading-relaxed">
                 Machine list, sheet thickness capabilities, achievable tolerances, sample finishes, and process bottlenecks are audited before any job assignment.
               </p>
             </article>
 
-            <article className="p-7 rounded-3xl bg-white/90 dark:bg-[#0e1524] border border-[#27187e]/15 dark:border-white/10 shadow-xs">
-              <span className="text-xs font-black text-[#27187e] dark:text-[#82aaff] tracking-wider">02 / INSPECTION</span>
-              <h3 className="text-xl font-bold text-[#0a1020] dark:text-white mt-3 mb-2">Evidence, not adjectives.</h3>
-              <p className="text-xs text-[#5a6480] dark:text-slate-400 leading-relaxed">
+            <article className="p-7 rounded-3xl bg-white/90 border border-[#27187e]/15 shadow-xs">
+              <span className="text-xs font-black text-[#27187e] tracking-wider">02 / INSPECTION</span>
+              <h3 className="text-xl font-bold text-[#0a1020] mt-3 mb-2">Evidence, not adjectives.</h3>
+              <p className="text-xs text-[#5a6480] leading-relaxed">
                 Caliper dimensional checks, angle gauges, burr checks, and photo evidence are documented against the agreed acceptance criteria before packaging.
               </p>
             </article>
 
-            <article className="p-7 rounded-3xl bg-white/90 dark:bg-[#0e1524] border border-[#27187e]/15 dark:border-white/10 shadow-xs">
-              <span className="text-xs font-black text-[#27187e] dark:text-[#82aaff] tracking-wider">03 / HISTORY</span>
-              <h3 className="text-xl font-bold text-[#0a1020] dark:text-white mt-3 mb-2">Every order teaches the next.</h3>
-              <p className="text-xs text-[#5a6480] dark:text-slate-400 leading-relaxed">
+            <article className="p-7 rounded-3xl bg-white/90 border border-[#27187e]/15 shadow-xs">
+              <span className="text-xs font-black text-[#27187e] tracking-wider">03 / HISTORY</span>
+              <h3 className="text-xl font-bold text-[#0a1020] mt-3 mb-2">Every order teaches the next.</h3>
+              <p className="text-xs text-[#5a6480] leading-relaxed">
                 Factory performance becomes structured operational data: on-time rate, dimensional deviations, rework latency, and repeatability metrics.
               </p>
             </article>
@@ -772,64 +809,64 @@ export default function HomePage() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
             <div>
               <span className="micro">05 / COMMERCIAL MODEL</span>
-              <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-[#0a1020] dark:text-white mt-1">
+              <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-[#0a1020] mt-1">
                 One order. One accountable layer.
               </h2>
             </div>
-            <p className="text-sm text-[#5a6480] dark:text-slate-300 max-w-md font-normal leading-relaxed">
+            <p className="text-sm text-[#5a6480] max-w-md font-normal leading-relaxed">
               Aartha earns for managing execution — not for selling leads or advertising. The commercial model is contribution-based, inventory-free, and cash-disciplined.
             </p>
           </div>
 
           {/* Model Flow Band */}
-          <div className="p-5 rounded-3xl bg-white/80 dark:bg-[#0e1524] border border-[#27187e]/15 dark:border-white/10 shadow-sm grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="p-5 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/5">
+          <div className="p-5 rounded-3xl bg-white/80 border border-[#27187e]/15 shadow-sm grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200">
               <span className="text-[10px] font-black uppercase tracking-wider text-[#5a6480]">BUYER</span>
-              <strong className="block text-sm font-bold text-[#0a1020] dark:text-white mt-1">Drawing + quantity</strong>
-              <small className="text-[11px] text-[#5a6480] dark:text-slate-400 block mt-1">RFQ / CAD / delivery date</small>
+              <strong className="block text-sm font-bold text-[#0a1020] mt-1">Drawing + quantity</strong>
+              <small className="text-[11px] text-[#5a6480] block mt-1">RFQ / CAD / delivery date</small>
             </div>
 
-            <div className="p-5 rounded-2xl bg-[#27187e]/10 dark:bg-[#82aaff]/10 border border-[#27187e]/20 dark:border-[#82aaff]/20">
-              <span className="text-[10px] font-black uppercase tracking-wider text-[#27187e] dark:text-[#82aaff]">AARTHA</span>
-              <strong className="block text-sm font-bold text-[#0a1020] dark:text-white mt-1">Managed price</strong>
-              <small className="text-[11px] text-[#5a6480] dark:text-slate-300 block mt-1">Production + QA + freight + risk</small>
+            <div className="p-5 rounded-2xl bg-[#27187e]/10 border border-[#27187e]/20">
+              <span className="text-[10px] font-black uppercase tracking-wider text-[#27187e]">AARTHA</span>
+              <strong className="block text-sm font-bold text-[#0a1020] mt-1">Managed price</strong>
+              <small className="text-[11px] text-[#5a6480] block mt-1">Production + QA + freight + risk</small>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/5">
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200">
               <span className="text-[10px] font-black uppercase tracking-wider text-[#5a6480]">SUPPLIER</span>
-              <strong className="block text-sm font-bold text-[#0a1020] dark:text-white mt-1">Fabrication</strong>
-              <small className="text-[11px] text-[#5a6480] dark:text-slate-400 block mt-1">Laser cut, bend, deburr, coat</small>
+              <strong className="block text-sm font-bold text-[#0a1020] mt-1">Fabrication</strong>
+              <small className="text-[11px] text-[#5a6480] block mt-1">Laser cut, bend, deburr, coat</small>
             </div>
 
-            <div className="p-5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-500/20">
-              <span className="text-[10px] font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400">DELIVERED</span>
-              <strong className="block text-sm font-bold text-[#0a1020] dark:text-white mt-1">Inspected parts</strong>
-              <small className="text-[11px] text-emerald-700 dark:text-emerald-300 block mt-1">Handoff with dimensional sheet</small>
+            <div className="p-5 rounded-2xl bg-emerald-50 border border-emerald-500/20">
+              <span className="text-[10px] font-black uppercase tracking-wider text-emerald-600">DELIVERED</span>
+              <strong className="block text-sm font-bold text-[#0a1020] mt-1">Inspected parts</strong>
+              <small className="text-[11px] text-emerald-700 block mt-1">Handoff with dimensional sheet</small>
             </div>
           </div>
 
           {/* Revenue Stream Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-            <article className="p-5 rounded-2xl bg-white dark:bg-[#0e1524] border border-[#27187e]/12 dark:border-white/10">
+            <article className="p-5 rounded-2xl bg-white border border-[#27187e]/12">
               <span className="text-xs font-black text-[#ff685c]">01</span>
-              <h4 className="text-sm font-bold text-[#0a1020] dark:text-white mt-2">Manufacturing contribution</h4>
-              <p className="text-[11px] text-[#5a6480] dark:text-slate-400 mt-1 leading-relaxed">
+              <h4 className="text-sm font-bold text-[#0a1020] mt-2">Manufacturing contribution</h4>
+              <p className="text-[11px] text-[#5a6480] mt-1 leading-relaxed">
                 Customer sees one managed delivered price rather than a raw factory quote.
               </p>
             </article>
 
-            <article className="p-5 rounded-2xl bg-white dark:bg-[#0e1524] border border-[#27187e]/12 dark:border-white/10">
+            <article className="p-5 rounded-2xl bg-white border border-[#27187e]/12">
               <span className="text-xs font-black text-[#ff685c]">02</span>
-              <h4 className="text-sm font-bold text-[#0a1020] dark:text-white mt-2">DFM & engineering review</h4>
-              <p className="text-[11px] text-[#5a6480] dark:text-slate-400 mt-1 leading-relaxed">
+              <h4 className="text-sm font-bold text-[#0a1020] mt-2">DFM & engineering review</h4>
+              <p className="text-[11px] text-[#5a6480] mt-1 leading-relaxed">
                 Applied when complex projects require significant CAD cleanup or tooling design.
               </p>
             </article>
 
-            <article className="p-5 rounded-2xl bg-white dark:bg-[#0e1524] border border-[#27187e]/12 dark:border-white/10">
+            <article className="p-5 rounded-2xl bg-white border border-[#27187e]/12">
               <span className="text-xs font-black text-[#ff685c]">03</span>
-              <h4 className="text-sm font-bold text-[#0a1020] dark:text-white mt-2">Quality & rush priority</h4>
-              <p className="text-[11px] text-[#5a6480] dark:text-slate-400 mt-1 leading-relaxed">
+              <h4 className="text-sm font-bold text-[#0a1020] mt-2">Quality & rush priority</h4>
+              <p className="text-[11px] text-[#5a6480] mt-1 leading-relaxed">
                 Specialized CMM inspection reports or expedited rapid prototyping runs.
               </p>
             </article>
@@ -887,11 +924,11 @@ export default function HomePage() {
               {/* Right Column: Active Form */}
               <form
                 onSubmit={handleRfqSubmit}
-                className="bg-white/95 dark:bg-[#0a1020]/95 backdrop-blur-xl rounded-2xl p-6 sm:p-7 text-[#0a1020] dark:text-white shadow-2xl border border-white/80 dark:border-white/10"
+                className="bg-white/95 backdrop-blur-xl rounded-2xl p-6 sm:p-7 text-[#0a1020] shadow-2xl border border-white/80"
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-3.5">
                   <div>
-                    <label className="block text-[10px] font-black uppercase tracking-wider text-[#5a6480] dark:text-slate-400 mb-1">
+                    <label className="block text-[10px] font-black uppercase tracking-wider text-[#5a6480] mb-1">
                       Your Name *
                     </label>
                     <input
@@ -900,27 +937,27 @@ export default function HomePage() {
                       value={rfqName}
                       onChange={(e) => setRfqName(e.target.value)}
                       placeholder="e.g. Rahul Sharma"
-                      className="w-full text-xs font-semibold px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#142035] text-[#0a1020] dark:text-white focus:outline-none focus:border-[#27187e] dark:focus:border-[#ff685c]"
+                      className="w-full text-xs font-semibold px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-[#0a1020] focus:outline-none focus:border-[#27187e]"
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-black uppercase tracking-wider text-[#5a6480] dark:text-slate-400 mb-1">
-                      Work Email *
+                    <label className="block text-[10px] font-black uppercase tracking-wider text-[#5a6480] mb-1">
+                      Email Address *
                     </label>
                     <input
                       type="email"
                       required
                       value={rfqEmail}
                       onChange={(e) => setRfqEmail(e.target.value)}
-                      placeholder="you@company.com"
-                      className="w-full text-xs font-semibold px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#142035] text-[#0a1020] dark:text-white focus:outline-none focus:border-[#27187e] dark:focus:border-[#ff685c]"
+                      placeholder="founder@company.com or personal Gmail"
+                      className="w-full text-xs font-semibold px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-[#0a1020] focus:outline-none focus:border-[#27187e]"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-3.5">
                   <div>
-                    <label className="block text-[10px] font-black uppercase tracking-wider text-[#5a6480] dark:text-slate-400 mb-1">
+                    <label className="block text-[10px] font-black uppercase tracking-wider text-[#5a6480] mb-1">
                       Target Quantity
                     </label>
                     <input
@@ -928,25 +965,34 @@ export default function HomePage() {
                       value={rfqQty}
                       onChange={(e) => setRfqQty(e.target.value)}
                       placeholder="e.g. 50 pcs (or prototype)"
-                      className="w-full text-xs font-semibold px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#142035] text-[#0a1020] dark:text-white focus:outline-none focus:border-[#27187e] dark:focus:border-[#ff685c]"
+                      className="w-full text-xs font-semibold px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-[#0a1020] focus:outline-none focus:border-[#27187e]"
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-black uppercase tracking-wider text-[#5a6480] dark:text-slate-400 mb-1">
-                      Material Grade
-                    </label>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-[10px] font-black uppercase tracking-wider text-[#5a6480]">
+                        Material Grade
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => setRfqMaterial('Not sure — recommend for me')}
+                        className="text-[10px] font-bold text-[#2563eb] hover:underline cursor-pointer"
+                      >
+                        Not sure?
+                      </button>
+                    </div>
                     <input
                       type="text"
                       value={rfqMaterial}
                       onChange={(e) => setRfqMaterial(e.target.value)}
-                      placeholder="e.g. SS304, MS, Aluminum"
-                      className="w-full text-xs font-semibold px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#142035] text-[#0a1020] dark:text-white focus:outline-none focus:border-[#27187e] dark:focus:border-[#ff685c]"
+                      placeholder="e.g. SS304, MS, Aluminum, or Not Sure"
+                      className="w-full text-xs font-semibold px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-[#0a1020] focus:outline-none focus:border-[#27187e]"
                     />
                   </div>
                 </div>
 
                 <div className="mb-3.5">
-                  <label className="block text-[10px] font-black uppercase tracking-wider text-[#5a6480] dark:text-slate-400 mb-1">
+                  <label className="block text-[10px] font-black uppercase tracking-wider text-[#5a6480] mb-1">
                     Project Notes (Tolerance, Finish, Target Date)
                   </label>
                   <textarea
@@ -954,13 +1000,13 @@ export default function HomePage() {
                     value={rfqNote}
                     onChange={(e) => setRfqNote(e.target.value)}
                     placeholder="e.g. SS304 2mm bracket, deburred edges, black powder coat, needed in 10 days"
-                    className="w-full text-xs font-semibold px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#142035] text-[#0a1020] dark:text-white focus:outline-none focus:border-[#27187e] dark:focus:border-[#ff685c]"
+                    className="w-full text-xs font-semibold px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-[#0a1020] focus:outline-none focus:border-[#27187e]"
                   />
                 </div>
 
                 {/* File Dropzone */}
                 <div className="mb-4">
-                  <label className="block text-[10px] font-black uppercase tracking-wider text-[#5a6480] dark:text-slate-400 mb-1">
+                  <label className="block text-[10px] font-black uppercase tracking-wider text-[#5a6480] mb-1">
                     Upload Drawing or CAD (PDF, DXF, STEP, PNG)
                   </label>
                   <input
@@ -974,24 +1020,24 @@ export default function HomePage() {
                     onClick={() => fileInputRef.current?.click()}
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={handleDrop}
-                    className="border-2 border-dashed border-slate-300 dark:border-white/20 rounded-2xl p-4 text-center cursor-pointer hover:border-[#27187e] dark:hover:border-[#ff685c] bg-[#fafbff] dark:bg-[#142035]/50 transition-colors"
+                    className="border-2 border-dashed border-slate-300 rounded-2xl p-4 text-center cursor-pointer hover:border-[#27187e] bg-[#fafbff] transition-colors"
                   >
                     {uploadedFile ? (
                       <div className="text-xs">
-                        <strong className="text-[#27187e] dark:text-[#82aaff] block font-bold">
+                        <strong className="text-[#27187e] block font-bold">
                           ✓ {uploadedFile.name}
                         </strong>
-                        <span className="text-[11px] text-[#5a6480] dark:text-slate-400 block mt-0.5">
+                        <span className="text-[11px] text-[#5a6480] block mt-0.5">
                           {(uploadedFile.size / 1024).toFixed(1)} KB · Ready for technical review
                         </span>
                       </div>
                     ) : (
                       <div className="text-xs">
-                        <UploadCloud size={20} className="mx-auto text-[#27187e] dark:text-[#82aaff] mb-1" />
-                        <strong className="text-[#0a1020] dark:text-white block font-bold">
+                        <UploadCloud size={20} className="mx-auto text-[#27187e] mb-1" />
+                        <strong className="text-[#0a1020] block font-bold">
                           Drop your drawing file here, or browse
                         </strong>
-                        <span className="text-[10px] text-[#5a6480] dark:text-slate-400 block mt-0.5">
+                        <span className="text-[10px] text-[#5a6480] block mt-0.5">
                           PDF, DXF, STEP, CAD or drawing images (up to 25MB)
                         </span>
                       </div>
@@ -1006,7 +1052,7 @@ export default function HomePage() {
                 >
                   {isSubmitting ? 'Registering RFQ...' : 'Submit Drawing for Review →'}
                 </button>
-                <div className="text-[10px] text-[#5a6480] dark:text-slate-400 text-center mt-2">
+                <div className="text-[10px] text-[#5a6480] text-center mt-2">
                   Drawings are kept confidential under mutual non-disclosure policy.
                 </div>
               </form>
@@ -1020,29 +1066,29 @@ export default function HomePage() {
       {/* Confirmation Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fadeIn">
-          <div className="bg-white dark:bg-[#0e1524] rounded-3xl p-6 sm:p-8 max-w-lg w-full border border-[#27187e]/20 dark:border-white/10 shadow-2xl relative">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full border border-[#27187e]/20 shadow-2xl relative">
             <button
               onClick={() => setModalOpen(false)}
-              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 dark:bg-white/10 text-slate-500 hover:text-black dark:hover:text-white flex items-center justify-center text-sm cursor-pointer"
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-black flex items-center justify-center text-sm cursor-pointer"
             >
               ✕
             </button>
-            <span className="micro text-[#27187e] dark:text-[#ff685c]">RFQ REGISTERED</span>
-            <h3 className="text-2xl font-black text-[#0a1020] dark:text-white mt-1">
+            <span className="micro text-[#27187e]">RFQ REGISTERED</span>
+            <h3 className="text-2xl font-black text-[#0a1020] mt-1">
               Next step: Engineering review.
             </h3>
             {createdRfqId && (
-              <div className="mt-3 inline-block px-3 py-1 rounded-full text-xs font-black bg-[#27187e]/10 text-[#27187e] dark:bg-white/10 dark:text-[#82aaff]">
+              <div className="mt-3 inline-block px-3 py-1 rounded-full text-xs font-black bg-[#27187e]/10 text-[#27187e]">
                 Reference ID: {createdRfqId}
               </div>
             )}
-            <p className="text-xs sm:text-sm text-[#5a6480] dark:text-slate-300 mt-3 leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#5a6480] mt-3 leading-relaxed">
               {modalMessage}
             </p>
             <div className="mt-6 flex items-center justify-end gap-3">
               <Link
                 href="/dashboard"
-                className="text-xs font-bold text-[#27187e] dark:text-[#82aaff] hover:underline"
+                className="text-xs font-bold text-[#27187e] hover:underline"
               >
                 Go to My Orders
               </Link>
