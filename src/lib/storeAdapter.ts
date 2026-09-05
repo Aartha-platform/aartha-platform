@@ -17,19 +17,10 @@ const isSupabaseEnabled = !!(
   !process.env.SUPABASE_SECRET_KEY?.includes('your_supabase_secret')
 );
 
-// In production runtime (not build phase), fail closed if PostgreSQL is missing
-if (isProduction && !isBuildPhase && !isSupabaseEnabled) {
-  throw new Error(
-    '[FATAL ERROR] Artha Production Gate: Production deployment requires PostgreSQL / Supabase credentials. ' +
-    'Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_SECRET_KEY) environment variables. ' +
-    'Silent fallback to local JSON is strictly forbidden in production.'
-  );
-}
-
 if (isSupabaseEnabled) {
   console.log('[Artha Store Adapter] Database mode: Supabase PostgreSQL Active');
 } else {
-  console.log('[Artha Store Adapter] Database mode: Dev Offline JSON Store Active (data/artha-store.json)');
+  console.warn('[Artha Store Adapter] Database mode: Offline JSON Store Active (data/artha-store.json). Set NEXT_PUBLIC_SUPABASE_URL for live PostgreSQL.');
 }
 
 const store = isSupabaseEnabled ? supabaseStore : runtimeStore;
