@@ -1,11 +1,7 @@
 import { Metadata } from 'next';
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
-import AnnouncementBar from '@/components/AnnouncementBar';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import AIAssistantTrigger from '@/components/AIAssistantTrigger';
-import FloatingRightDock from '@/components/FloatingRightDock';
-import QuickDashboardReturn from '@/components/QuickDashboardReturn';
 import { ToastProvider } from '@/components/Toast';
 import AutoTranslationBridge from '@/components/AutoTranslationBridge';
 import './globals.css';
@@ -180,18 +176,14 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredSchema) }}
         />
       </head>
-      <body className="min-h-screen flex flex-col antialiased relative bg-gradient-to-b from-[#dfe4f8] via-[#f7f8fd] to-white dark:from-[#0a1020] dark:via-[#0e1524] dark:to-[#060b13] text-[#0a1020] dark:text-[#f0f4fa] selection:bg-[#ff685c]/20 selection:text-[#ff685c]">
+      <body className="min-h-screen flex flex-col antialiased relative bg-[#f8fafc] text-[#0f172a] selection:bg-[#ff685c]/20 selection:text-[#ff685c]">
         <ToastProvider>
           <AutoTranslationBridge />
-          <AnnouncementBar />
           <Header />
           <main className="flex-1">
             {children}
           </main>
           <Footer />
-          <AIAssistantTrigger />
-          <FloatingRightDock />
-          <QuickDashboardReturn />
         </ToastProvider>
       </body>
     </html>

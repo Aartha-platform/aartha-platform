@@ -138,7 +138,7 @@ export default function Header() {
   return (
     <header
       ref={headerRef}
-      className="sticky top-0 z-50 w-full bg-[#dfe4f8]/85 dark:bg-[#0a1020]/90 backdrop-blur-xl border-b border-[#27187e]/12 dark:border-white/10 transition-colors duration-200"
+      className="sticky top-0 z-50 w-full bg-[#dfe4f8]/85 backdrop-blur-xl border-b border-[#27187e]/12 transition-colors duration-200"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="h-[74px] flex items-center justify-between gap-4">
@@ -156,16 +156,16 @@ export default function Header() {
               <img
                 src="/brand/aartha-logo.png"
                 alt="Aartha Logo"
-                className="w-full h-full object-contain block dark:hidden"
+                className="w-full h-full object-contain block"
               />
               <img
                 src="/brand/aartha-logo-white.png"
                 alt="Aartha Logo"
-                className="w-full h-full object-contain hidden dark:block"
+                className="w-full h-full object-contain hidden"
               />
             </div>
             <div>
-              <div className="text-[#0a1020] dark:text-white font-black text-xl leading-none tracking-tight">
+              <div className="text-[#0a1020] font-black text-xl leading-none tracking-tight">
                 Aartha
               </div>
               <div className="text-[10px] font-extrabold uppercase tracking-widest text-[#ff685c] mt-0.5">
@@ -176,8 +176,8 @@ export default function Header() {
 
           {/* Interactive Nav Search (V3 Commerce-Inspired) */}
           <div className="relative hidden md:flex items-center flex-1 max-w-[440px] mx-2">
-            <div className="relative w-full flex items-center bg-white/85 dark:bg-[#142035]/85 border border-[#27187e]/14 dark:border-white/10 rounded-full py-1.5 pl-4 pr-1.5 shadow-[0_10px_25px_rgba(39,24,126,0.06)] focus-within:border-[#27187e] dark:focus-within:border-[#ff685c] transition-all">
-              <Search size={16} className="text-[#5a6480] dark:text-slate-400 mr-2.5 flex-shrink-0" />
+            <div className="relative w-full flex items-center bg-white/85 border border-[#27187e]/14 rounded-full py-1.5 pl-4 pr-1.5 shadow-[0_10px_25px_rgba(39,24,126,0.06)] focus-within:border-[#27187e] transition-all">
+              <Search size={16} className="text-[#5a6480] mr-2.5 flex-shrink-0" />
               <input
                 type="search"
                 value={searchQuery}
@@ -187,13 +187,13 @@ export default function Header() {
                 }}
                 onFocus={() => setSearchResultsOpen(true)}
                 placeholder="Search parts, materials, processes..."
-                className="w-full bg-transparent text-xs font-semibold text-[#0a1020] dark:text-white placeholder:text-[#7a84a1] focus:outline-none"
+                className="w-full bg-transparent text-xs font-semibold text-[#0a1020] placeholder:text-[#7a84a1] focus:outline-none"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery('')}
-                  className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 px-1"
+                  className="text-xs text-slate-400 hover:text-slate-600 px-1"
                 >
                   ✕
                 </button>
@@ -202,7 +202,7 @@ export default function Header() {
 
             {/* Live Search Autocomplete Popover */}
             {searchResultsOpen && searchQuery.trim() && (
-              <div className="absolute left-0 right-0 top-[52px] bg-white dark:bg-[#0e1524] border border-[#27187e]/15 dark:border-white/10 rounded-2xl p-2 shadow-[0_25px_60px_rgba(39,24,126,0.18)] z-50 animate-fadeIn">
+              <div className="absolute left-0 right-0 top-[52px] bg-white border border-[#27187e]/15 rounded-2xl p-2 shadow-[0_25px_60px_rgba(39,24,126,0.18)] z-50 animate-fadeIn">
                 <div className="text-[10px] font-black tracking-wider uppercase text-[#5a6480] px-3 py-1.5">
                   Suggested Matches
                 </div>
@@ -212,26 +212,26 @@ export default function Header() {
                       key={i}
                       type="button"
                       onClick={() => handleSearchResultClick(res.link)}
-                      className="w-full text-left flex items-center justify-between p-2.5 rounded-xl hover:bg-[#eff2ff] dark:hover:bg-white/5 transition-colors cursor-pointer text-xs"
+                      className="w-full text-left flex items-center justify-between p-2.5 rounded-xl hover:bg-[#eff2ff] transition-colors cursor-pointer text-xs"
                     >
                       <div>
-                        <b className="font-bold text-[#0a1020] dark:text-white block">{res.name}</b>
-                        <span className="text-[11px] text-[#5a6480] dark:text-slate-400">{res.sub}</span>
+                        <b className="font-bold text-[#0a1020] block">{res.name}</b>
+                        <span className="text-[11px] text-[#5a6480]">{res.sub}</span>
                       </div>
-                      <ArrowUpRight size={14} className="text-[#27187e] dark:text-[#ff685c]" />
+                      <ArrowUpRight size={14} className="text-[#27187e]" />
                     </button>
                   ))
                 ) : (
-                  <div className="p-4 text-center text-xs text-[#5a6480] dark:text-slate-400">
+                  <div className="p-4 text-center text-xs text-[#5a6480]">
                     No matching parts found. Send your drawing for review!
                   </div>
                 )}
-                <div className="pt-2 border-t border-slate-100 dark:border-white/5 mt-1 px-2 flex items-center justify-between">
+                <div className="pt-2 border-t border-slate-100 mt-1 px-2 flex items-center justify-between">
                   <span className="text-[10px] text-[#7a84a1]">Drawing-led custom jobs</span>
                   <Link
                     href="/rfq"
                     onClick={() => setSearchResultsOpen(false)}
-                    className="text-[11px] font-extrabold text-[#27187e] dark:text-[#ff685c] hover:underline"
+                    className="text-[11px] font-extrabold text-[#27187e] hover:underline"
                   >
                     Upload Drawing →
                   </Link>
@@ -253,8 +253,8 @@ export default function Header() {
                 }}
                 className={`flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl transition-all cursor-pointer ${
                   categoriesOpen
-                    ? 'text-[#27187e] dark:text-[#ff685c] bg-white/70 dark:bg-white/10'
-                    : 'text-[#48506b] dark:text-slate-300 hover:text-[#27187e] dark:hover:text-white hover:bg-white/50 dark:hover:bg-white/5'
+                    ? 'text-[#27187e] bg-white/70'
+                    : 'text-[#48506b] hover:text-[#27187e] hover:bg-white/50'
                 }`}
               >
                 <span>Categories</span>
@@ -272,8 +272,8 @@ export default function Header() {
                 }}
                 className={`flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl transition-all cursor-pointer ${
                   aboutOpen
-                    ? 'text-[#27187e] dark:text-[#ff685c] bg-white/70 dark:bg-white/10'
-                    : 'text-[#48506b] dark:text-slate-300 hover:text-[#27187e] dark:hover:text-white hover:bg-white/50 dark:hover:bg-white/5'
+                    ? 'text-[#27187e] bg-white/70'
+                    : 'text-[#48506b] hover:text-[#27187e] hover:bg-white/50'
                 }`}
               >
                 <span>About Aartha</span>
@@ -284,7 +284,7 @@ export default function Header() {
             {/* Direct Link to Verified Suppliers (Secondary Directory) */}
             <Link
               href="/suppliers"
-              className="text-xs font-bold text-[#48506b] dark:text-slate-300 hover:text-[#27187e] dark:hover:text-white px-3 py-2 rounded-xl hover:bg-white/50 dark:hover:bg-white/5 transition-all"
+              className="text-xs font-bold text-[#48506b] hover:text-[#27187e] px-3 py-2 rounded-xl hover:bg-white/50 transition-all"
             >
               Factory Network
             </Link>
@@ -292,7 +292,7 @@ export default function Header() {
             {/* How It Works Link */}
             <Link
               href="/how-it-works"
-              className="text-xs font-bold text-[#48506b] dark:text-slate-300 hover:text-[#27187e] dark:hover:text-white px-3 py-2 rounded-xl hover:bg-white/50 dark:hover:bg-white/5 transition-all"
+              className="text-xs font-bold text-[#48506b] hover:text-[#27187e] px-3 py-2 rounded-xl hover:bg-white/50 transition-all"
             >
               How It Works
             </Link>
@@ -305,19 +305,19 @@ export default function Header() {
               <div className="flex items-center gap-1.5 pl-2">
                 <Link
                   href={getDashboardPath(user?.role)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-white/80 dark:bg-white/10 border border-[#27187e]/20 dark:border-white/10 hover:bg-white dark:hover:bg-white/20 text-[#0a1020] dark:text-white transition-all shadow-xs"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-white/80 border border-[#27187e]/20 hover:bg-white text-[#0a1020] transition-all shadow-xs"
                 >
                   {user?.role === 'admin' ? (
                     <Shield size={13} className="text-[#ff685c]" />
                   ) : (
-                    <User size={13} className="text-[#27187e] dark:text-[#82aaff]" />
+                    <User size={13} className="text-[#27187e]" />
                   )}
                   <span className="max-w-[100px] truncate">{getDashboardLabel(user)}</span>
                 </Link>
                 <button
                   onClick={logout}
                   title="Sign out"
-                  className="p-1.5 rounded-full text-[#5a6480] hover:text-red-600 hover:bg-white/60 dark:hover:bg-white/10 transition-all cursor-pointer"
+                  className="p-1.5 rounded-full text-[#5a6480] hover:text-red-600 hover:bg-white/60 transition-all cursor-pointer"
                 >
                   <LogOut size={13} />
                 </button>
@@ -325,7 +325,7 @@ export default function Header() {
             ) : (
               <Link
                 href="/signin"
-                className="text-xs font-extrabold text-[#0a1020] dark:text-white px-3 py-1.5 rounded-full hover:bg-white/60 dark:hover:bg-white/10 transition-all"
+                className="text-xs font-extrabold text-[#0a1020] px-3 py-1.5 rounded-full hover:bg-white/60 transition-all"
               >
                 Sign In
               </Link>
@@ -351,7 +351,7 @@ export default function Header() {
             </Link>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl text-[#0a1020] dark:text-white hover:bg-white/50 dark:hover:bg-white/10 cursor-pointer"
+              className="p-2 rounded-xl text-[#0a1020] hover:bg-white/50 cursor-pointer"
               aria-label="Toggle navigation menu"
             >
               {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
@@ -362,12 +362,12 @@ export default function Header() {
 
       {/* Mega Menu: Category Explorer */}
       {categoriesOpen && (
-        <div className="absolute left-0 right-0 top-[74px] bg-white dark:bg-[#0e1524] border-b border-[#27187e]/15 dark:border-white/10 shadow-[0_35px_80px_rgba(10,16,32,0.18)] z-40 animate-fadeIn">
+        <div className="absolute left-0 right-0 top-[74px] bg-white border-b border-[#27187e]/15 shadow-[0_35px_80px_rgba(10,16,32,0.18)] z-40 animate-fadeIn">
           <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-            <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-6 bg-[#fafbff] dark:bg-[#142035] rounded-3xl border border-[#27187e]/10 dark:border-white/10 p-4 sm:p-6">
+            <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-6 bg-[#fafbff] rounded-3xl border border-[#27187e]/10 p-4 sm:p-6">
               
               {/* Sidebar Tabs */}
-              <aside className="border-b md:border-b-0 md:border-r border-[#27187e]/10 dark:border-white/10 pb-4 md:pb-0 md:pr-4 flex md:flex-col gap-1 overflow-x-auto">
+              <aside className="border-b md:border-b-0 md:border-r border-[#27187e]/10 pb-4 md:pb-0 md:pr-4 flex md:flex-col gap-1 overflow-x-auto">
                 <div className="text-[10px] font-black uppercase tracking-widest text-[#7a84a1] px-3 py-2 hidden md:block">
                   Part Families
                 </div>
@@ -385,8 +385,8 @@ export default function Header() {
                     onClick={() => setActiveCategoryTab(cat.id)}
                     className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                       activeCategoryTab === cat.id
-                        ? 'bg-white dark:bg-[#0e1524] text-[#27187e] dark:text-[#82aaff] shadow-xs border-l-4 border-[#27187e] dark:border-[#82aaff]'
-                        : 'text-[#48506b] dark:text-slate-300 hover:bg-white/60 dark:hover:bg-white/5'
+                        ? 'bg-white text-[#27187e] shadow-xs border-l-4 border-[#27187e]'
+                        : 'text-[#48506b] hover:bg-white/60'
                     }`}
                   >
                     {cat.label}
@@ -396,17 +396,17 @@ export default function Header() {
 
               {/* Content Grid */}
               <div>
-                <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#27187e]/10 dark:border-white/10">
+                <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#27187e]/10">
                   <div>
                     <span className="micro">Aartha / Precision Catalogue</span>
-                    <h3 className="text-xl font-bold text-[#0a1020] dark:text-white mt-0.5">
+                    <h3 className="text-xl font-bold text-[#0a1020] mt-0.5">
                       {categoryData[activeCategoryTab]?.title || 'Custom sheet-metal parts'}
                     </h3>
                   </div>
                   <button
                     type="button"
                     onClick={() => setCategoriesOpen(false)}
-                    className="w-8 h-8 rounded-full bg-slate-100 dark:bg-white/10 text-slate-500 hover:text-black dark:hover:text-white flex items-center justify-center text-sm cursor-pointer"
+                    className="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-black flex items-center justify-center text-sm cursor-pointer"
                   >
                     ✕
                   </button>
@@ -418,24 +418,24 @@ export default function Header() {
                       key={idx}
                       href={item.href}
                       onClick={() => setCategoriesOpen(false)}
-                      className="group p-3.5 rounded-2xl bg-white dark:bg-[#0e1524] border border-[#27187e]/10 dark:border-white/10 hover:border-[#27187e]/30 dark:hover:border-[#ff685c]/40 hover:-translate-y-0.5 transition-all shadow-3xs"
+                      className="group p-3.5 rounded-2xl bg-white border border-[#27187e]/10 hover:border-[#27187e]/30 hover:-translate-y-0.5 transition-all shadow-3xs"
                     >
-                      <strong className="block text-xs font-bold text-[#0a1020] dark:text-white group-hover:text-[#27187e] dark:group-hover:text-[#ff685c]">
+                      <strong className="block text-xs font-bold text-[#0a1020] group-hover:text-[#27187e]">
                         {item.name}
                       </strong>
-                      <span className="block text-[11px] text-[#5a6480] dark:text-slate-400 mt-1 line-clamp-2">
+                      <span className="block text-[11px] text-[#5a6480] mt-1 line-clamp-2">
                         {item.desc}
                       </span>
                     </Link>
                   ))}
                 </div>
 
-                <div className="mt-5 pt-4 border-t border-[#27187e]/10 dark:border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs text-[#5a6480] dark:text-slate-400">
+                <div className="mt-5 pt-4 border-t border-[#27187e]/10 flex flex-wrap items-center justify-between gap-3 text-xs text-[#5a6480]">
                   <span>Starting commercial wedge: Laser cutting + CNC press brake bending</span>
                   <Link
                     href="/rfq"
                     onClick={() => setCategoriesOpen(false)}
-                    className="font-black text-[#27187e] dark:text-[#ff685c] hover:underline inline-flex items-center gap-1"
+                    className="font-black text-[#27187e] hover:underline inline-flex items-center gap-1"
                   >
                     Start with a drawing →
                   </Link>
@@ -448,13 +448,13 @@ export default function Header() {
 
       {/* Popover: About Aartha */}
       {aboutOpen && (
-        <div className="absolute right-4 sm:right-8 lg:right-24 top-[74px] w-[360px] bg-white dark:bg-[#0e1524] border border-[#27187e]/15 dark:border-white/10 rounded-3xl p-4 shadow-[0_35px_80px_rgba(10,16,32,0.18)] z-40 animate-fadeIn">
-          <div className="flex items-center justify-between px-2 pb-2 border-b border-slate-100 dark:border-white/10">
+        <div className="absolute right-4 sm:right-8 lg:right-24 top-[74px] w-[360px] bg-white border border-[#27187e]/15 rounded-3xl p-4 shadow-[0_35px_80px_rgba(10,16,32,0.18)] z-40 animate-fadeIn">
+          <div className="flex items-center justify-between px-2 pb-2 border-b border-slate-100">
             <span className="micro">Aartha / Managed Model</span>
             <button
               type="button"
               onClick={() => setAboutOpen(false)}
-              className="w-7 h-7 rounded-full bg-slate-100 dark:bg-white/10 text-slate-500 hover:text-black dark:hover:text-white flex items-center justify-center text-xs cursor-pointer"
+              className="w-7 h-7 rounded-full bg-slate-100 text-slate-500 hover:text-black flex items-center justify-center text-xs cursor-pointer"
             >
               ✕
             </button>
@@ -471,15 +471,15 @@ export default function Header() {
                 key={i}
                 href={menuItem.href}
                 onClick={() => setAboutOpen(false)}
-                className="block p-2.5 rounded-xl hover:bg-[#eff2ff] dark:hover:bg-white/5 transition-colors group"
+                className="block p-2.5 rounded-xl hover:bg-[#eff2ff] transition-colors group"
               >
                 <div className="flex items-center justify-between">
-                  <strong className="text-xs font-bold text-[#0a1020] dark:text-white group-hover:text-[#27187e] dark:group-hover:text-[#ff685c]">
+                  <strong className="text-xs font-bold text-[#0a1020] group-hover:text-[#27187e]">
                     {menuItem.title}
                   </strong>
                   <ArrowUpRight size={13} className="text-slate-400 group-hover:text-[#27187e]" />
                 </div>
-                <small className="text-[11px] text-[#5a6480] dark:text-slate-400 block mt-0.5">
+                <small className="text-[11px] text-[#5a6480] block mt-0.5">
                   {menuItem.desc}
                 </small>
               </Link>
@@ -490,50 +490,50 @@ export default function Header() {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden absolute top-[74px] left-0 right-0 bg-white/95 dark:bg-[#0a1020]/95 backdrop-blur-xl border-b border-[#27187e]/15 dark:border-white/10 shadow-2xl p-5 z-40 animate-fadeIn">
+        <div className="lg:hidden absolute top-[74px] left-0 right-0 bg-white/95 backdrop-blur-xl border-b border-[#27187e]/15 shadow-2xl p-5 z-40 animate-fadeIn">
           <div className="space-y-2">
             <Link
               href="/#catalogue"
               onClick={() => setMobileMenuOpen(false)}
-              className="block p-2.5 rounded-xl text-xs font-extrabold text-[#0a1020] dark:text-white hover:bg-slate-100 dark:hover:bg-white/5"
+              className="block p-2.5 rounded-xl text-xs font-extrabold text-[#0a1020] hover:bg-slate-100"
             >
               Part Catalogue (Brackets, Plates, Covers)
             </Link>
             <Link
               href="/how-it-works"
               onClick={() => setMobileMenuOpen(false)}
-              className="block p-2.5 rounded-xl text-xs font-extrabold text-[#0a1020] dark:text-white hover:bg-slate-100 dark:hover:bg-white/5"
+              className="block p-2.5 rounded-xl text-xs font-extrabold text-[#0a1020] hover:bg-slate-100"
             >
               How It Works (6-Step Workflow)
             </Link>
             <Link
               href="/suppliers"
               onClick={() => setMobileMenuOpen(false)}
-              className="block p-2.5 rounded-xl text-xs font-extrabold text-[#0a1020] dark:text-white hover:bg-slate-100 dark:hover:bg-white/5"
+              className="block p-2.5 rounded-xl text-xs font-extrabold text-[#0a1020] hover:bg-slate-100"
             >
               Supplier Network Directory
             </Link>
             <Link
               href="/about"
               onClick={() => setMobileMenuOpen(false)}
-              className="block p-2.5 rounded-xl text-xs font-extrabold text-[#0a1020] dark:text-white hover:bg-slate-100 dark:hover:bg-white/5"
+              className="block p-2.5 rounded-xl text-xs font-extrabold text-[#0a1020] hover:bg-slate-100"
             >
               Why Aartha & Quality Model
             </Link>
             <Link
               href="/verified"
               onClick={() => setMobileMenuOpen(false)}
-              className="block p-2.5 rounded-xl text-xs font-extrabold text-[#0a1020] dark:text-white hover:bg-slate-100 dark:hover:bg-white/5"
+              className="block p-2.5 rounded-xl text-xs font-extrabold text-[#0a1020] hover:bg-slate-100"
             >
               Trust Center & Verification
             </Link>
-            <div className="pt-3 border-t border-slate-100 dark:border-white/10 space-y-2">
+            <div className="pt-3 border-t border-slate-100 space-y-2">
               {isAuthenticated ? (
                 <>
                   <Link
                     href={getDashboardPath(user?.role)}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block text-center py-2.5 px-3 rounded-xl text-xs font-bold bg-slate-100 dark:bg-white/10 text-[#0a1020] dark:text-white"
+                    className="block text-center py-2.5 px-3 rounded-xl text-xs font-bold bg-slate-100 text-[#0a1020]"
                   >
                     Dashboard ({getDashboardLabel(user)})
                   </Link>
@@ -551,7 +551,7 @@ export default function Header() {
                 <Link
                   href="/signin"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block text-center py-2.5 px-3 rounded-xl text-xs font-bold border border-slate-200 dark:border-white/10 text-[#0a1020] dark:text-white"
+                  className="block text-center py-2.5 px-3 rounded-xl text-xs font-bold border border-slate-200 text-[#0a1020]"
                 >
                   Sign In
                 </Link>
