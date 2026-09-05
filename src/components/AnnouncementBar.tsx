@@ -9,7 +9,7 @@ export default function AnnouncementBar() {
   const { t } = useTranslation();
 
   return (
-    <div className="bg-navy text-white text-[11px] h-[36px] flex items-center border-b border-white/10 relative z-[60]">
+    <div className="bg-[#0a1020] text-white text-[11px] h-[36px] flex items-center border-b border-white/10 relative z-[60]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4 xl:px-8 w-full flex items-center justify-between">
         {/* Left Side Trust Banner */}
         <div className="flex items-center gap-2 font-medium">

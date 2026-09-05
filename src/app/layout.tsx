@@ -1,27 +1,26 @@
 import { Metadata } from 'next';
-import { Plus_Jakarta_Sans, Inter } from 'next/font/google';
+import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
 import AnnouncementBar from '@/components/AnnouncementBar';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AIAssistantTrigger from '@/components/AIAssistantTrigger';
 import FloatingRightDock from '@/components/FloatingRightDock';
 import QuickDashboardReturn from '@/components/QuickDashboardReturn';
-import LiquidGlassBackground from '@/components/ui/LiquidGlassBackground';
 import { ToastProvider } from '@/components/Toast';
 import AutoTranslationBridge from '@/components/AutoTranslationBridge';
 import './globals.css';
 
-const plusJakartaSans = Plus_Jakarta_Sans({
+const inter = Inter({
   variable: '--font-primary',
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['400', '500', '600', '700', '800', '900'],
   display: 'swap',
 });
 
-const inter = Inter({
+const plusJakartaSans = Plus_Jakarta_Sans({
   variable: '--font-data',
   subsets: ['latin'],
-  weight: ['400', '500', '600'],
+  weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
 });
 
@@ -90,8 +89,8 @@ const structuredSchema = {
       "@id": "https://aartha.site/#website",
       "url": "https://aartha.site",
       "name": "Aartha",
-      "alternateName": ["Aartha Platform", "Aartha B2B", "Aartha Manufacturing Network"],
-      "description": "India's Verified B2B Manufacturing Network connecting global industrial buyers directly with authentic Gujarat factories.",
+      "alternateName": ["Aartha Platform", "Aartha Managed Manufacturing"],
+      "description": "Managed manufacturing for custom precision parts. Send your drawing — Aartha handles engineering review, supplier selection, production, inspection, and delivery.",
       "potentialAction": {
         "@type": "SearchAction",
         "target": {
@@ -105,10 +104,10 @@ const structuredSchema = {
       "@type": "Organization",
       "@id": "https://aartha.site/#organization",
       "name": "Aartha",
-      "legalName": "Aartha B2B Platform",
+      "legalName": "Aartha Platform",
       "url": "https://aartha.site",
       "logo": "https://aartha.site/brand/aartha-logo.png",
-      "description": "Evidence-grounded B2B manufacturing discovery & verification platform for Indian MSMEs and global industrial buyers.",
+      "description": "Managed manufacturing execution layer for custom precision parts — from drawing to inspected delivery.",
       "address": {
         "@type": "PostalAddress",
         "addressRegion": "Gujarat",
@@ -121,44 +120,47 @@ const structuredSchema = {
       }
     },
     {
+      "@type": "Service",
+      "@id": "https://aartha.site/#service",
+      "name": "Managed Manufacturing Service",
+      "description": "End-to-end managed manufacturing for custom sheet-metal parts: RFQ intake, DFM review, supplier selection, production coordination, dimensional inspection, and delivered parts.",
+      "provider": { "@id": "https://aartha.site/#organization" },
+      "serviceType": "Contract Manufacturing Management",
+      "areaServed": "IN",
+      "url": "https://aartha.site/rfq"
+    },
+    {
       "@type": "ItemList",
       "@id": "https://aartha.site/#sitelinks",
-      "name": "Aartha Main Navigation & Directories",
+      "name": "Aartha Navigation",
       "itemListElement": [
         {
           "@type": "SiteNavigationElement",
           "position": 1,
-          "name": "Manufacturers Directory",
-          "description": "Browse verified direct manufacturers across Gujarat industrial GIDC clusters",
-          "url": "https://aartha.site/suppliers"
-        },
-        {
-          "@type": "SiteNavigationElement",
-          "position": 2,
-          "name": "Post Sourcing RFQ",
-          "description": "Submit raw technical specifications & get matched with verified factories",
+          "name": "Send an RFQ",
+          "description": "Upload your drawing and receive a managed manufacturing quote",
           "url": "https://aartha.site/rfq"
         },
         {
           "@type": "SiteNavigationElement",
+          "position": 2,
+          "name": "Production Network",
+          "description": "Browse qualified suppliers across Gujarat industrial GIDC clusters",
+          "url": "https://aartha.site/suppliers"
+        },
+        {
+          "@type": "SiteNavigationElement",
           "position": 3,
-          "name": "Get Your Factory Listed",
-          "description": "Register your Indian manufacturing plant and connect with global buyers with zero listing fees",
-          "url": "https://aartha.site/get-listed"
+          "name": "How It Works",
+          "description": "Drawing to delivered part — the managed manufacturing workflow",
+          "url": "https://aartha.site/how-it-works"
         },
         {
           "@type": "SiteNavigationElement",
           "position": 4,
-          "name": "Verified Factories",
-          "description": "View plant audit logs, GPS telemetry, and verified GSTIN/IEC credentials",
-          "url": "https://aartha.site/verified"
-        },
-        {
-          "@type": "SiteNavigationElement",
-          "position": 5,
-          "name": "For Global Buyers",
-          "description": "Zero brokerage B2B sourcing network for international and domestic procurement teams",
-          "url": "https://aartha.site/for-buyers"
+          "name": "Get Your Factory Listed",
+          "description": "Join Aartha's qualified supplier network",
+          "url": "https://aartha.site/get-listed"
         }
       ]
     }
