@@ -61,6 +61,19 @@
   --color-trust-purple-bg: #F5F3FF;
   --color-whatsapp: #25D366;
 
+  /* Aartha Managed Manufacturing Design System */
+  --color-ice: #dfe4f8;
+  --color-ice2: #edf0fb;
+  --color-coral: #ff685c;
+  --color-coral-soft: #ffd8d2;
+  --color-periwinkle: #82aaff;
+  --color-cornflower: #758bfd;
+  --color-violet: #27187e;
+  --color-cobalt: #2350d2;
+  --color-ink: #0a1020;
+  --color-industrial-muted: #5a6480;
+  --color-industrial-line: rgba(39, 24, 126, 0.14);
+
   /* Custom animation mappings */
   --animate-blob-slow-1: blob-slow-1 25s infinite ease-in-out;
   --animate-blob-slow-2: blob-slow-2 25s infinite ease-in-out;
@@ -148,6 +161,21 @@
 
   /* Contrast-safe Gold Text for light background */
   --color-gold-text: #A07B1E;
+
+  /* Aartha Managed Manufacturing Design System */
+  --ice: #dfe4f8;
+  --ice2: #edf0fb;
+  --coral: #ff685c;
+  --coral-soft: #ffd8d2;
+  --periwinkle: #82aaff;
+  --cornflower: #758bfd;
+  --violet: #27187e;
+  --cobalt: #2350d2;
+  --ink: #0a1020;
+  --muted: #5a6480;
+  --line: rgba(39, 24, 126, 0.14);
+  --shadow-industrial: 0 30px 70px rgba(39, 24, 126, 0.12);
+  --radius-industrial: 30px;
 }
 
 .dark {
@@ -622,6 +650,298 @@ body {
 .goog-text-highlight {
   background-color: transparent !important;
   box-shadow: none !important;
+}
+
+/* =========================================================
+   AARTHA MANAGED MANUFACTURING DESIGN SYSTEM & UTILITIES
+   ========================================================= */
+
+.pill {
+  border-radius: 999px;
+  padding: 11px 18px;
+  font-weight: 800;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid var(--line);
+  transition: all 0.25s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+.pill:hover {
+  transform: translateY(-2px);
+}
+.pill-ink {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff !important;
+}
+.pill-ink:hover {
+  box-shadow: 0 10px 25px rgba(10, 16, 32, 0.25);
+}
+.pill-light {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  color: var(--ink);
+}
+.pill-light:hover {
+  background: #ffffff;
+  border-color: var(--violet);
+}
+.pill-primary {
+  background: var(--violet);
+  color: #fff !important;
+  border-color: var(--violet);
+}
+.pill-primary:hover {
+  box-shadow: 0 10px 25px rgba(39, 24, 126, 0.25);
+}
+.pill-coral {
+  background: var(--coral);
+  color: #fff !important;
+  border-color: var(--coral);
+}
+.pill-coral:hover {
+  box-shadow: 0 10px 25px rgba(255, 104, 92, 0.35);
+}
+
+.micro {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+.dark .micro {
+  color: var(--coral);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--violet);
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid var(--line);
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+}
+.eyebrow i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--coral);
+  display: block;
+  box-shadow: 0 0 0 5px rgba(255, 104, 92, 0.15);
+}
+
+/* Signal Strip */
+.signal-strip {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(12px);
+  scrollbar-width: none;
+}
+.signal-strip::-webkit-scrollbar {
+  display: none;
+}
+.signal-item {
+  min-width: max-content;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 22px;
+  border-right: 1px solid var(--line);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+.signal-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.signal-dot.coral { background: var(--coral); }
+.signal-dot.blue { background: var(--cobalt); }
+.signal-dot.violet { background: var(--violet); }
+.signal-dot.green { background: #34d399; }
+
+/* SVG Art Components for Sheet Metal Parts */
+.part-art {
+  height: 165px;
+  border-radius: 17px;
+  background: linear-gradient(145deg, #eef1ff, #d4dcff);
+  position: relative;
+  overflow: hidden;
+}
+.part-art:before {
+  content: "";
+  position: absolute;
+  inset: 18px;
+  border: 1px dashed rgba(39, 24, 126, 0.18);
+  border-radius: 14px;
+}
+.part-art:after {
+  content: "";
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  right: -18px;
+  bottom: -36px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 104, 92, 0.36), transparent 68%);
+}
+.fold {
+  position: absolute;
+  width: 110px;
+  height: 75px;
+  left: 46px;
+  top: 45px;
+  border: 8px solid #7289da;
+  border-right: 0;
+  border-bottom: 0;
+  border-radius: 10px;
+  transform: skewY(-17deg);
+}
+.hole {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #6f84d9;
+  z-index: 2;
+}
+.h1 { left: 63px; top: 58px; }
+.h2 { left: 63px; top: 99px; }
+
+.art-plate:before {
+  inset: 38px 28px;
+  border: 10px solid #8da3ff;
+  border-radius: 10px;
+}
+.plate-hole {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #6f84d9;
+}
+.plate-hole.a { left: 47px; top: 47px; }
+.plate-hole.b { right: 48px; top: 47px; }
+.plate-hole.c { left: 47px; bottom: 49px; }
+.plate-slot {
+  position: absolute;
+  width: 62px;
+  height: 14px;
+  border: 3px solid #6f84d9;
+  border-radius: 99px;
+  left: 76px;
+  bottom: 48px;
+}
+
+.art-cover:before {
+  inset: 37px 48px;
+  border: 8px solid #7f96ea;
+  border-radius: 8px;
+  transform: skewY(-14deg);
+}
+.cover-edge {
+  position: absolute;
+  width: 86px;
+  height: 60px;
+  left: 54px;
+  top: 63px;
+  border-right: 7px solid #5d72c4;
+  border-bottom: 7px solid #5d72c4;
+  transform: skewY(12deg);
+}
+.cover-hole {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #6f84d9;
+  right: 55px;
+  top: 58px;
+}
+
+.art-housing:before {
+  inset: 34px 46px;
+  border: 0;
+  background: linear-gradient(145deg, #95a9f4, #657bd1);
+  clip-path: polygon(14% 0, 100% 15%, 90% 100%, 0 82%);
+}
+.housing-face {
+  position: absolute;
+  width: 82px;
+  height: 70px;
+  left: 70px;
+  top: 56px;
+  background: #e9edff;
+  border: 5px solid #697fd4;
+  border-radius: 7px;
+  transform: skewY(-12deg);
+}
+.housing-slot {
+  position: absolute;
+  width: 42px;
+  height: 9px;
+  border-radius: 99px;
+  background: #697fd4;
+  left: 93px;
+  top: 85px;
+  z-index: 2;
+}
+
+.art-enclosure:before {
+  inset: 35px 55px;
+  border: 0;
+  background: linear-gradient(145deg, #94a9f5, #5e74c8);
+  border-radius: 10px;
+  transform: skewY(-7deg);
+}
+.door {
+  position: absolute;
+  width: 72px;
+  height: 92px;
+  left: 79px;
+  top: 43px;
+  border: 5px solid #eef1ff;
+  border-radius: 5px;
+  z-index: 2;
+}
+.hinge {
+  position: absolute;
+  width: 8px;
+  height: 18px;
+  background: #eef1ff;
+  left: 72px;
+  z-index: 3;
+  border-radius: 2px;
+}
+.hinge.one { top: 54px; }
+.hinge.two { top: 102px; }
+
+/* Micro animations */
+@keyframes floatPart {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+}
+.animate-float-part {
+  animation: floatPart 8s ease-in-out infinite;
 }
 
 

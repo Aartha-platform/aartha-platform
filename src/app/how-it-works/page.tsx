@@ -1,122 +1,142 @@
-'use client';
+"use client";
 
 import Link from 'next/link';
-import { ShieldCheck, ArrowRight, UserCheck, MapPin, BarChart2, CheckCircle, HelpCircle } from 'lucide-react';
-import { useTranslation } from '@/hooks/useTranslation';
+import { 
+  FileText, CheckCircle2, ShieldCheck, ArrowRight, ArrowUpRight, 
+  Settings, Wrench, Layers, Clock, Award, Check 
+} from 'lucide-react';
 
 export default function HowItWorksPage() {
-  const { lang } = useTranslation();
-  const isGu = lang === 'gu';
-
   const steps = [
     {
       num: '01',
-      title: isGu ? 'વિનંતી સબમિટ કરો' : 'Submit Sourcing Requirement',
-      desc: isGu 
-        ? 'ખરીદદારો તેમના વિગતવાર સ્પષ્ટીકરણો, જથ્થો અને લક્ષ્ય કિંમત સબમિટ કરે છે. આ સિસ્ટમ વ્યાવસાયિક ડોમેન્સ અને ખરીદી સત્તાવાર મર્યાદાની ચકાસણી કરે છે.'
-        : 'Buyers submit their detailed product specifications, target quantity, and target prices. The system validates company domains and purchasing authority levels to prevent spam.'
+      title: 'Share your Drawing & Specifications',
+      subtitle: 'Upload 2D PDF, DXF, or 3D STEP file',
+      desc: 'Send us your CAD file, target quantity, material grade (SS304, MS, Aluminum), and critical tolerances. We clarify hole patterns, bend allowances, and surface finishes before moving to quotation.',
+      deliverable: 'Clear manufacturing specification sheet',
     },
     {
       num: '02',
-      title: isGu ? 'ભૌતિક ફેક્ટરી ઓડિટ' : 'Physical GIDC Factory Audit',
-      desc: isGu
-        ? 'વરિષ્ઠ ઓડિટર રાજેશ શાહના નેતૃત્વમાં ઓડિટિંગ ટીમ વાસ્તવિક ઉત્પાદક પ્લાન્ટની મુલાકાત લે છે, જીપીએસ કોઓર્ડિનેટ્સ મેપ કરે છે અને મશીનરી લાઈવ તપાસે છે.'
-        : 'Our auditing team, led by Senior Auditor Rajesh Shah, schedules physical plant inspections inside Vatva GIDC, Sachin GIDC Surat, or Ankleshwar to verify actual factory setup.'
+      title: 'Engineering DFM Review',
+      subtitle: 'Design for Manufacturability check',
+      desc: 'Our mechanical engineers review the drawing for laser piercing constraints, press brake punch-die clearances, bend radius ratios, and potential distortion points to prevent shop floor failures.',
+      deliverable: 'DFM feedback report & suggested geometry adjustments',
     },
     {
       num: '03',
-      title: isGu ? 'દસ્તાવેજ અને ગુણવત્તા સ્કોરિંગ' : 'Document Dossier Verification',
-      desc: isGu
-        ? 'અમે મંત્રાલયના રેકોર્ડ્સમાંથી GSTIN, IEC અને પાલન પ્રમાણપત્રો ચકાસીએ છીએ. આ પછી, ૧૦૦-પોઇન્ટ વેરિફાઇડ ક્વોલિટી સ્કોર જનરેટ થાય છે.'
-        : 'We check registered GSTIN details, active IEC export codes, and compliance documentation. A transparent 100-point Quality Score is calculated for total matching clarity.'
+      title: 'Supplier Capability Matching',
+      subtitle: 'Routing to audited Gujarat fabrication shops',
+      desc: 'Instead of blasting your RFQ across dozens of brokers, we route the job to 1–2 specific shops in Gujarat whose laser wattages, bed sizes, press-brake tonnage, and current capacity match your part.',
+      deliverable: 'Single managed delivered quotation with fixed timeline',
     },
     {
       num: '04',
-      title: isGu ? 'સ્માર્ટ અને સુરક્ષિત મેચિંગ' : 'Evidence-Backed Matching',
-      desc: isGu
-        ? 'અમારી સિસ્ટમ ખરીદદારોના ચોક્કસ માપદંડો સાથે ઉચ્ચ સ્કોર ધરાવતા સ્થાનિક સપ્લાયર્સને મેચ કરે છે અને સબમિટ કરેલ રિકવેસ્ટ સીધી મોકલે છે.'
-        : 'Our algorithm maps active buyer requirements only to verified suppliers of that exact category. Suppliers submit side-by-side quotes directly with geocoded audit evidence.'
+      title: 'Tooling & Production Coordination',
+      subtitle: 'Active shop-floor milestone management',
+      desc: 'Aartha manages the production loop: raw sheet sourcing, nesting optimization, CNC laser cutting, press brake folding, deburring, and optional surface treatments like powder coating or zinc plating.',
+      deliverable: 'Live milestone updates without the WhatsApp chase',
     },
     {
       num: '05',
-      title: isGu ? 'ટ્રેડ આઉટકમ ટ્રેકિંગ' : 'Outcome Tracking & Dispatch',
-      desc: isGu
-        ? 'ખરીદદારો અને વેન્ડર્સ કરાર, નમૂના સ્વીકૃતિ અને ચુકવણીના માઇલસ્ટોન્સને મોનિટર કરવા માટે એક સંયુક્ત ટ્રેકરનો ઉપયોગ કરે છે, જેથી સુરક્ષિત સોદો પૂર્ણ થાય.'
-        : 'Both buyer and manufacturer utilize our live shared outcome trackers to record sample approval, price negotiation, and cargo dispatch milestones securely.'
-    }
+      title: 'Pre-Dispatch Dimensional Inspection',
+      subtitle: 'Evidence-based quality control',
+      desc: 'Before any parts leave the factory floor, physical samples are checked with calibrated vernier calipers, micrometers, and angle gauges. Dimensional deviation logs and clear macro photos are recorded.',
+      deliverable: 'Aartha QA Inspection Certificate & photo evidence',
+    },
+    {
+      num: '06',
+      title: 'Delivered Parts & Single Accountability',
+      subtitle: 'Handoff to your facility with full traceability',
+      desc: 'Inspected parts arrive at your receiving dock carefully packed. You receive a single GST-compliant commercial invoice and one accountable point of contact for reorders, batch repeats, or design revisions.',
+      deliverable: 'Ready-to-assemble hardware delivered on schedule',
+    },
   ];
 
   return (
-    <div className="bg-cream font-sans text-text-primary min-h-screen">
-      {/* Hero */}
-      <section className="bg-navy text-white py-12 px-4 border-b border-border-default/10">
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-8">
-          <div className="flex-1 space-y-4">
-            <div className="inline-flex items-center gap-1.5 bg-gold/15 text-gold text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-gold/10">
-              <ShieldCheck size={12} /> {isGu ? 'ટ્રસ્ટ ઓએસ માર્ગદર્શિકા' : 'Trust OS Framework'}
-            </div>
-            <h1 className="text-3xl lg:text-4xl font-bold uppercase tracking-wide">
-              {isGu ? 'આ પ્લેટફોર્મ કેવી રીતે કાર્ય કરે છે?' : 'How Aartha Works'}
-            </h1>
-            <p className="text-gold text-lg font-semibold">
-              {isGu ? 'ભૌતિક વેરિફિકેશન અને ચકાસાયેલ માહિતી સાથે વેપાર' : 'Physical Verification meets Digital Matchmaking'}
-            </p>
-            <p className="text-white/70 text-xs leading-relaxed max-w-xl">
-              {isGu 
-                ? 'અમે જાહેરાતો અથવા લિસ્ટિંગ ફી વેચતા નથી. અમારું કાર્ય સપ્લાયર્સના વાસ્તવિક સરનામાં, પ્લાન્ટ વીડિયો અને પાલન રેકોર્ડ્સનું ભૌતિક ઓડિટ કરીને ખરીદદારો સુધી પહોંચાડવાનું છે.'
-                : 'Unlike legacy business portals, we do not sell higher search rankings. We verify actual physical plants, log GPS positions, check registered company documents, and enforce absolute transparent trade milestones.'}
-            </p>
+    <div className="bg-gradient-to-b from-[#dfe4f8] via-[#f7f8fd] to-white dark:from-[#0a1020] dark:via-[#0e1524] dark:to-[#060b13] font-sans text-[#0a1020] dark:text-[#f0f4fa] min-h-screen py-10 sm:py-16">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Header */}
+        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+          <span className="eyebrow">AARTHA / EXECUTION LAYER</span>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#0a1020] dark:text-white leading-[0.95]">
+            How managed manufacturing works.
+          </h1>
+          <p className="text-base sm:text-lg text-[#5a6480] dark:text-slate-300 font-normal leading-relaxed">
+            From technical CAD review to delivered batch — without becoming your procurement department. Here is how Aartha turns drawings into inspected precision parts.
+          </p>
+          <div className="pt-2">
+            <Link
+              href="/rfq"
+              className="pill pill-primary text-xs px-6 py-3"
+            >
+              <span>Upload your drawing to start</span>
+              <ArrowUpRight size={14} />
+            </Link>
           </div>
         </div>
-      </section>
 
-      <div className="max-w-4xl mx-auto px-4 py-12 space-y-12">
-        {/* Step List */}
-        <section className="space-y-8">
-          <h2 className="text-xl font-bold text-center uppercase tracking-wide">
-            {isGu ? 'ચકાસાયેલ સોર્સિંગ પ્રક્રિયાના ૫ પગલાં' : '5 Steps to Verified B2B Trade'}
-          </h2>
-
-          <div className="space-y-6">
-            {steps.map((s, idx) => (
-              <div key={idx} className="bg-white border border-border-default rounded-2xl p-6 flex gap-6 items-start shadow-2xs hover:border-gold/25 transition-all">
-                <div className="text-3xl font-mono font-bold text-gold/30 flex-shrink-0 select-none">
-                  {s.num}
-                </div>
-                <div className="space-y-1.5 text-xs">
-                  <h3 className="font-bold text-sm text-text-primary uppercase tracking-wider">{s.title}</h3>
-                  <p className="text-text-secondary leading-relaxed font-medium">{s.desc}</p>
-                </div>
+        {/* 6 Steps List */}
+        <div className="space-y-6">
+          {steps.map((step) => (
+            <div
+              key={step.num}
+              className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#0e1524] border border-[#27187e]/15 dark:border-white/10 shadow-xs hover:shadow-md transition-all grid grid-cols-1 md:grid-cols-[100px_1fr_260px] gap-6 items-start"
+            >
+              {/* Step Number */}
+              <div className="text-4xl sm:text-5xl font-black text-[#ff685c]">
+                {step.num}
               </div>
-            ))}
-          </div>
-        </section>
 
-        {/* Call to Actions */}
-        <section className="bg-navy text-white rounded-2xl p-8 text-center space-y-6 border border-border-default/10">
-          <h2 className="text-lg font-bold uppercase tracking-wider text-gold">
-            {isGu ? 'આજે જ સુરક્ષિત સોર્સિંગ શરૂ કરો' : 'Start Sourcing with Absolute Trust'}
-          </h2>
-          <p className="text-white/70 text-xs max-w-md mx-auto leading-relaxed">
-            {isGu 
-              ? 'ભલે તમે વૈશ્વિક બાયર હોવ કે ગુજરાતના સપ્લાયર, અમારા ઓડિટિંગ ગેટવે સાથે જોડાઈને સુરક્ષિત વેપારની શરૂઆત કરો.'
-              : 'Access geolocated manufacturer directories or register your own factory cluster for physical verification audit routing.'}
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link 
-              href="/rfq" 
-              className="bg-navy-light hover:bg-navy border border-white/20 text-white font-bold px-6 py-2.5 rounded-lg text-xs uppercase tracking-wider no-underline transition-all h-11 min-h-[44px] flex items-center justify-center"
-            >
-              {isGu ? 'નવી RFQ સબમિટ કરો' : 'Post Sourcing RFQ'}
-            </Link>
-            <Link 
-              href="/get-listed" 
-              className="bg-gold hover:bg-gold-hover text-white font-bold px-6 py-2.5 rounded-lg text-xs uppercase tracking-wider no-underline transition-all h-11 min-h-[44px] flex items-center justify-center"
-            >
-              {isGu ? 'ફેક્ટરી ઓડિટ શેડ્યૂલ કરો' : 'Apply for GIDC Audit'}
-            </Link>
+              {/* Step Details */}
+              <div>
+                <span className="text-[11px] font-black uppercase tracking-wider text-[#27187e] dark:text-[#82aaff]">
+                  {step.subtitle}
+                </span>
+                <h2 className="text-xl sm:text-2xl font-black text-[#0a1020] dark:text-white mt-1">
+                  {step.title}
+                </h2>
+                <p className="text-xs sm:text-sm text-[#5a6480] dark:text-slate-400 mt-2.5 leading-relaxed">
+                  {step.desc}
+                </p>
+              </div>
+
+              {/* Deliverable Badge */}
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/5">
+                <span className="text-[10px] font-black uppercase tracking-wider text-[#5a6480] dark:text-slate-400 block mb-1">
+                  Key Output / Handoff
+                </span>
+                <strong className="text-xs font-bold text-[#0a1020] dark:text-white flex items-start gap-1.5 leading-snug">
+                  <CheckCircle2 size={14} className="text-emerald-500 flex-shrink-0 mt-0.5" />
+                  <span>{step.deliverable}</span>
+                </strong>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom CTA Box */}
+        <div className="mt-16 rounded-3xl p-8 sm:p-12 bg-gradient-to-br from-[#0a1020] to-[#27187e] text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl">
+          <div>
+            <span className="text-[10px] font-black uppercase tracking-widest text-[#ffd8d2]">
+              READY TO BUILD?
+            </span>
+            <h3 className="text-2xl sm:text-3xl font-black mt-1">
+              Have a bracket, plate, or custom part to make?
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-300 mt-2 max-w-lg">
+              Send us your drawing for a free manufacturability review and managed quotation within 24 hours.
+            </p>
           </div>
-        </section>
+          <Link
+            href="/rfq"
+            className="pill pill-coral text-xs px-6 py-3.5 whitespace-nowrap"
+          >
+            <span>Upload Drawing (PDF / STEP / DXF)</span>
+            <ArrowUpRight size={14} />
+          </Link>
+        </div>
+
       </div>
     </div>
   );

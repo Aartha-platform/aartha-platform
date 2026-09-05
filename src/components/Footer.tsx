@@ -99,38 +99,38 @@ export default function Footer() {
           
           {/* Brand & Mission (Span 2) */}
           <div className="sm:col-span-2 lg:col-span-2 space-y-4">
-            <Link href="/" className="inline-flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/15 p-1 flex items-center justify-center overflow-hidden">
+            <Link href="/" className="inline-flex items-center gap-3 group">
+              <div className="w-10 h-10 flex items-center justify-center flex-shrink-0 transition-transform duration-200 group-hover:scale-105">
                 <img
-                  src="/brand/aartha-logo.png"
+                  src="/brand/aartha-logo-white.png"
                   alt="Aartha Logo"
-                  className="w-full h-full object-contain invert"
+                  className="w-full h-full object-contain drop-shadow-xs"
                 />
               </div>
               <div>
-                <span className="font-extrabold text-base tracking-wider text-white">AARTHA</span>
-                <span className="text-[10px] block text-amber-400/90 uppercase tracking-widest font-semibold">Purpose · Wealth · Prosperity</span>
+                <span className="font-black text-xl tracking-tight text-white">Aartha</span>
+                <span className="text-[10px] block text-[#ff685c] uppercase tracking-widest font-extrabold mt-0.5">Managed Sourcing</span>
               </div>
             </Link>
 
-            <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
-              {t('footer_tagline')}
+            <p className="text-xs text-slate-400 leading-relaxed max-w-sm font-normal">
+              Send us your drawing. We handle the rest — from technical DFM review to qualified factory routing, shop-floor milestone tracking, and documented pre-dispatch inspection.
             </p>
 
             {/* Live Status & Contact Row */}
             <div className="space-y-2 pt-1">
-              <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full text-[11px] font-medium text-emerald-400">
+              <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full text-[11px] font-bold text-emerald-400">
                 <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
-                <span>{t('footer_status_operational')}</span>
+                <span>Operating Model: Order-First · Inventory-Free</span>
               </div>
 
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-400 pt-1">
-                <a href="tel:+917208432138" className="hover:text-amber-400 transition-colors flex items-center gap-1.5">
-                  <Phone size={12} className="text-amber-400/80" />
+                <a href="tel:+917208432138" className="hover:text-white transition-colors flex items-center gap-1.5">
+                  <Phone size={12} className="text-[#ff685c]" />
                   <span>+91 72084 32138</span>
                 </a>
-                <a href="mailto:support@aartha.site" className="hover:text-amber-400 transition-colors flex items-center gap-1.5">
-                  <Mail size={12} className="text-amber-400/80" />
+                <a href="mailto:support@aartha.site" className="hover:text-white transition-colors flex items-center gap-1.5">
+                  <Mail size={12} className="text-[#ff685c]" />
                   <span>support@aartha.site</span>
                 </a>
               </div>
@@ -149,7 +149,7 @@ export default function Footer() {
                   <a
                     key={s.label}
                     href={s.href}
-                    className="w-7 h-7 rounded-md bg-white/[0.03] border border-white/[0.08] hover:border-amber-400/40 hover:text-amber-400 text-slate-400 flex items-center justify-center transition-all"
+                    className="w-7 h-7 rounded-md bg-white/[0.03] border border-white/[0.08] hover:border-[#ff685c]/60 hover:text-[#ff685c] text-slate-400 flex items-center justify-center transition-all"
                     title={s.label}
                     aria-label={s.label}
                   >
@@ -160,48 +160,47 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Platform */}
+          {/* Parts Catalogue */}
           <div className="space-y-3">
-            <h4 className="text-xs font-semibold text-slate-200 uppercase tracking-wider">
-              {t('footer_col_platform')}
+            <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider">
+              Part Families
             </h4>
             <ul className="space-y-2 text-xs">
-              <li><Link href="/suppliers" className="hover:text-white transition-colors">{t('footer_link_find_suppliers')}</Link></li>
-              <li><Link href="/pricing" className="hover:text-white transition-colors">{t('footer_link_pricing')}</Link></li>
-              <li><Link href="/categories" className="hover:text-white transition-colors">{t('footer_link_categories')}</Link></li>
-              <li><Link href="/rfq" className="hover:text-white transition-colors">{t('footer_link_rfq')}</Link></li>
-              <li><Link href="/get-listed" className="hover:text-white transition-colors">{t('footer_link_get_listed')}</Link></li>
-              <li><Link href="/verified" className="hover:text-white transition-colors">{t('footer_link_verified_standard')}</Link></li>
+              <li><Link href="/#catalogue" className="hover:text-white transition-colors">Brackets (Angle & Flat)</Link></li>
+              <li><Link href="/#catalogue" className="hover:text-white transition-colors">Mounting & Base Plates</Link></li>
+              <li><Link href="/#catalogue" className="hover:text-white transition-colors">Covers & Machine Guards</Link></li>
+              <li><Link href="/#catalogue" className="hover:text-white transition-colors">Equipment Housings</Link></li>
+              <li><Link href="/#catalogue" className="hover:text-white transition-colors">Electrical Enclosures</Link></li>
+              <li><Link href="/rfq" className="hover:text-white transition-colors">Rapid Prototype Runs</Link></li>
             </ul>
           </div>
 
-          {/* Clusters */}
+          {/* Operations & Workflow */}
           <div className="space-y-3">
-            <h4 className="text-xs font-semibold text-slate-200 uppercase tracking-wider">
-              {t('footer_col_clusters')}
+            <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider">
+              Operations
             </h4>
             <ul className="space-y-2 text-xs">
-              <li><Link href="/suppliers?category=pharma-healthcare" className="hover:text-white transition-colors">{t('cluster_pharma')}</Link></li>
-              <li><Link href="/suppliers?category=chemicals-materials" className="hover:text-white transition-colors">{t('cluster_chemicals')}</Link></li>
-              <li><Link href="/suppliers?category=home-consumer" className="hover:text-white transition-colors">{t('cluster_ceramics')}</Link></li>
-              <li><Link href="/suppliers?category=textiles-apparel" className="hover:text-white transition-colors">{t('cluster_textiles')}</Link></li>
-              <li><Link href="/suppliers?category=machinery-industrial" className="hover:text-white transition-colors">{t('cluster_machinery')}</Link></li>
-              <li><Link href="/suppliers?category=food-agro" className="hover:text-white transition-colors">{t('cluster_food')}</Link></li>
+              <li><Link href="/how-it-works" className="hover:text-white transition-colors">6-Step Sourcing Workflow</Link></li>
+              <li><Link href="/rfq" className="hover:text-white transition-colors">Upload Drawing / RFQ</Link></li>
+              <li><Link href="/verified" className="hover:text-white transition-colors">Quality & Inspection Logs</Link></li>
+              <li><Link href="/suppliers" className="hover:text-white transition-colors">Gujarat Factory Network</Link></li>
+              <li><Link href="/#model" className="hover:text-white transition-colors">Commercial Model</Link></li>
+              <li><Link href="/document-intelligence" className="hover:text-white transition-colors">Document Intelligence</Link></li>
             </ul>
           </div>
 
-          {/* Solutions & Company */}
+          {/* Company & Support */}
           <div className="space-y-3">
-            <h4 className="text-xs font-semibold text-slate-200 uppercase tracking-wider">
-              {t('footer_col_solutions')}
+            <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider">
+              Company
             </h4>
             <ul className="space-y-2 text-xs">
-              <li><Link href="/solutions" className="hover:text-white transition-colors">{t('footer_link_sourcing_solutions')}</Link></li>
-              <li><Link href="/solutions" className="hover:text-white transition-colors">{t('footer_link_custom_sourcing')}</Link></li>
-              <li><Link href="/verified" className="hover:text-white transition-colors">{t('footer_link_trade_assurance')}</Link></li>
-              <li><Link href="/document-intelligence" className="hover:text-white transition-colors">{t('footer_link_doc_intel')}</Link></li>
-              <li><Link href="/about" className="hover:text-white transition-colors">{t('footer_link_about')}</Link></li>
-              <li><Link href="/contact" className="hover:text-white transition-colors">{t('footer_link_contact')}</Link></li>
+              <li><Link href="/about" className="hover:text-white transition-colors">Why Aartha Exists</Link></li>
+              <li><Link href="/contact" className="hover:text-white transition-colors">Contact Engineering Desk</Link></li>
+              <li><Link href="/get-listed" className="hover:text-white transition-colors">Apply as Qualified Factory</Link></li>
+              <li><Link href="/blog" className="hover:text-white transition-colors">Manufacturing Insights</Link></li>
+              <li><Link href="/verified" className="hover:text-white transition-colors">Trust Center</Link></li>
             </ul>
           </div>
 

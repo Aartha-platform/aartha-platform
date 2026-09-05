@@ -1,0 +1,1345 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aartha — Managed Manufacturing for Custom Precision Parts</title>
+  <meta name="description" content="Aartha manages custom precision sheet-metal parts from drawing to inspected delivery.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ice:#dfe4f8;
+      --ice2:#edf0fb;
+      --coral:#ff685c;
+      --coral-soft:#ffd8d2;
+      --periwinkle:#82aaff;
+      --cornflower:#758bfd;
+      --violet:#27187e;
+      --cobalt:#2350d2;
+      --ink:#0a1020;
+      --muted:#5a6480;
+      --line:rgba(39,24,126,.14);
+      --white:#fff;
+      --shadow:0 30px 70px rgba(39,24,126,.12);
+      --radius:30px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      color:var(--ink);
+      background:linear-gradient(180deg,var(--ice) 0%,#f7f8fd 38%,#fff 100%);
+      font-family:"Inter",ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      line-height:1.5;
+      overflow-x:hidden;
+    }
+    a{color:inherit;text-decoration:none}
+    button,input,textarea{font:inherit}
+
+    /* ───────── Intro ───────── */
+    .intro{
+      position:fixed;inset:0;z-index:1000;
+      display:grid;place-items:center;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(255,104,92,.24), transparent 28%),
+        radial-gradient(circle at 78% 65%, rgba(117,139,253,.22), transparent 30%),
+        var(--ink);
+      transition:opacity .7s ease,visibility .7s ease;
+    }
+    .intro.hide{opacity:0;visibility:hidden;pointer-events:none}
+    .intro-inner{text-align:center;display:flex;flex-direction:column;align-items:center;gap:0}
+    .intro-logo{
+      width:116px;height:116px;display:grid;place-items:center;
+      animation:logoIn 1s cubic-bezier(.2,.8,.2,1) forwards;opacity:0;
+    }
+    .intro-logo img{
+      width:100%;height:100%;object-fit:contain;display:block;
+      filter:drop-shadow(0 24px 38px rgba(35,80,210,.24));
+    }
+    .intro-name{
+      margin-top:18px;color:#fff;letter-spacing:.28em;font-size:14px;font-weight:800;
+      opacity:0;animation:fadeUp .6s ease .3s forwards
+    }
+    @keyframes markIn{from{opacity:0;transform:scale(.55) rotate(-14deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+    .shell{max-width:1240px;margin:0 auto;padding:0 28px}
+    .nav{
+      height:84px;display:flex;align-items:center;justify-content:space-between;
+      position:sticky;top:0;z-index:50;
+      background:rgba(223,228,248,.78);backdrop-filter:blur(18px);
+      margin:0 -28px;padding:0 28px;border-bottom:1px solid transparent;
+    }
+    .nav.scrolled{border-color:var(--line)}
+    .brand{display:flex;gap:10px;align-items:center;min-width:max-content;font-weight:800;letter-spacing:-.02em}
+    .brand-logo{
+      width:32px;height:32px;object-fit:contain;display:block;
+      border-radius:8px;
+    }
+    .brand-word{
+      font-weight:800;letter-spacing:-.025em;
+    }
+    .nav-links{display:flex;gap:26px;align-items:center;font-size:13px;font-weight:700;letter-spacing:.005em;color:#48506b}
+    .nav-links a:hover{color:var(--violet)}
+    .nav-actions{display:flex;gap:10px;align-items:center}
+    .pill{
+      border-radius:999px;padding:11px 17px;font-weight:800;font-size:13px;
+      display:inline-flex;align-items:center;gap:9px;border:1px solid var(--line);
+      transition:.25s ease;cursor:pointer
+    }
+    .pill:hover{transform:translateY(-2px)}
+    .pill-ink{background:var(--ink);border-color:var(--ink);color:#fff}
+    .pill-light{background:rgba(255,255,255,.72)}
+    .pill-primary{background:var(--violet);color:white;border-color:var(--violet)}
+    .nav-toggle{display:none;border:0;background:transparent;font-size:22px}
+
+    /* ───────── Hero ───────── */
+    .hero{padding:54px 0 38px;position:relative}
+    .hero-grid{display:grid;grid-template-columns:1.03fr .97fr;gap:42px;align-items:stretch}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:9px;color:var(--violet);
+      background:rgba(255,255,255,.68);border:1px solid var(--line);padding:8px 12px;border-radius:999px;
+      font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase
+    }
+    .eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--coral);display:block;box-shadow:0 0 0 5px rgba(255,104,92,.13)}
+    .hero h1{
+      margin:20px 0 18px;
+      font-family:"Inter",ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      font-size:clamp(54px,7vw,96px);line-height:.90;letter-spacing:-.065em;
+      font-weight:800;
+    }
+    .hero h1 em{font-style:normal;color:var(--violet)}
+    .hero-copy{max-width:600px;color:var(--muted);font-size:17px;line-height:1.7}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+    .hero-proof{display:flex;gap:26px;flex-wrap:wrap;margin-top:34px;padding-top:22px;border-top:1px solid var(--line)}
+    .proof strong{display:block;font-size:18px;font-weight:800;letter-spacing:-.02em}
+    .proof span{display:block;font-size:11px;color:#7f89a4;margin-top:2px}
+    .hero-note{margin-top:16px;font-size:11px;color:#7b86a4}
+
+    .hero-art{
+      min-height:610px;border-radius:38px;position:relative;overflow:hidden;
+      background:
+        radial-gradient(circle at 78% 12%, rgba(255,104,92,.52), transparent 19%),
+        radial-gradient(circle at 22% 28%, rgba(130,170,255,.75), transparent 25%),
+        linear-gradient(145deg,#b8c3f3 0%,#8eb4f7 45%,#e5bbd0 100%);
+      box-shadow:var(--shadow);
+      border:1px solid rgba(255,255,255,.65);
+    }
+    .hero-art:before{
+      content:"";position:absolute;inset:0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.18) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.18) 1px,transparent 1px);
+      background-size:42px 42px;mask-image:linear-gradient(180deg,black,transparent 85%);
+      opacity:.55
+    }
+    .hero-kicker{
+      position:absolute;left:28px;top:26px;color:rgba(10,16,32,.72);
+      font-size:11px;font-weight:900;letter-spacing:.18em;text-transform:uppercase
+    }
+    .part-stage{position:absolute;inset:70px 28px 24px;display:grid;place-items:center}
+    .part{
+      width:min(460px,78%);aspect-ratio:1.08;
+      filter:drop-shadow(0 34px 40px rgba(39,24,126,.25));
+      animation:floatPart 8s ease-in-out infinite;
+    }
+    @keyframes floatPart{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-12px) rotate(2deg)}}
+    .blueprint-card{
+      position:absolute;right:22px;top:23px;background:rgba(255,255,255,.74);backdrop-filter:blur(16px);
+      border:1px solid rgba(255,255,255,.72);border-radius:18px;padding:13px 15px;min-width:165px;
+      box-shadow:0 14px 35px rgba(39,24,126,.14)
+    }
+    .blueprint-card small{display:block;color:#7a84a2;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+    .blueprint-card strong{display:block;margin-top:4px;font-size:14px}
+    .status-stack{position:absolute;left:22px;bottom:22px;display:flex;gap:9px;flex-wrap:wrap}
+    .status{
+      padding:10px 12px;border-radius:999px;background:rgba(255,255,255,.76);border:1px solid rgba(255,255,255,.82);
+      font-size:11px;font-weight:800;box-shadow:0 10px 24px rgba(39,24,126,.12)
+    }
+    .status .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#2f9b58;margin-right:7px}
+
+    /* ───────── Proof strip ───────── */
+    .proof-strip{padding:14px 0 0}
+    .proof-panel{
+      border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.7);
+      display:grid;grid-template-columns:repeat(4,1fr);overflow:hidden
+    }
+    .proof-cell{padding:22px;border-right:1px solid var(--line)}
+    .proof-cell:last-child{border-right:0}
+    .proof-cell strong{display:block;font-size:28px;font-weight:800;letter-spacing:-.045em}
+    .proof-cell span{display:block;color:#72809b;font-size:11px;margin-top:4px}
+
+    /* ───────── Sections ───────── */
+    section{padding:110px 0}
+    .section-head{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:38px}
+    .section-head h2{
+      margin:0;font-family:"Inter",ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:clamp(44px,5vw,68px);font-weight:700;line-height:.94;letter-spacing:-.055em;
+      max-width:760px
+    }
+    .section-head p{max-width:400px;color:var(--muted);font-size:14px;line-height:1.7;margin:0}
+    .micro{font-size:10px;font-weight:900;letter-spacing:.15em;text-transform:uppercase;color:var(--violet)}
+
+    /* Problem / solution */
+    .story{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+    .story-card{min-height:460px;border-radius:34px;padding:28px;position:relative;overflow:hidden;border:1px solid var(--line)}
+    .story-before{background:#f7f5f7}
+    .story-after{background:linear-gradient(135deg,var(--violet),var(--cobalt));color:#fff}
+    .story-card h3{font-size:13px;text-transform:uppercase;letter-spacing:.14em;margin:0 0 10px}
+    .story-card h4{font-family:"Inter",ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:54px;line-height:.98;letter-spacing:-.04em;margin:0;max-width:470px}
+    .story-card p{max-width:450px;color:inherit;opacity:.8}
+    .mini-lines{position:absolute;right:-20px;bottom:0;width:48%;opacity:.22}
+    .story-points{position:absolute;left:28px;bottom:28px;display:grid;gap:10px}
+    .story-point{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:800}
+    .story-point b{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:rgba(255,104,92,.18)}
+    .part-demo{position:absolute;right:20px;bottom:20px;width:43%;opacity:.96}
+    .part-demo svg{width:100%;height:auto;filter:drop-shadow(0 25px 26px rgba(0,0,0,.14))}
+
+    /* How it works */
+    .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .step{background:rgba(255,255,255,.78);border:1px solid var(--line);border-radius:26px;padding:24px;min-height:250px;transition:.25s}
+    .step:hover{transform:translateY(-6px);box-shadow:0 22px 50px rgba(39,24,126,.08)}
+    .step-no{font-family:"Inter",ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:40px;color:var(--coral)}
+    .step h3{margin:16px 0 9px;font-size:16px}
+    .step p{margin:0;color:var(--muted);font-size:13px;line-height:1.65}
+
+    /* Capabilities */
+    .cap-wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:24px}
+    .cap-main{border-radius:32px;background:var(--ink);color:#fff;padding:34px;min-height:440px;position:relative;overflow:hidden}
+    .cap-main:after{
+      content:"";position:absolute;width:420px;height:420px;right:-160px;top:-150px;border-radius:50%;
+      background:radial-gradient(circle,rgba(255,104,92,.85),rgba(117,139,253,0) 65%)
+    }
+    .cap-main h3{font-family:"Inter",ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:54px;font-weight:500;line-height:.96;letter-spacing:-.05em;max-width:630px;margin:0 0 20px;position:relative;z-index:1}
+    .cap-list{display:flex;flex-wrap:wrap;gap:10px;position:relative;z-index:2}
+    .tag{padding:9px 12px;border-radius:999px;letter-spacing:.01em;border:1px solid rgba(255,255,255,.19);background:rgba(255,255,255,.07);font-size:11px;font-weight:800}
+    .cap-side{display:grid;grid-template-rows:1fr 1fr;gap:14px}
+    .cap-card{border-radius:28px;padding:26px;border:1px solid var(--line);background:#fff}
+    .cap-card strong{font-size:13px;text-transform:uppercase;letter-spacing:.12em}
+    .cap-card h4{font-family:"Inter",ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:31px;font-weight:500;margin:22px 0 10px}
+    .cap-card p{font-size:12px;color:var(--muted);line-height:1.65;margin:0}
+
+    /* QA */
+    .qa-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+    .qa-card{border-radius:30px;border:1px solid var(--line);padding:28px;background:linear-gradient(160deg,#fff,#f7f7ff);min-height:250px}
+    .qa-card .num{font-size:11px;color:var(--violet);font-weight:900;letter-spacing:.14em}
+    .qa-card h3{font-family:"Inter",ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:34px;font-weight:500;line-height:1;margin:28px 0 10px}
+    .qa-card p{font-size:12px;color:var(--muted);line-height:1.7;margin:0}
+
+    /* RFQ */
+    .rfq{border-radius:34px;background:linear-gradient(145deg,var(--coral),#ff8d7f);padding:34px;color:#fff;position:relative;overflow:hidden}
+    .rfq:after{content:"";position:absolute;right:-120px;bottom:-120px;width:350px;height:350px;border-radius:50%;background:rgba(255,255,255,.16)}
+    .rfq-grid{display:grid;grid-template-columns:1fr .9fr;gap:24px;align-items:start;position:relative;z-index:1}
+    .rfq h2{font-family:"Inter",ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-weight:500;font-size:66px;line-height:.94;letter-spacing:-.05em;margin:0 0 16px}
+    .rfq p{max-width:480px;opacity:.86}
+    .rfq-form{background:rgba(255,255,255,.9);border:1px solid rgba(255,255,255,.7);border-radius:26px;padding:18px;color:var(--ink);box-shadow:0 22px 55px rgba(39,24,126,.14)}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .field{margin-bottom:10px}
+    .field label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.1em;font-weight:900;color:#7c86a0;margin-bottom:6px}
+    .field input,.field textarea,.field select{
+      width:100%;border:1px solid #dfe3ef;border-radius:14px;padding:11px 12px;outline:none;background:#fff;color:var(--ink)
+    }
+    .field textarea{min-height:86px;resize:vertical}
+    .upload{
+      border:1.5px dashed #c3cbe0;border-radius:16px;padding:16px;text-align:center;background:#fafbff;cursor:pointer
+    }
+    .upload strong{display:block;font-size:12px}
+    .upload span{display:block;margin-top:3px;font-size:10px;color:#7a84a2}
+    .submit{width:100%;border:0;background:var(--violet);color:white;border-radius:14px;padding:13px;font-weight:900;cursor:pointer}
+    .note{font-size:10px;color:#7a84a2;text-align:center;margin:10px 0 0}
+
+    /* Footer */
+    footer{padding:36px 0 60px}
+    .footer-grid{display:flex;justify-content:space-between;gap:30px;align-items:flex-end;border-top:1px solid var(--line);padding-top:24px}
+    .footer-brand{font-family:"Inter",ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:38px}
+    .footer-copy{font-size:11px;color:#7a84a2;max-width:480px;text-align:right}
+
+    /* Modal */
+    .modal{position:fixed;inset:0;background:rgba(10,16,32,.45);backdrop-filter:blur(12px);display:none;place-items:center;z-index:2000;padding:20px}
+    .modal.show{display:grid}
+    .modal-card{background:#fff;border-radius:26px;max-width:520px;width:100%;padding:28px;box-shadow:0 40px 90px rgba(10,16,32,.25)}
+    .modal-card h3{font-family:"Inter",ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:42px;font-weight:500;line-height:1;margin:0 0 12px}
+    .modal-card p{color:var(--muted);font-size:13px}
+    .modal-close{float:right;border:0;background:#eef0f7;width:34px;height:34px;border-radius:50%;cursor:pointer}
+
+    /* Reveal */
+    [data-reveal]{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+    [data-reveal].in{opacity:1;transform:none}
+
+
+    /* One-font design system: Inter only */
+    html, body, button, input, textarea, select, option, a,
+    h1, h2, h3, h4, h5, h6, p, span, label, small, strong, div {
+      font-family:"Inter",ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+
+
+    /* =========================================================
+       AARTHA V2 — INFORMATION-LED B2B COMMERCE SYSTEM
+       Inspired by the interaction patterns of modern B2B platforms,
+       not a visual copy of any third-party brand.
+       ========================================================= */
+
+    .nav{gap:18px}
+    .nav-search{
+      position:relative; flex:1; max-width:520px; min-width:250px;
+      height:48px; display:flex; align-items:center;
+      background:rgba(255,255,255,.82); border:1px solid rgba(39,24,126,.12);
+      border-radius:999px; padding:5px 6px 5px 16px; box-shadow:0 14px 34px rgba(39,24,126,.08);
+    }
+    .search-icon{font-size:25px; line-height:1; color:#6f7891; margin-right:10px; transform:translateY(-1px)}
+    .nav-search input{flex:1; border:0; outline:0; background:transparent; min-width:0; color:var(--ink); font-size:13px}
+    .nav-search input::placeholder{color:#7c87a1}
+    .nav-search button{
+      border:0; background:linear-gradient(90deg,var(--coral),var(--cobalt)); color:#fff;
+      border-radius:999px; padding:10px 18px; font-weight:800; font-size:12px; cursor:pointer;
+    }
+    .search-results{
+      position:absolute; left:0; right:0; top:54px; display:none; padding:10px;
+      background:#fff; border:1px solid var(--line); border-radius:18px; box-shadow:0 25px 60px rgba(39,24,126,.16);
+      z-index:90;
+    }
+    .search-results.show{display:block}
+    .search-result{
+      display:flex; justify-content:space-between; gap:12px; padding:12px 13px; border-radius:12px;
+      font-size:12px; border-bottom:1px solid #eef0f6; cursor:pointer;
+    }
+    .search-result:last-child{border-bottom:0}
+    .search-result:hover{background:#f7f8ff}
+    .search-result span{color:#8790a8}
+    .mega-menu{
+      position:absolute; left:0; right:0; top:76px; display:none; padding:24px;
+      background:rgba(255,255,255,.98); border:1px solid var(--line); border-radius:26px;
+      box-shadow:0 30px 80px rgba(39,24,126,.18); z-index:85;
+    }
+    .mega-menu.show{display:block}
+    .mega-head{display:flex;justify-content:space-between;gap:20px;align-items:start;padding-bottom:18px;border-bottom:1px solid var(--line)}
+    .mega-head h3{margin:8px 0 0;font-size:24px;letter-spacing:-.03em;max-width:680px}
+    .mega-close{border:0;background:#f2f3f8;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:20px}
+    .mega-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding-top:16px}
+    .mega-grid a{padding:16px;border:1px solid #e4e7f1;border-radius:17px;transition:.2s}
+    .mega-grid a:hover{background:#fafbff;transform:translateY(-2px);border-color:#c9cff0}
+    .mega-grid strong{display:block;font-size:13px}
+    .mega-grid span{display:block;margin-top:4px;color:#7c86a0;font-size:11px;line-height:1.45}
+
+    .signal-strip{
+      display:flex; gap:0; overflow:auto; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+      background:rgba(255,255,255,.72); margin:0 -28px; padding:0 28px; scrollbar-width:none;
+    }
+    .signal-strip::-webkit-scrollbar{display:none}
+    .signal-item{min-width:max-content;display:flex;align-items:center;gap:9px;padding:12px 20px;border-right:1px solid var(--line);font-size:10px;letter-spacing:.04em}
+    .signal-item:first-child{padding-left:0}
+    .signal-item b{font-size:10px}
+    .signal-item span:last-child{color:#7e88a2}
+    .signal-dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+    .signal-dot.coral{background:var(--coral)}
+    .signal-dot.blue{background:var(--cobalt)}
+    .signal-dot.violet{background:var(--violet)}
+    .signal-dot.green{background:#43a56a}
+
+    .service-strip{
+      display:flex; align-items:center; gap:8px; padding:12px 0 8px;
+      border-bottom:1px solid var(--line); overflow:auto; scrollbar-width:none;
+    }
+    .service-strip::-webkit-scrollbar{display:none}
+    .service-tab{
+      flex:0 0 auto; border:1px solid var(--line); background:rgba(255,255,255,.62);
+      padding:11px 16px; border-radius:999px; color:#68748f; cursor:pointer; font-size:11px; font-weight:800;
+    }
+    .service-tab span{font-size:9px;color:#929ab0;margin-right:6px}
+    .service-tab.active{background:var(--violet);border-color:var(--violet);color:#fff}
+    .service-copy{margin-left:auto;min-width:250px;text-align:right;font-size:11px;color:#7a84a1}
+    .service-copy b{color:var(--ink)}
+
+    .catalogue-section{padding-top:90px}
+    .catalogue-shell{
+      display:grid;grid-template-columns:280px 1fr;gap:16px;border:1px solid var(--line);border-radius:32px;
+      padding:14px;background:rgba(255,255,255,.76);box-shadow:0 25px 60px rgba(39,24,126,.07)
+    }
+    .catalogue-rail{
+      padding:25px;border-radius:24px;min-height:520px;color:#fff;position:relative;overflow:hidden;
+      background:
+        radial-gradient(circle at 90% 10%, rgba(255,104,92,.8), transparent 23%),
+        linear-gradient(145deg,var(--ink),var(--violet));
+    }
+    .catalogue-rail:after{
+      content:"";position:absolute;left:-80px;bottom:-110px;width:260px;height:260px;border-radius:50%;
+      border:1px solid rgba(255,255,255,.14);box-shadow:0 0 0 35px rgba(255,255,255,.035),0 0 0 70px rgba(255,255,255,.025)
+    }
+    .catalogue-rail-label{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#cbd2ef}
+    .catalogue-rail h3{font-size:42px;margin:16px 0 8px;letter-spacing:-.05em}
+    .catalogue-rail p{font-size:12px;line-height:1.7;color:#cbd2e9;max-width:210px}
+    .catalogue-meta{position:absolute;left:25px;right:25px;bottom:22px;display:grid;gap:8px}
+    .catalogue-meta span{padding:9px 10px;border:1px solid rgba(255,255,255,.13);border-radius:12px;font-size:10px;color:#eef1ff}
+    .part-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .part-card{
+      text-align:left;border:1px solid #e5e8f1;background:#fff;border-radius:24px;padding:14px;min-height:250px;cursor:pointer;transition:.25s;
+    }
+    .part-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(39,24,126,.1)}
+    .part-card.active{border-color:var(--coral);box-shadow:0 0 0 3px rgba(255,104,92,.1)}
+    .part-art{height:165px;border-radius:17px;background:linear-gradient(145deg,#eef1ff,#d4dcff);position:relative;overflow:hidden}
+    .part-art:before{content:"";position:absolute;inset:18px;border:1px dashed rgba(39,24,126,.18);border-radius:14px}
+    .part-art:after{content:"";position:absolute;width:90px;height:90px;right:-18px;bottom:-36px;border-radius:50%;background:radial-gradient(circle,rgba(255,104,92,.36),transparent 68%)}
+    .art-bracket:after,.art-plate:after,.art-cover:after,.art-housing:after,.art-enclosure:after{display:block}
+    .fold{position:absolute;width:110px;height:75px;left:46px;top:45px;border:8px solid #7289da;border-right:0;border-bottom:0;border-radius:10px;transform:skewY(-17deg)}
+    .hole{position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid #6f84d9;z-index:2}
+    .h1{left:63px;top:58px}.h2{left:63px;top:99px}
+    .art-plate:before{inset:38px 28px;border:10px solid #8da3ff;border-radius:10px}
+    .plate-hole{position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid #6f84d9}
+    .a{left:47px;top:47px}.b{right:48px;top:47px}.c{left:47px;bottom:49px}
+    .plate-slot{position:absolute;width:62px;height:14px;border:3px solid #6f84d9;border-radius:99px;left:76px;bottom:48px}
+    .art-cover:before{inset:37px 48px;border:8px solid #7f96ea;border-radius:8px;transform:skewY(-14deg)}
+    .cover-edge{position:absolute;width:86px;height:60px;left:54px;top:63px;border-right:7px solid #5d72c4;border-bottom:7px solid #5d72c4;transform:skewY(12deg)}
+    .cover-hole{position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid #6f84d9;right:55px;top:58px}
+    .art-housing:before{inset:34px 46px;border:0;background:linear-gradient(145deg,#95a9f4,#657bd1);clip-path:polygon(14% 0,100% 15%,90% 100%,0 82%)}
+    .housing-face{position:absolute;width:82px;height:70px;left:70px;top:56px;background:#e9edff;border:5px solid #697fd4;border-radius:7px;transform:skewY(-12deg)}
+    .housing-slot{position:absolute;width:42px;height:9px;border-radius:99px;background:#697fd4;left:93px;top:85px;z-index:2}
+    .art-enclosure:before{inset:35px 55px;border:0;background:linear-gradient(145deg,#94a9f5,#5e74c8);border-radius:10px;transform:skewY(-7deg)}
+    .door{position:absolute;width:72px;height:92px;left:79px;top:43px;border:5px solid #eef1ff;border-radius:5px;z-index:2}
+    .hinge{position:absolute;width:8px;height:18px;background:#eef1ff;left:72px;z-index:3;border-radius:2px}
+    .hinge.one{top:54px}.hinge.two{top:102px}
+    .part-meta{display:grid;grid-template-columns:35px 1fr;column-gap:8px;margin-top:12px}
+    .part-meta span{grid-row:1/3;font-size:10px;color:var(--coral);font-weight:900}
+    .part-meta strong{font-size:14px;letter-spacing:-.02em}
+    .part-meta small{font-size:10px;color:#828ca4;margin-top:2px}
+    .part-card-highlight{
+      background:linear-gradient(145deg,var(--coral),#ff8b80);color:#fff;border-color:transparent;position:relative;overflow:hidden
+    }
+    .part-card-highlight:before{content:"";position:absolute;width:180px;height:180px;border-radius:50%;right:-70px;top:-60px;background:rgba(255,255,255,.16)}
+    .highlight-copy{position:relative;padding:5px}
+    .highlight-copy strong{display:block;font-size:28px;line-height:1.02;letter-spacing:-.045em;margin-top:15px;max-width:180px}
+    .highlight-copy p{font-size:11px;line-height:1.6;opacity:.88;max-width:210px}
+    .highlight-copy .arrow{position:absolute;right:0;bottom:0;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.16);font-size:17px}
+
+    .network-section{padding-top:105px}
+    .network-grid{display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:14px}
+    .network-card{min-height:365px;border:1px solid var(--line);border-radius:30px;padding:28px;background:#fff;position:relative;overflow:hidden}
+    .network-card.dark{background:var(--ink);color:#fff;border-color:var(--ink)}
+    .network-topline{display:flex;justify-content:space-between;gap:15px;color:#7e88a3;font-size:9px;letter-spacing:.16em;font-weight:900}
+    .network-card.dark .network-topline{color:#c5cbdf}
+    .network-topline b{font-size:28px;letter-spacing:-.05em;color:var(--violet)}
+    .network-card.dark .network-topline b{color:#fff}
+    .network-map{background:linear-gradient(145deg,#f8f9ff,#eef2ff)}
+    .network-visual{position:relative;height:235px;margin-top:18px}
+    .network-visual:before{content:"";position:absolute;inset:22px 10px;border-radius:50%;border:1px dashed rgba(39,24,126,.22);box-shadow:0 0 0 30px rgba(39,24,126,.025),0 0 0 62px rgba(39,24,126,.02)}
+    .center-node{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:18px;background:linear-gradient(145deg,var(--coral),var(--violet));display:grid;place-items:center;color:#fff;font-size:25px;font-weight:900;box-shadow:0 18px 35px rgba(39,24,126,.18)}
+    .cluster{position:absolute;width:18px;height:18px;border-radius:50%;background:var(--cobalt);box-shadow:0 0 0 8px rgba(35,80,210,.1)}
+    .cluster-a{left:18%;top:26%}.cluster-b{right:20%;top:36%}.cluster-c{left:28%;bottom:18%}
+    .network-line{position:absolute;height:2px;background:linear-gradient(90deg,rgba(35,80,210,.05),rgba(35,80,210,.34),rgba(35,80,210,.05));transform-origin:left center}
+    .l1{width:145px;left:30%;top:40%;transform:rotate(12deg)}.l2{width:120px;left:50%;top:52%;transform:rotate(-17deg)}.l3{width:118px;left:37%;top:58%;transform:rotate(32deg)}
+    .network-foot{font-size:10px;color:#79839e;border-top:1px solid var(--line);padding-top:14px}
+    .network-card h3{font-size:30px;line-height:1.03;letter-spacing:-.04em;margin:32px 0 12px;max-width:340px}
+    .network-card p{font-size:12px;color:#6d7790;line-height:1.7;max-width:340px}
+    .network-card.dark p{color:#b6bed6}
+    .network-link{position:absolute;left:28px;bottom:26px;font-size:11px;font-weight:800;color:var(--coral)}
+    .os-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:34px 0 20px}
+    .os-grid span{border:1px solid rgba(255,255,255,.14);padding:13px 11px;border-radius:14px;font-size:10px;letter-spacing:.11em;font-weight:900;text-align:center}
+    .os-grid span:last-child{grid-column:1/-1}
+
+    .model-section{padding-top:105px}
+    .model-band{
+      border:1px solid var(--line);border-radius:28px;padding:15px;background:rgba(255,255,255,.72);
+      display:grid;grid-template-columns:1fr 36px 1.15fr 36px 1fr 36px 1fr;gap:6px;align-items:stretch
+    }
+    .model-item{padding:24px 20px;border-radius:20px;background:#fff;border:1px solid #e9ebf2}
+    .model-item span{display:block;font-size:9px;letter-spacing:.15em;color:#8a93aa;font-weight:900}
+    .model-item strong{display:block;font-size:16px;margin-top:9px}
+    .model-item small{display:block;color:#7c86a0;font-size:10px;margin-top:5px;line-height:1.5}
+    .model-arrow{display:grid;place-items:center;color:var(--coral);font-size:22px}
+    .revenue-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
+    .revenue-grid article{border:1px solid var(--line);border-radius:22px;padding:22px;background:#fff;min-height:180px}
+    .revenue-grid article>span{color:var(--coral);font-size:10px;font-weight:900}
+    .revenue-grid h3{font-size:17px;line-height:1.1;margin:19px 0 8px}
+    .revenue-grid p{font-size:11px;color:#7b86a0;line-height:1.65}
+    .revenue-note{background:linear-gradient(145deg,var(--violet),var(--cobalt))!important;color:#fff;border-color:transparent!important}
+    .revenue-note strong{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+    .revenue-note p{color:#d8ddf0}
+
+    .footer-mega{
+      display:grid;grid-template-columns:1.3fr .7fr .8fr .7fr;gap:28px;border-top:1px solid var(--line);padding:44px 0 30px;
+    }
+    .footer-brand-block{padding-right:30px}
+    .footer-logo{width:44px;height:44px;object-fit:contain;display:block;margin-bottom:10px}
+    .footer-brand{font-size:38px;font-weight:800;letter-spacing:-.05em}
+    .footer-brand-block p{font-size:11px;color:#74809a;max-width:300px;line-height:1.65;margin:5px 0 12px}
+    .footer-mini{font-size:10px;color:var(--violet);font-weight:800}
+    .footer-col{display:grid;align-content:start;gap:10px}
+    .footer-col strong{font-size:9px;letter-spacing:.15em;color:#8a93a8;margin-bottom:6px}
+    .footer-col a{font-size:11px;color:#68738e}
+    .footer-col a:hover{color:var(--violet)}
+    .footer-bottom{border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;padding:16px 0 40px;font-size:9px;letter-spacing:.06em;color:#8c95a8;text-transform:uppercase}
+
+
+    /* ===== AARTHA V3 — reference-inspired refinement ===== */
+    .nav{background:linear-gradient(90deg,rgba(223,228,248,.93),rgba(242,243,252,.88));}
+    .nav-actions{display:flex;align-items:center;gap:17px}
+    .nav-text-btn{border:0;background:transparent;color:#48506b;font-size:12px;font-weight:800;cursor:pointer;padding:9px 2px}
+    .nav-text-btn span{margin-left:4px;color:#6b7390}
+    .nav-text-btn:hover{color:var(--violet)}
+    .hero-v3{padding-top:40px}
+    .hero-topline{display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .hero-code{font-size:10px;font-weight:900;letter-spacing:.15em;color:#8a93aa}
+    .hero-copy-v3{max-width:980px;margin-top:24px}
+    .hero-copy-v3 h1{font-size:clamp(74px,10vw,144px);line-height:.82;letter-spacing:-.082em;max-width:1100px;margin:0}
+    .hero-copy-v3 h1 em{color:var(--violet);font-style:normal}
+    .hero-copy-v3 p{max-width:760px;font-size:18px;line-height:1.65;color:#596581;margin:28px 0 0}
+    .hero-copy-v3 .hero-actions{margin-top:24px}
+    .hero-proofline{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:46px}
+    .hero-proofline>div{padding:18px 18px 17px;border-right:1px solid var(--line)}
+    .hero-proofline>div:last-child{border-right:0}
+    .hero-proofline strong{display:block;color:var(--coral);font-size:11px;letter-spacing:.14em}
+    .hero-proofline span{display:block;margin-top:5px;font-size:12px;font-weight:800;color:#555f7a}
+    .hero-gallery-v3{display:grid;grid-template-columns:1.45fr .75fr .75fr;grid-template-rows:230px 230px;gap:12px;margin-top:18px}
+    .gallery-card{border:1px solid var(--line);border-radius:24px;overflow:hidden;position:relative;background:#fff}
+    .gallery-label{position:absolute;left:18px;top:15px;z-index:3;font-size:9px;font-weight:900;letter-spacing:.15em;color:#7f89a2}
+    .gallery-blueprint{grid-row:1/3;background:linear-gradient(145deg,#eff2ff,#d9e2ff)}
+    .gallery-blueprint svg{position:absolute;inset:28px 20px 14px;width:calc(100% - 40px);height:calc(100% - 40px)}
+    .gallery-status{background:linear-gradient(145deg,#27187e,#2350d2);color:#fff}
+    .gallery-status .gallery-label,.gallery-status .status-foot{color:#cbd2ef}
+    .status-stack-v3{display:grid;gap:8px;position:absolute;left:18px;right:18px;top:50px}
+    .status-v3{display:flex;align-items:center;gap:7px;padding:10px 11px;border:1px solid rgba(255,255,255,.14);border-radius:12px;background:rgba(255,255,255,.06);font-size:10px}
+    .status-v3 b{width:20px;color:#d3d9f0}
+    .status-v3 i{margin-left:auto;font-style:normal;color:#9fe0ad}
+    .status-v3.live{background:rgba(255,104,92,.16);border-color:rgba(255,104,92,.4)}
+    .status-v3.live i{color:var(--coral)}
+    .status-foot{position:absolute;bottom:15px;left:18px;font-size:9px;letter-spacing:.11em;text-transform:uppercase}
+    .gallery-material{background:linear-gradient(145deg,#fff,#f1f3fb);padding:54px 17px 17px}
+    .material-slab{border:1px solid #dde1ef;border-radius:16px;padding:22px 16px;background:linear-gradient(105deg,#e4e7ef,#fcfcff 35%,#c7ccd6 50%,#fff 65%,#cfd4df);box-shadow:inset 0 1px rgba(255,255,255,.8)}
+    .material-slab span{display:block;font-size:27px;font-weight:900;letter-spacing:-.04em}
+    .material-slab b{display:block;margin-top:6px;font-size:12px}
+    .material-slab small{display:block;margin-top:3px;color:#777f92;font-size:10px}
+    .material-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}
+    .material-grid span{font-size:9px;border:1px solid #e3e6ef;padding:8px;border-radius:9px;text-align:center;color:#6f7891}
+    .gallery-qa{background:linear-gradient(145deg,#fff,#f3f5fa)}
+    .qa-sheet{position:absolute;left:17px;right:17px;top:55px;padding:16px;border:1px solid #e4e7ef;border-radius:15px;background:#fff}
+    .qa-line{height:6px;background:#dfe4f8;border-radius:99px;margin:0 0 9px}
+    .qa-line.big{height:10px;background:#758bfd}.qa-line.short{width:55%}
+    .qa-check{font-size:8px;letter-spacing:.13em;font-weight:900;color:#5d6780;border-top:1px solid #eef0f5;padding-top:8px;margin-top:7px}
+    .qa-stamp{position:absolute;right:13px;bottom:14px;border:2px solid rgba(39,24,126,.18);color:var(--violet);padding:7px 9px;border-radius:10px;font-size:8px;font-weight:900;letter-spacing:.12em;text-align:center;transform:rotate(-5deg)}
+    .company-band{display:flex;align-items:center;justify-content:space-between;gap:30px;padding:28px 0 0}
+    .company-band-title{display:grid;gap:5px}
+    .company-band-title strong{font-size:18px;letter-spacing:-.03em}
+    .company-band-items{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+    .company-band-items span{border:1px solid var(--line);background:rgba(255,255,255,.6);padding:9px 11px;border-radius:999px;font-size:10px;color:#6c768f}
+    .evidence-section{padding:100px 0 110px;display:grid;grid-template-columns:.85fr 1.15fr;gap:40px;align-items:start}
+    .evidence-lead h2{font-size:clamp(50px,6vw,78px);line-height:.9;letter-spacing:-.07em;margin:14px 0 18px}
+    .evidence-lead h2 em{font-style:normal;color:var(--violet)}
+    .evidence-lead p{font-size:14px;color:#68738c;line-height:1.75;max-width:440px}
+    .evidence-tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .evidence-tile{min-height:210px;border-radius:22px;padding:22px;border:1px solid var(--line);position:relative;overflow:hidden}
+    .evidence-tile:before{content:"";position:absolute;right:-55px;bottom:-55px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(130,170,255,.5),transparent 68%)}
+    .evidence-tile.e2:before{background:radial-gradient(circle,rgba(255,104,92,.42),transparent 68%)}
+    .evidence-tile.e3:before{background:radial-gradient(circle,rgba(39,24,126,.22),transparent 68%)}
+    .evidence-tile.e4{background:linear-gradient(145deg,var(--violet),var(--cobalt));color:#fff;border-color:transparent}
+    .evidence-tile.e4:before{background:radial-gradient(circle,rgba(255,255,255,.2),transparent 68%)}
+    .evidence-tile span{font-size:9px;font-weight:900;letter-spacing:.15em;color:#7e88a1}
+    .evidence-tile.e4 span{color:#d0d7f2}
+    .evidence-tile strong{display:block;margin-top:52px;font-size:18px;letter-spacing:-.03em}
+    .evidence-tile small{display:block;margin-top:6px;font-size:10px;color:#7c86a1;max-width:200px}
+    .evidence-tile.e4 small{color:#d1d8ec}
+    .category-explorer{
+      position:absolute;left:0;right:0;top:77px;display:none;min-height:520px;background:#fff;border:1px solid var(--line);
+      border-radius:24px;overflow:hidden;box-shadow:0 35px 80px rgba(10,16,32,.18);z-index:200
+    }
+    .category-explorer.show{display:grid;grid-template-columns:235px 1fr}
+    .category-sidebar{background:#f5f7fc;border-right:1px solid #e4e7ef;padding:18px 0}
+    .category-caption{padding:3px 22px 13px;font-size:9px;color:#97a0b4;letter-spacing:.15em;font-weight:900}
+    .category-side{width:100%;border:0;background:transparent;display:grid;grid-template-columns:28px 1fr 14px;align-items:center;gap:9px;text-align:left;padding:15px 20px;color:#1b2440;font-size:12px;cursor:pointer}
+    .category-side b{color:#a0a8b9}
+    .category-side.active{background:#fff;color:var(--cobalt);box-shadow:inset 3px 0 var(--cobalt)}
+    .category-content{padding:22px 28px;display:flex;flex-direction:column;min-width:0}
+    .category-head{display:flex;align-items:start;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:17px}
+    .category-head h3{font-size:24px;margin:7px 0 0;letter-spacing:-.04em}
+    .category-content-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:18px 0;overflow:auto}
+    .category-link-card{border:1px solid #e7e9f0;border-radius:16px;padding:15px;background:#fff;transition:.2s}
+    .category-link-card:hover{border-color:#cad0ef;background:#fafbff;transform:translateY(-2px)}
+    .category-link-card strong{display:block;font-size:12px}.category-link-card span{display:block;font-size:10px;color:#7d879f;margin-top:4px;line-height:1.45}
+    .category-bottom{margin-top:auto;border-top:1px solid var(--line);padding-top:13px;display:flex;justify-content:space-between;gap:20px;font-size:10px;color:#7c86a0}
+    .category-bottom button{border:0;background:transparent;color:var(--violet);font-size:10px;font-weight:900;cursor:pointer}
+    .about-popover{
+      position:absolute;right:0;top:77px;width:375px;display:none;background:#fff;border:1px solid var(--line);border-radius:22px;padding:13px;
+      box-shadow:0 35px 80px rgba(10,16,32,.18);z-index:210
+    }
+    .about-popover.show{display:block}
+    .about-popover-head{display:flex;justify-content:space-between;padding:6px 5px 10px}
+    .about-popover a{display:grid;grid-template-columns:40px 1fr 14px;gap:10px;align-items:center;padding:12px;border-radius:14px}
+    .about-popover a:hover{background:#f7f8fd}
+    .about-icon{width:36px;height:36px;border-radius:11px;background:#f0f4ff;color:var(--cobalt);display:grid;place-items:center;font-weight:900}
+    .about-popover strong{display:block;font-size:12px}.about-popover small{display:block;font-size:9px;color:#7d87a0;margin-top:3px;line-height:1.4}.about-popover a>b{color:#aab1c3}
+    .mega-close{border:0;background:#f2f3f8;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:19px}
+
+    .back-top{position:absolute;right:0;bottom:18px;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.07);color:#fff;cursor:pointer;font-size:18px}
+    footer{position:relative}
+
+    @media(max-width:1080px){
+      .hero-copy-v3 h1{font-size:clamp(64px,9vw,110px)}
+      .company-band{display:block}.company-band-items{justify-content:flex-start;margin-top:14px}
+    }
+
+    @media(max-width:1080px){
+      .nav-search{max-width:400px}
+      .nav-links{display:none}
+      .network-grid{grid-template-columns:1fr 1fr}
+      .network-card.dark{grid-column:1/-1}
+      .revenue-grid{grid-template-columns:repeat(2,1fr)}
+      .footer-mega{grid-template-columns:1.2fr .8fr .8fr}
+      .footer-col:last-child{grid-column:3}
+    }
+
+    @media(max-width:980px){
+      .nav-links{display:none}.nav-toggle{display:block}.nav-actions .pill-light{display:none}.brand-logo{width:30px;height:30px}
+
+      .nav-search{display:none}
+      .nav-actions{gap:9px}
+      .nav-text-btn{display:none}
+      .hero-topline{align-items:flex-start}
+      .hero-code{display:none}
+      .hero-copy-v3 h1{font-size:clamp(56px,15vw,92px)}
+      .hero-copy-v3 p{font-size:15px}
+      .hero-proofline{grid-template-columns:1fr 1fr}
+      .hero-proofline>div:nth-child(2){border-right:0}
+      .hero-proofline>div:nth-child(3){border-top:1px solid var(--line)}
+      .hero-proofline>div:nth-child(4){border-top:1px solid var(--line);border-right:0}
+      .hero-gallery-v3{grid-template-columns:1fr 1fr;grid-template-rows:260px 200px 200px}
+      .gallery-blueprint{grid-row:1/2;grid-column:1/3}
+      .category-explorer.show{grid-template-columns:1fr}
+      .category-sidebar{display:flex;overflow:auto;border-right:0;border-bottom:1px solid #e4e7ef}
+      .category-caption{display:none}
+      .category-side{min-width:150px}
+      .category-content-grid{grid-template-columns:1fr 1fr}
+      .category-bottom{display:grid}
+      .about-popover{right:0;width:min(92vw,375px)}
+      .evidence-section{grid-template-columns:1fr}
+      .evidence-tiles{grid-template-columns:1fr 1fr}
+      .mega-menu{top:70px}
+      .mega-grid{grid-template-columns:1fr 1fr}
+      .signal-strip{margin:0 -18px;padding:0 18px}
+      .service-copy{display:none}
+      .catalogue-shell{grid-template-columns:1fr}
+      .catalogue-rail{min-height:310px}
+      .part-grid{grid-template-columns:repeat(2,1fr)}
+      .network-grid{grid-template-columns:1fr}
+      .network-card.dark{grid-column:auto}
+      .model-band{grid-template-columns:1fr}
+      .model-arrow{transform:rotate(90deg);height:20px}
+      .revenue-grid{grid-template-columns:1fr 1fr}
+      .footer-mega{grid-template-columns:1.2fr .8fr .8fr}
+
+      .hero-grid,.story,.cap-wrap,.rfq-grid{grid-template-columns:1fr}
+      .hero-art{min-height:520px}
+      .proof-panel{grid-template-columns:repeat(2,1fr)}
+      .proof-cell:nth-child(2){border-right:0}.proof-cell:nth-child(-n+2){border-bottom:1px solid var(--line)}
+      .steps{grid-template-columns:repeat(2,1fr)}
+      .qa-grid{grid-template-columns:1fr}
+      .cap-side{grid-template-rows:auto auto}
+    }
+    @media(max-width:640px){
+      .shell{padding:0 18px}.nav{margin:0 -18px;padding:0 18px}
+
+      .mega-grid{grid-template-columns:1fr}
+      .hero-gallery-v3{grid-template-columns:1fr}
+      .gallery-blueprint{grid-column:auto}
+      .gallery-status,.gallery-material,.gallery-qa{min-height:210px}
+      .category-content-grid{grid-template-columns:1fr}
+      .evidence-tiles{grid-template-columns:1fr}
+      .part-grid{grid-template-columns:1fr}
+      .network-card{min-height:320px}
+      .revenue-grid{grid-template-columns:1fr}
+      .footer-mega{grid-template-columns:1fr 1fr}
+      .footer-col:last-child{grid-column:auto}
+      .footer-bottom{display:grid;gap:8px}
+
+      .hero{padding-top:30px}.hero h1{font-size:58px}
+      .section-head{display:block}.section-head p{margin-top:16px}
+      .hero-art{min-height:450px}
+      .proof-panel,.steps{grid-template-columns:1fr}
+      .proof-cell{border-right:0!important;border-bottom:1px solid var(--line)}
+      .proof-cell:last-child{border-bottom:0}
+      .row{grid-template-columns:1fr}
+      .rfq h2{font-size:52px}
+      .part-demo{width:52%}
+      .story-card{min-height:390px}
+      .story-card h4{font-size:44px}
+      .footer-grid{display:block}.footer-copy{text-align:left;margin-top:16px}
+    }
+  
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto}
+      *,*::before,*::after{
+        animation-duration:.001ms!important;
+        animation-iteration-count:1!important;
+        transition-duration:.001ms!important;
+      }
+    }
+
+  </style>
+  <link rel="icon" type="image/png" href="aartha-logo.png">\n</head>
+<body>
+  <div class="intro" id="intro">
+    <div class="intro-inner">
+      <div class="intro-logo">
+        <img src="aartha-logo.png" alt="Aartha">
+      </div>
+      <div class="intro-name">AARTHA</div>
+    </div>
+  </div>
+
+  <div class="shell">
+    <nav class="nav" id="nav">
+      <a class="brand" href="#" aria-label="Aartha home">
+        <img class="brand-logo" src="aartha-logo.png" alt="">
+        <span class="brand-word">Aartha</span>
+      </a>
+
+      <div class="nav-search" role="search">
+        <span class="search-icon" aria-hidden="true">⌕</span>
+        <input id="globalSearch" type="search" autocomplete="off"
+          placeholder="Search parts, materials, processes..." aria-label="Search Aartha">
+        <button id="globalSearchBtn" type="button">Search</button>
+        <div class="search-results" id="searchResults" aria-live="polite"></div>
+      </div>
+
+      <div class="nav-actions">
+        <button class="nav-text-btn" id="categoryTrigger" type="button">Categories <span>⌄</span></button>
+        <button class="nav-text-btn" id="aboutTrigger" type="button">About Aartha <span>⌄</span></button>
+        <button class="pill pill-ink" id="navRFQ">Send an RFQ ↗</button>
+      </div>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Open navigation">☰</button>
+
+      <!-- Category explorer -->
+      <div class="category-explorer" id="megaMenu" aria-hidden="true">
+        <aside class="category-sidebar">
+          <div class="category-caption">ALL CATEGORIES</div>
+          <button class="category-side active" data-cat="all" type="button">⌂ <span>All parts</span><b>›</b></button>
+          <button class="category-side" data-cat="brackets" type="button">01 <span>Brackets</span><b>›</b></button>
+          <button class="category-side" data-cat="plates" type="button">02 <span>Mounting plates</span><b>›</b></button>
+          <button class="category-side" data-cat="covers" type="button">03 <span>Covers & panels</span><b>›</b></button>
+          <button class="category-side" data-cat="housings" type="button">04 <span>Housings</span><b>›</b></button>
+          <button class="category-side" data-cat="enclosures" type="button">05 <span>Enclosures</span><b>›</b></button>
+        </aside>
+        <div class="category-content">
+          <div class="category-head">
+            <div>
+              <div class="micro">AARTHA / CATALOGUE</div>
+              <h3 id="categoryTitle">Custom sheet-metal parts</h3>
+            </div>
+            <button id="megaClose" class="mega-close" type="button">×</button>
+          </div>
+          <div class="category-content-grid" id="categoryContentGrid"></div>
+          <div class="category-bottom">
+            <span>Starting wedge: laser cutting + press-brake bending</span>
+            <button type="button" id="categoryRFQ">Start with a drawing →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- About dropdown -->
+      <div class="about-popover" id="aboutMenu" aria-hidden="true">
+        <div class="about-popover-head"><span class="micro">AARTHA / COMPANY</span><button id="aboutClose" class="mega-close" type="button">×</button></div>
+        <a href="#why"><span class="about-icon">i</span><div><strong>Why Aartha</strong><small>What we solve and why managed sourcing matters.</small></div><b>›</b></a>
+        <a href="#qa"><span class="about-icon">✓</span><div><strong>Quality</strong><small>Supplier qualification and documented inspection.</small></div><b>›</b></a>
+        <a href="#network"><span class="about-icon">◌</span><div><strong>Supplier network</strong><small>Small, qualified, performance-tracked.</small></div><b>›</b></a>
+        <a href="#model"><span class="about-icon">₹</span><div><strong>Commercial model</strong><small>Order-first, contribution-based, inventory-free.</small></div><b>›</b></a>
+        <a href="#rfq"><span class="about-icon">↗</span><div><strong>Contact / RFQ</strong><small>Send your drawing and start a qualification.</small></div><b>›</b></a>
+      </div>
+    </nav>
+
+
+    <div class="signal-strip" aria-label="Aartha operating signals">
+      <div class="signal-item"><span class="signal-dot coral"></span><b>RFQ INTAKE</b><span>drawings + specs</span></div>
+      <div class="signal-item"><span class="signal-dot blue"></span><b>SUPPLY</b><span>Gujarat industrial cluster</span></div>
+      <div class="signal-item"><span class="signal-dot violet"></span><b>QUALITY</b><span>documented inspection</span></div>
+      <div class="signal-item"><span class="signal-dot green"></span><b>MODEL</b><span>order-first • inventory-free</span></div>
+    </div>
+
+    <main>
+      <section class="hero hero-v3">
+        <div class="hero-topline">
+          <span class="eyebrow"><i></i> Managed sourcing for custom precision parts</span>
+          <span class="hero-code">AARTHA / 001 / GUJARAT</span>
+        </div>
+
+        <div class="hero-copy-v3" data-reveal>
+          <h1>Send us your<br><em>drawing.</em><br>We handle the rest.</h1>
+          <p>
+            Aartha manages custom sheet-metal brackets, mounting plates, covers and small housings
+            from technical review to supplier selection, production coordination and documented inspection.
+          </p>
+          <div class="hero-actions">
+            <button class="pill pill-primary" id="heroRFQ">Upload a drawing ↗</button>
+            <a class="pill pill-light" href="#how">See the workflow</a>
+          </div>
+        </div>
+
+        <div class="hero-proofline" data-reveal>
+          <div><strong>01</strong><span>Engineering review</span></div>
+          <div><strong>02</strong><span>Supplier selection</span></div>
+          <div><strong>03</strong><span>Production + QA</span></div>
+          <div><strong>04</strong><span>Delivered part</span></div>
+        </div>
+
+        <div class="hero-gallery-v3" data-reveal>
+          <div class="gallery-card gallery-blueprint">
+            <div class="gallery-label">PART / BRACKET-001</div>
+            <svg viewBox="0 0 500 330" aria-hidden="true">
+              <defs><linearGradient id="gb1" x1="0" x2="1"><stop stop-color="#dfe4f8"/><stop offset="1" stop-color="#82aaff"/></linearGradient></defs>
+              <rect x="26" y="30" width="448" height="270" rx="22" fill="rgba(255,255,255,.22)" stroke="rgba(39,24,126,.18)"/>
+              <path d="M105 224V112l180-38 92 54v110l-92 24-180-38Z" fill="url(#gb1)" stroke="#fff" stroke-width="4"/>
+              <path d="M105 112l92 54 180-38" fill="none" stroke="#6c7ecc" stroke-width="4"/>
+              <circle cx="160" cy="200" r="17" fill="none" stroke="#27187e" stroke-width="4"/>
+              <circle cx="320" cy="163" r="15" fill="none" stroke="#ff685c" stroke-width="4"/>
+              <path d="M80 264h320M92 84h220" stroke="#7b89c4" stroke-width="2" stroke-dasharray="7 9"/>
+              <text x="92" y="284" fill="#6f7c9d" font-size="12" letter-spacing="2">LASER CUT / BEND / INSPECT</text>
+            </svg>
+          </div>
+
+          <div class="gallery-card gallery-status">
+            <div class="gallery-label">ORDER FLOW</div>
+            <div class="status-stack-v3">
+              <span class="status-v3"><b>01</b> RFQ received <i>✓</i></span>
+              <span class="status-v3"><b>02</b> DFM checked <i>✓</i></span>
+              <span class="status-v3"><b>03</b> Supplier assigned <i>✓</i></span>
+              <span class="status-v3 live"><b>04</b> Production <i>●</i></span>
+              <span class="status-v3"><b>05</b> QA report <i>—</i></span>
+            </div>
+            <div class="status-foot">One accountable interface</div>
+          </div>
+
+          <div class="gallery-card gallery-material">
+            <div class="gallery-label">MATERIAL / FINISH</div>
+            <div class="material-slab"><span>SS304</span><b>1.5 mm</b><small>Brushed / deburred</small></div>
+            <div class="material-grid"><span>MS</span><span>AL</span><span>SS</span><span>+ coating</span></div>
+          </div>
+
+          <div class="gallery-card gallery-qa">
+            <div class="gallery-label">QA / EVIDENCE</div>
+            <div class="qa-sheet">
+              <div class="qa-line big"></div><div class="qa-line"></div><div class="qa-line short"></div>
+              <div class="qa-check">✓ DIMENSIONS</div><div class="qa-check">✓ VISUAL</div><div class="qa-check">✓ PHOTOS</div>
+            </div>
+            <div class="qa-stamp">AARTHA<br>INSPECTED</div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="company-band" data-reveal>
+        <div class="company-band-title">
+          <span class="micro">BUILT FOR</span>
+          <strong>Teams that build machines.</strong>
+        </div>
+        <div class="company-band-items">
+          <span>Industrial automation</span><span>Robotics</span><span>Electrical hardware</span><span>Testing equipment</span><span>EV-adjacent hardware</span>
+        </div>
+      </section>
+
+      <section class="service-strip" aria-label="Aartha service flows">
+        <button class="service-tab active" type="button" data-service="discover"><span>01</span>Discover</button>
+        <button class="service-tab" type="button" data-service="quote"><span>02</span>Quote</button>
+        <button class="service-tab" type="button" data-service="make"><span>03</span>Make</button>
+        <button class="service-tab" type="button" data-service="verify"><span>04</span>Verify</button>
+        <button class="service-tab" type="button" data-service="track"><span>05</span>Track</button>
+        <div class="service-copy" id="serviceCopy">
+          <b>Start with one drawing.</b> We turn the RFQ into a managed production loop.
+        </div>
+      </section>
+
+      <div class="proof-strip" data-reveal>
+        <div class="proof-panel">
+          <div class="proof-cell"><strong>RFQ</strong><span>Drawing / spec in one place</span></div>
+          <div class="proof-cell"><strong>DFM</strong><span>Human engineering review before production</span></div>
+          <div class="proof-cell"><strong>QA</strong><span>Documented inspection before dispatch</span></div>
+          <div class="proof-cell"><strong>DELIVERY</strong><span>One accountable point of contact</span></div>
+        </div>
+      </div>
+
+
+      <section id="catalogue" class="catalogue-section">
+        <div class="section-head" data-reveal>
+          <div>
+            <div class="micro">01 / part families</div>
+            <h2>What we make, starting small.</h2>
+          </div>
+          <p>Built around the first commercial wedge: low-to-medium volume fabricated parts where inspection is practical and inventory can stay at zero.</p>
+        </div>
+
+        <div class="catalogue-shell" data-reveal>
+          <aside class="catalogue-rail">
+            <div class="catalogue-rail-label">Starting wedge</div>
+            <h3>Sheet metal</h3>
+            <p>Laser cutting + press-brake bending, with finishing and inspection coordinated around the order.</p>
+            <div class="catalogue-meta">
+              <span>Gujarat supply</span>
+              <span>Order-first</span>
+              <span>QA documented</span>
+            </div>
+          </aside>
+
+          <div class="part-grid" id="partGrid">
+            <button class="part-card" data-keywords="bracket mounting support angle laser cut bend steel aluminium" type="button">
+              <div class="part-art art-bracket"><span class="hole h1"></span><span class="hole h2"></span><span class="fold"></span></div>
+              <div class="part-meta"><span>01</span><strong>Brackets</strong><small>Mounting + support</small></div>
+            </button>
+
+            <button class="part-card" data-keywords="mounting plate base plate laser drilling steel aluminium" type="button">
+              <div class="part-art art-plate"><span class="plate-hole a"></span><span class="plate-hole b"></span><span class="plate-hole c"></span><span class="plate-slot"></span></div>
+              <div class="part-meta"><span>02</span><strong>Mounting Plates</strong><small>Drilled / slotted patterns</small></div>
+            </button>
+
+            <button class="part-card" data-keywords="cover guard panel bent sheet metal laser cut" type="button">
+              <div class="part-art art-cover"><span class="cover-edge"></span><span class="cover-hole"></span></div>
+              <div class="part-meta"><span>03</span><strong>Covers</strong><small>Guards + panels</small></div>
+            </button>
+
+            <button class="part-card" data-keywords="housing enclosure equipment fabricated box sheet metal" type="button">
+              <div class="part-art art-housing"><span class="housing-face"></span><span class="housing-slot"></span></div>
+              <div class="part-meta"><span>04</span><strong>Housings</strong><small>Small equipment shells</small></div>
+            </button>
+
+            <button class="part-card" data-keywords="enclosure electrical control box cabinet sheet metal" type="button">
+              <div class="part-art art-enclosure"><span class="door"></span><span class="hinge one"></span><span class="hinge two"></span></div>
+              <div class="part-meta"><span>05</span><strong>Enclosures</strong><small>Simple electrical + hardware</small></div>
+            </button>
+
+            <button class="part-card part-card-highlight" data-keywords="prototype urgent rush first article sample" type="button">
+              <div class="highlight-copy">
+                <span class="micro" style="color:var(--coral)">Need a prototype?</span>
+                <strong>Bring the drawing.</strong>
+                <p>We route the part to the best-fit supplier and document what arrives.</p>
+                <span class="arrow">→</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="why">
+        <div class="section-head" data-reveal>
+          <div>
+            <div class="micro">01 / why this exists</div>
+            <h2>The problem is not finding a factory. It is getting the part right.</h2>
+          </div>
+          <p>Directories create introductions. Aartha is designed around the work that starts after the introduction: review, coordination, inspection and delivery.</p>
+        </div>
+
+        <div class="story">
+          <article class="story-card story-before" data-reveal>
+            <h3>Before</h3>
+            <h4>Five quotes.<br>Three WhatsApps.<br>Still no certainty.</h4>
+            <p>Supplier discovery turns into repeated follow-ups, inconsistent quotes, unclear quality ownership and production surprises.</p>
+            <div class="story-points">
+              <div class="story-point"><b>×</b> fragmented supplier communication</div>
+              <div class="story-point"><b>×</b> unclear quality ownership</div>
+              <div class="story-point"><b>×</b> slow status chasing</div>
+            </div>
+            <svg class="mini-lines" viewBox="0 0 300 280" fill="none">
+              <path d="M15 45h250M15 100h190M15 155h230M15 210h170" stroke="#8b91a8" stroke-width="1"/>
+              <circle cx="46" cy="45" r="8" stroke="#ff685c" stroke-width="3"/>
+              <circle cx="220" cy="155" r="8" stroke="#ff685c" stroke-width="3"/>
+              <path d="M62 45 205 155" stroke="#8b91a8" stroke-width="2" stroke-dasharray="4 6"/>
+            </svg>
+          </article>
+
+          <article class="story-card story-after" data-reveal>
+            <h3>After</h3>
+            <h4>One drawing.<br>One accountable partner.</h4>
+            <p>Send the RFQ. We coordinate the right supplier, production milestones, inspection and delivery — with a clear commercial path end to end.</p>
+            <div class="story-points">
+              <div class="story-point"><b>✓</b> qualified supplier selection</div>
+              <div class="story-point"><b>✓</b> documented inspection</div>
+              <div class="story-point"><b>✓</b> clear delivery ownership</div>
+            </div>
+            <div class="part-demo">
+              <svg viewBox="0 0 360 240" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="g2" x1="0" x2="1">
+                    <stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#9cb3ff"/>
+                  </linearGradient>
+                </defs>
+                <path d="M40 72 214 36 304 88 130 124Z" fill="url(#g2)" opacity=".96"/>
+                <path d="M130 124 304 88 306 181 131 218Z" fill="#b7c7ff" opacity=".72"/>
+                <path d="M40 72 130 124 131 218 42 166Z" fill="#dbe2ff" opacity=".86"/>
+                <circle cx="90" cy="151" r="12" fill="none" stroke="#ff685c" stroke-width="4"/>
+                <circle cx="260" cy="111" r="10" fill="none" stroke="#27187e" stroke-width="4"/>
+              </svg>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="how">
+        <div class="section-head" data-reveal>
+          <div>
+            <div class="micro">02 / how it works</div>
+            <h2>From drawing to delivered part — without becoming your procurement department.</h2>
+          </div>
+          <p>A deliberately human workflow today. Software becomes more useful after the first repeat orders prove the process.</p>
+        </div>
+
+        <div class="steps">
+          <article class="step" data-reveal><div class="step-no">01</div><h3>Share your RFQ</h3><p>Upload a drawing or specification. We clarify material, thickness, tolerances, finish and quantity before quoting.</p></article>
+          <article class="step" data-reveal><div class="step-no">02</div><h3>Engineering review</h3><p>We perform a practical DFM check and route the job to suppliers that actually fit the part and volume.</p></article>
+          <article class="step" data-reveal><div class="step-no">03</div><h3>Production + QA</h3><p>We coordinate the shop floor, track milestones and inspect the finished batch against the agreed acceptance criteria.</p></article>
+          <article class="step" data-reveal><div class="step-no">04</div><h3>Delivery</h3><p>You get one commercial interface and one documented handoff — not a chain of suppliers to chase.</p></article>
+        </div>
+      </section>
+
+      <section id="capabilities">
+        <div class="section-head" data-reveal>
+          <div>
+            <div class="micro">03 / starting wedge</div>
+            <h2>One narrow product family. Done unusually well.</h2>
+          </div>
+          <p>We are deliberately starting with non-safety-critical, low-to-medium volume fabrication where quality can be inspected and the operating model can stay inventory-free.</p>
+        </div>
+
+        <div class="cap-wrap">
+          <div class="cap-main" data-reveal>
+            <div class="micro" style="color:#c8d1ff">Aartha / starting scope</div>
+            <h3>Brackets, covers, mounting plates, housings & small enclosures.</h3>
+            <div class="cap-list">
+              <span class="tag">Laser cutting</span><span class="tag">Press brake bending</span><span class="tag">Welding</span>
+              <span class="tag">Powder coating</span><span class="tag">Dimensional inspection</span><span class="tag">Prototype runs</span>
+            </div>
+          </div>
+          <div class="cap-side">
+            <article class="cap-card" data-reveal><strong>Best-fit buyers</strong><h4>Industrial equipment & hardware teams</h4><p>Automation builders, robotics companies, test-equipment teams, electrical hardware manufacturers and EV-adjacent product teams.</p></article>
+            <article class="cap-card" data-reveal><strong>Not in the first release</strong><h4>No cells. No BMS. No high-voltage assemblies.</h4><p>Safety-critical work comes later, only after quality systems and repeat-order evidence justify the added responsibility.</p></article>
+          </div>
+        </div>
+      </section>
+
+
+      <section id="network" class="network-section">
+        <div class="section-head" data-reveal>
+          <div>
+            <div class="micro">03 / supply network</div>
+            <h2>Small network. Deep data.</h2>
+          </div>
+          <p>We do not need thousands of suppliers to start. We need the right suppliers, correctly described, and a record of how they perform.</p>
+        </div>
+
+        <div class="network-grid">
+          <div class="network-card network-map" data-reveal>
+            <div class="network-topline"><span>INITIAL NETWORK BUILD</span><b>30</b></div>
+            <div class="network-visual">
+              <div class="cluster cluster-a"></div><div class="cluster cluster-b"></div><div class="cluster cluster-c"></div>
+              <div class="network-line l1"></div><div class="network-line l2"></div><div class="network-line l3"></div>
+              <div class="center-node">A</div>
+            </div>
+            <div class="network-foot">Initial factory pipeline in the plan • qualification before assignment</div>
+          </div>
+
+          <div class="network-card" data-reveal>
+            <div class="network-topline"><span>EARLY SIGNAL</span><b>22</b></div>
+            <h3>Manufacturer conversations completed.</h3>
+            <p>They rejected the listing-platform idea. That feedback is what pushed Aartha toward managed execution instead of lead generation.</p>
+            <a href="#why" class="network-link">See the pivot →</a>
+          </div>
+
+          <div class="network-card dark" data-reveal>
+            <div class="network-topline"><span>AARTHA OS / v0</span><b>05</b></div>
+            <div class="os-grid">
+              <span>RFQ</span><span>DFM</span><span>MAKE</span><span>QA</span><span>TRACK</span>
+            </div>
+            <p>Manual tools first: forms, Drive, supplier database, order tracker and inspection records. Automation comes after repeat orders.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="qa">
+        <div class="section-head" data-reveal>
+          <div>
+            <div class="micro">04 / quality system</div>
+            <h2>Trust is the product layer.</h2>
+          </div>
+          <p>No “zero-defect” promise. The value is a defined acceptance process, supplier qualification and traceable documentation.</p>
+        </div>
+        <div class="qa-grid">
+          <article class="qa-card" data-reveal><div class="num">01 / SUPPLIER</div><h3>Capability first.</h3><p>Machine list, material capability, achievable tolerances, lead time, sample quality and process fit are recorded before assignment.</p></article>
+          <article class="qa-card" data-reveal><div class="num">02 / INSPECTION</div><h3>Evidence, not adjectives.</h3><p>Dimensional checks, visual inspection and photo documentation are tied to the agreed acceptance criteria.</p></article>
+          <article class="qa-card" data-reveal><div class="num">03 / HISTORY</div><h3>Every order teaches the next.</h3><p>Supplier performance becomes structured data: on-time delivery, quality events, process strengths and repeat-order history.</p></article>
+        </div>
+      </section>
+
+
+      <section class="evidence-section">
+        <div class="evidence-lead" data-reveal>
+          <div class="micro">04 / WHY BUYERS STAY</div>
+          <h2>Less chasing.<br><em>More evidence.</em></h2>
+          <p>Aartha turns supplier coordination into a visible workflow: who is making the part, what changed, what was checked and what ships.</p>
+        </div>
+        <div class="evidence-tiles" data-reveal>
+          <article class="evidence-tile e1"><span>01</span><strong>Supplier fit</strong><small>Capability before assignment.</small></article>
+          <article class="evidence-tile e2"><span>02</span><strong>Production state</strong><small>Milestones without the WhatsApp chase.</small></article>
+          <article class="evidence-tile e3"><span>03</span><strong>Inspection record</strong><small>Photos + measurement evidence.</small></article>
+          <article class="evidence-tile e4"><span>04</span><strong>Commercial clarity</strong><small>Managed price, not a loose chain of quotes.</small></article>
+        </div>
+      </section>
+
+      <section id="model" class="model-section">
+        <div class="section-head" data-reveal>
+          <div>
+            <div class="micro">04 / commercial model</div>
+            <h2>One order. One accountable layer.</h2>
+          </div>
+          <p>Aartha earns for managing execution — not for selling a listing. The first model is contribution-based and cash-disciplined.</p>
+        </div>
+
+        <div class="model-band" data-reveal>
+          <div class="model-item"><span>BUYER</span><strong>Drawing + quantity</strong><small>RFQ / spec / target date</small></div>
+          <div class="model-arrow">→</div>
+          <div class="model-item"><span>AARTHA</span><strong>Managed price</strong><small>factory + QA + coordination + risk</small></div>
+          <div class="model-arrow">→</div>
+          <div class="model-item"><span>SUPPLIER</span><strong>Production</strong><small>milestones + evidence</small></div>
+          <div class="model-arrow">→</div>
+          <div class="model-item"><span>BUYER</span><strong>Delivered part</strong><small>inspection + handoff</small></div>
+        </div>
+
+        <div class="revenue-grid" data-reveal>
+          <article><span>01</span><h3>Manufacturing contribution</h3><p>Customer sees one managed delivered price rather than a raw factory quote.</p></article>
+          <article><span>02</span><h3>DFM / engineering</h3><p>Paid when a project requires meaningful drawing cleanup or manufacturability work.</p></article>
+          <article><span>03</span><h3>QA / rush</h3><p>Documentation and accelerated coordination become optional premium services.</p></article>
+          <article class="revenue-note"><strong>Cash rule</strong><p>Prefer buyer-funded orders. Avoid inventory and early customer credit.</p></article>
+        </div>
+      </section>
+
+      <section>
+        <div class="rfq" id="rfq">
+          <div class="rfq-grid">
+            <div data-reveal>
+              <div class="micro" style="color:#fff">05 / start a project</div>
+              <h2>Have a part?<br>Let’s make it real.</h2>
+              <p>Send a drawing, tell us the quantity and finish, and we’ll come back with the next step. This demo does not transmit files anywhere; it simulates the real RFQ workflow.</p>
+              <div style="margin-top:24px;font-size:11px;opacity:.75">Typical first response: qualification call → engineering review → supplier route → quote.</div>
+            </div>
+
+            <form class="rfq-form" id="rfqForm" data-reveal>
+              <div class="row">
+                <div class="field"><label>Name</label><input required name="name" placeholder="Your name"></div>
+                <div class="field"><label>Work email</label><input required type="email" name="email" placeholder="you@company.com"></div>
+              </div>
+              <div class="row">
+                <div class="field"><label>Quantity</label><input name="qty" placeholder="e.g. 50"></div>
+                <div class="field"><label>Material</label><input name="material" placeholder="e.g. SS304 / MS / Al"></div>
+              </div>
+              <div class="field"><label>Project note</label><textarea name="note" placeholder="Part type, tolerance, finish, timeline..."></textarea></div>
+              <div class="field">
+                <label>Drawing / spec</label>
+                <input type="file" id="fileInput" hidden>
+                <div class="upload" id="uploadBox">
+                  <strong id="fileLabel">Drop a PDF / DXF / STEP / image here</strong>
+                  <span id="fileSub">Demo only — file stays in your browser</span>
+                </div>
+              </div>
+              <button class="submit" type="submit">Create RFQ →</button>
+              <div class="note">No data is sent in this demo. Use it tomorrow as a clickable prototype.</div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-mega">
+        <div class="footer-brand-block">
+          <img src="aartha-logo.png" alt="Aartha" class="footer-logo">
+          <div class="footer-brand">Aartha.</div>
+          <p>Managed sourcing for custom precision sheet-metal parts.</p>
+          <div class="footer-mini">Start narrow → prove repeatability → scale the workflow.</div>
+        </div>
+        <div class="footer-col">
+          <strong>PARTS</strong>
+          <a href="#catalogue">Brackets</a><a href="#catalogue">Mounting plates</a><a href="#catalogue">Covers</a><a href="#catalogue">Housings</a><a href="#catalogue">Enclosures</a>
+        </div>
+        <div class="footer-col">
+          <strong>OPERATIONS</strong>
+          <a href="#how">RFQ flow</a><a href="#qa">Quality</a><a href="#network">Supplier network</a><a href="#model">Commercial model</a><a href="#rfq">Start a project</a>
+        </div>
+        <div class="footer-col">
+          <strong>COMPANY</strong>
+          <a href="#why">Why Aartha</a><a href="#network">How we build</a><a href="#model">Revenue model</a><a href="#rfq">Contact</a>
+          <span class="footer-location">Gujarat • India</span>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Aartha</span><span>Inventory-free by design</span><span>Custom manufacturing, managed end to end</span>
+      </div>
+    <button class="back-top" id="backTop" type="button" aria-label="Back to top">↑</button>
+    </footer>
+  </div>
+
+  <div class="modal" id="successModal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <button class="modal-close" id="modalClose">×</button>
+      <div class="micro">RFQ CREATED</div>
+      <h3>Good. The next step is qualification.</h3>
+      <p id="modalText">Your demo RFQ is ready. In the real workflow, this would create a project record and route the drawing to an engineering review.</p>
+      <button class="pill pill-primary" style="margin-top:8px" id="modalDone">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const intro = document.getElementById('intro');
+    window.addEventListener('load', () => {
+      setTimeout(() => intro.classList.add('hide'), 1250);
+    });
+
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 12);
+    });
+
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach((entry, i) => {
+        if(entry.isIntersecting){
+          entry.target.style.transitionDelay = `${Math.min(i*40, 240)}ms`;
+          entry.target.classList.add('in');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, {threshold:.12});
+    document.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
+
+    const modal = document.getElementById('successModal');
+    const openModal = () => modal.classList.add('show');
+    document.getElementById('navRFQ').onclick = () => document.getElementById('rfq').scrollIntoView({behavior:'smooth'});
+    document.getElementById('heroRFQ').onclick = () => document.getElementById('rfq').scrollIntoView({behavior:'smooth'});
+    document.getElementById('modalClose').onclick = () => modal.classList.remove('show');
+    document.getElementById('modalDone').onclick = () => modal.classList.remove('show');
+    modal.addEventListener('click', e => { if(e.target === modal) modal.classList.remove('show'); });
+
+    const uploadBox = document.getElementById('uploadBox');
+    const fileInput = document.getElementById('fileInput');
+    const fileLabel = document.getElementById('fileLabel');
+    const fileSub = document.getElementById('fileSub');
+
+    uploadBox.addEventListener('click', () => fileInput.click());
+    uploadBox.addEventListener('dragover', e => {e.preventDefault(); uploadBox.style.background = '#eef1ff';});
+    uploadBox.addEventListener('dragleave', () => uploadBox.style.background = '#fafbff');
+    uploadBox.addEventListener('drop', e => {
+      e.preventDefault(); uploadBox.style.background = '#fafbff';
+      const f = e.dataTransfer.files?.[0];
+      if(f) showFile(f);
+    });
+    fileInput.addEventListener('change', () => {
+      if(fileInput.files?.[0]) showFile(fileInput.files[0]);
+    });
+    function showFile(f){
+      fileLabel.textContent = f.name;
+      fileSub.textContent = `${Math.round(f.size/1024)} KB • ready for demo submission`;
+    }
+
+    document.getElementById('rfqForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const name = e.target.name.value.trim() || 'there';
+      document.getElementById('modalText').textContent =
+        `Thanks, ${name}. The demo RFQ is now staged. In production, this step would create a project record, store the drawing securely, and trigger the technical review queue.`;
+      openModal();
+    });
+
+
+    // Aartha V3 commerce-style header interactions
+    const globalSearch = document.getElementById('globalSearch');
+    const globalSearchBtn = document.getElementById('globalSearchBtn');
+    const searchResults = document.getElementById('searchResults');
+    const partCards = [...document.querySelectorAll('.part-card')];
+    const partLabels = partCards.map(c => ({
+      el:c, name:c.querySelector('.part-meta strong')?.textContent || 'Part',
+      keywords:(c.dataset.keywords||'').toLowerCase(),
+      sub:c.querySelector('.part-meta small')?.textContent || ''
+    }));
+
+    function runSearch(q){
+      q=(q||'').trim().toLowerCase();
+      if(!q){searchResults?.classList.remove('show'); return;}
+      const matches = partLabels.filter(x => x.keywords.includes(q) || x.name.toLowerCase().includes(q));
+      const list = matches.length ? matches.slice(0,5) : partLabels.slice(0,4);
+      if(!searchResults) return;
+      searchResults.innerHTML=list.map(x=>`<div class="search-result" data-target="${x.name}"><b>${x.name}</b><span>${x.sub}</span></div>`).join('');
+      searchResults.querySelectorAll('[data-target]').forEach(r=>r.addEventListener('click',()=>{
+        const target=partLabels.find(x=>x.name===r.dataset.target)?.el;
+        target?.scrollIntoView({behavior:'smooth',block:'center'});
+        target?.classList.add('active'); setTimeout(()=>target?.classList.remove('active'),1200);
+        searchResults.classList.remove('show');
+      }));
+      searchResults.classList.add('show');
+    }
+    globalSearch?.addEventListener('input',e=>runSearch(e.target.value));
+    globalSearchBtn?.addEventListener('click',()=>runSearch(globalSearch?.value||''));
+    document.addEventListener('click',e=>{
+      if(!e.target.closest('.nav-search')) searchResults?.classList.remove('show');
+      if(!e.target.closest('.category-explorer') && !e.target.closest('#categoryTrigger')) closeCategory();
+      if(!e.target.closest('.about-popover') && !e.target.closest('#aboutTrigger')) closeAbout();
+    });
+
+    // Category explorer content
+    const categoryData={
+      all:[
+        ['Brackets','Angle, support and mounting brackets','brackets'],['Mounting plates','Laser-cut bases and drilled patterns','plates'],
+        ['Covers','Guards, access panels and caps','covers'],['Housings','Small fabricated equipment shells','housings'],
+        ['Enclosures','Simple electrical and hardware enclosures','enclosures'],['Prototype runs','Small-lot fabrication for design iteration','prototype']
+      ],
+      brackets:[['Angle brackets','L-bends / formed supports','brackets'],['Flat brackets','Laser-cut flat profiles','brackets'],['Slotted brackets','Adjustment slots + tabs','brackets'],['Custom supports','Drawing-led geometry','brackets'],['Prototype brackets','1–50 piece runs','brackets'],['Repeat brackets','Batch production + inspection','brackets']],
+      plates:[['Base plates','Drilled / tapped mounting plates','plates'],['Slotted plates','Adjustment patterns','plates'],['Back plates','Panel / equipment backs','plates'],['Adapter plates','Interface / conversion plates','plates'],['Laser-cut plates','Flat profiles','plates'],['Repeat plates','Batch production + QA','plates']],
+      covers:[['Top covers','Simple folded covers','covers'],['Guards','Operator / equipment guards','covers'],['Access panels','Service access panels','covers'],['Corner covers','Folded protective pieces','covers'],['Vent panels','Cutout-led panels','covers'],['Prototype covers','Low-volume iterations','covers']],
+      housings:[['Sensor housings','Small equipment shells','housings'],['Controller housings','Sheet-metal boxes','housings'],['Instrument housings','Panel + folded assemblies','housings'],['Chassis','Base + cover systems','housings'],['Bracketed housings','Mounting-integrated shells','housings'],['Prototype housings','Low-volume development','housings']],
+      enclosures:[['Electrical boxes','Simple control enclosures','enclosures'],['Junction boxes','Compact boxes + covers','enclosures'],['Wall enclosures','Small industrial cabinets','enclosures'],['Control panels','Cutout-led panels','enclosures'],['Outdoor shells','Protected hardware housings','enclosures'],['Prototype enclosures','Small batch builds','enclosures']]
+    };
+    const categoryExplorer=document.getElementById('megaMenu');
+    const categoryTitle=document.getElementById('categoryTitle');
+    const categoryGrid=document.getElementById('categoryContentGrid');
+    const categoryTitles={all:'Custom sheet-metal parts',brackets:'Brackets',plates:'Mounting plates',covers:'Covers & panels',housings:'Housings',enclosures:'Enclosures'};
+    function renderCategory(key){
+      if(!categoryGrid) return;
+      categoryTitle.textContent=categoryTitles[key]||categoryTitles.all;
+      categoryGrid.innerHTML=(categoryData[key]||categoryData.all).map(item=>`<button class="category-link-card" type="button" data-jump="${item[0]}"><strong>${item[0]}</strong><span>${item[1]}</span></button>`).join('');
+      categoryGrid.querySelectorAll('[data-jump]').forEach(btn=>btn.addEventListener('click',()=>{
+        document.getElementById('rfq')?.scrollIntoView({behavior:'smooth'});
+        closeCategory();
+      }));
+    }
+    function openCategory(){renderCategory('all');categoryExplorer?.classList.add('show');categoryExplorer?.setAttribute('aria-hidden','false');closeAbout();}
+    function closeCategory(){categoryExplorer?.classList.remove('show');categoryExplorer?.setAttribute('aria-hidden','true');}
+    document.getElementById('categoryTrigger')?.addEventListener('click',()=>categoryExplorer?.classList.contains('show')?closeCategory():openCategory());
+    document.getElementById('megaClose')?.addEventListener('click',closeCategory);
+    document.querySelectorAll('.category-side').forEach(btn=>btn.addEventListener('click',()=>{
+      document.querySelectorAll('.category-side').forEach(x=>x.classList.remove('active'));
+      btn.classList.add('active'); renderCategory(btn.dataset.cat||'all');
+    }));
+    document.getElementById('categoryRFQ')?.addEventListener('click',()=>{
+      closeCategory(); document.getElementById('rfq')?.scrollIntoView({behavior:'smooth'});
+    });
+
+    // About dropdown
+    const aboutMenu=document.getElementById('aboutMenu');
+    function closeAbout(){aboutMenu?.classList.remove('show');aboutMenu?.setAttribute('aria-hidden','true')}
+    document.getElementById('aboutTrigger')?.addEventListener('click',()=>{
+      const open=aboutMenu?.classList.contains('show');
+      closeCategory();
+      if(open) closeAbout(); else {aboutMenu?.classList.add('show');aboutMenu?.setAttribute('aria-hidden','false');}
+    });
+    document.getElementById('aboutClose')?.addEventListener('click',closeAbout);
+
+    // Mobile menu
+    const navToggle = document.getElementById('navToggle');
+    navToggle.addEventListener('click', () => {
+      const links = document.querySelector('.nav-links');
+      const open = links.style.display === 'flex';
+      links.style.display = open ? '' : 'flex';
+      if(!open){
+        links.style.position='absolute'; links.style.top='70px'; links.style.left='18px'; links.style.right='18px';
+        links.style.padding='16px'; links.style.background='rgba(255,255,255,.96)';
+        links.style.border='1px solid #dfe3ef'; links.style.borderRadius='18px';
+        links.style.flexDirection='column'; links.style.gap='14px'; links.style.boxShadow='0 18px 40px rgba(39,24,126,.12)';
+      }
+    });
+  
+    const backTop=document.getElementById('backTop');
+    backTop?.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+</script>
+</body>
+</html>

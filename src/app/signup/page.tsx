@@ -292,11 +292,12 @@ export default function SignUpPage() {
             
             {/* Header */}
             <div className="space-y-2">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 p-1 shadow-xs flex items-center justify-center overflow-hidden">
-                  <img src="/brand/aartha-logo.png" alt="Aartha Logo" className="w-full h-full object-contain dark:invert" />
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 flex items-center justify-center flex-shrink-0">
+                  <img src="/brand/aartha-logo.png" alt="Aartha Logo" className="w-full h-full object-contain block dark:hidden drop-shadow-xs" />
+                  <img src="/brand/aartha-logo-white.png" alt="Aartha Logo" className="w-full h-full object-contain hidden dark:block drop-shadow-xs" />
                 </div>
-                <span className="font-extrabold tracking-wider text-xs text-navy dark:text-white uppercase">AARTHA PLATFORM</span>
+                <span className="font-extrabold tracking-wider text-xs sm:text-sm text-navy dark:text-white uppercase">AARTHA PLATFORM</span>
               </div>
 
               <div>

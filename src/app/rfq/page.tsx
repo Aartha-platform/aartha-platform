@@ -21,9 +21,10 @@ const emptyFormData: RFQFormData = {
 const rfqSteps = ['Sourcing Specs', 'Quantity & Specs', 'Company Details'];
 
 const benefitBadges = [
-  { label: 'Verified Suppliers Only', icon: ShieldCheck },
-  { label: 'Corridor Routing', icon: Award },
-  { label: 'Zero Spam', icon: Lock },
+  { label: 'DFM Review Included', icon: ShieldCheck },
+  { label: 'Documented Inspection & QA', icon: Award },
+  { label: 'Single Accountable Invoice', icon: Clock },
+  { label: 'Mutual NDA Confidential', icon: Lock },
 ];
 
 export default function RFQPage() {
@@ -94,17 +95,21 @@ export default function RFQPage() {
   };
 
   return (
-    <div className="bg-cream font-sans min-h-screen py-8 text-text-primary">
+    <div className="bg-gradient-to-b from-[#dfe4f8] via-[#f7f8fd] to-white dark:from-[#0a1020] dark:via-[#0e1524] dark:to-[#060b13] font-sans min-h-screen py-10 text-[#0a1020] dark:text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-6 space-y-3">
-          <h1 className="text-2xl lg:text-3xl font-bold uppercase tracking-wide">
-            Request a Quote (RFQ)
+        <div className="text-center mb-8 space-y-3">
+          <span className="eyebrow">AARTHA / MANAGED INTAKE</span>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#0a1020] dark:text-white">
+            Send us your drawing. We handle the rest.
           </h1>
-          <div className="flex flex-wrap justify-center gap-2">
+          <p className="text-sm text-[#5a6480] dark:text-slate-300 max-w-xl mx-auto leading-relaxed">
+            Upload your technical drawing or CAD file. Aartha coordinates DFM review, supplier routing, production oversight, and documented pre-dispatch inspection.
+          </p>
+          <div className="flex flex-wrap justify-center gap-2 pt-2">
             {benefitBadges.map(({ label, icon: Icon }) => (
-              <div key={label} className="flex items-center gap-1.5 bg-navy/10 text-navy px-3 py-1 rounded-full text-xs font-bold border border-navy/5">
-                <Icon size={12} className="text-gold" />
+              <div key={label} className="flex items-center gap-1.5 bg-white/80 dark:bg-white/10 text-[#0a1020] dark:text-white px-3.5 py-1.5 rounded-full text-xs font-bold border border-[#27187e]/15 dark:border-white/10 shadow-3xs">
+                <Icon size={13} className="text-[#ff685c]" />
                 <span>{label}</span>
               </div>
             ))}

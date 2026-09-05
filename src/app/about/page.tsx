@@ -108,26 +108,26 @@ export default function AboutPage() {
               About <span className="bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 bg-clip-text text-transparent">Aartha</span>
             </h1>
             
-            <p className="text-amber-300 text-lg font-bold uppercase tracking-wider">
-              Purpose-Led Industrial Sourcing & Verified Trade Operating System
+            <p className="text-amber-300 text-lg font-bold tracking-tight">
+              Managed Manufacturing Execution Layer for Custom Precision Parts
             </p>
             
             <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-2xl">
-              In Sanskrit, <strong className="text-white border-b border-amber-500/30 pb-0.5">Aartha</strong> represents meaning, purpose, wealth, and prosperity — all at once. We build India's most comprehensive digital trade verification platform, connecting global B2B procurement teams directly with pre-screened Gujarat manufacturers. No listing ads, no payment rank manipulations, and zero unverified spam.
+              In Sanskrit, <strong className="text-white border-b border-amber-500/30 pb-0.5">Aartha</strong> represents purpose, meaning, and true value. We built Aartha because the hardest part of manufacturing is not finding a factory — it is getting the part made correctly. Aartha acts as the single accountable concierge between hardware teams and audited Gujarat fabrication clusters.
             </p>
 
             <div className="flex flex-wrap gap-4 pt-2">
               <Link 
-                href="/suppliers" 
+                href="/rfq" 
                 className="btn-amber text-xs font-extrabold uppercase tracking-wider px-8 py-3.5 shadow-lg rounded-xl"
               >
-                Browse Directory
+                Send an RFQ ↗
               </Link>
               <Link 
-                href="#narrative" 
+                href="/how-it-works" 
                 className="border-[1.5px] border-white/20 text-white hover:bg-white hover:text-navy hover:border-white text-xs font-extrabold uppercase tracking-wider px-8 py-3.5 rounded-xl transition-all"
               >
-                Read Our Story
+                See How It Works
               </Link>
             </div>
           </div>
@@ -191,11 +191,16 @@ export default function AboutPage() {
 
             {/* Official Brand Monogram Emblem Card */}
             <div className="flex flex-col items-center justify-center p-6 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200/80 dark:border-white/10 shadow-xs text-center">
-              <div className="w-28 h-28 rounded-full bg-white dark:bg-slate-800 p-2 border border-slate-200 dark:border-white/10 shadow-sm flex items-center justify-center overflow-hidden mb-3">
+              <div className="w-28 h-28 rounded-full bg-slate-50 dark:bg-slate-800 p-1.5 border border-slate-200/90 dark:border-white/15 shadow-md flex items-center justify-center overflow-hidden mb-3 transition-transform duration-300 hover:scale-105">
                 <img
                   src="/brand/aartha-logo.png"
                   alt="Aartha Monogram"
-                  className="w-full h-full object-contain dark:invert"
+                  className="w-full h-full object-contain block dark:hidden drop-shadow-sm"
+                />
+                <img
+                  src="/brand/aartha-logo-white.png"
+                  alt="Aartha Monogram"
+                  className="w-full h-full object-contain hidden dark:block drop-shadow-sm"
                 />
               </div>
               <span className="font-extrabold text-xs tracking-wider uppercase text-navy dark:text-white">AARTHA SEAL</span>

@@ -28,17 +28,25 @@ export default function CategoriesPage() {
     <div className="bg-cream font-sans min-h-screen text-text-primary pb-16">
       {/* Header Banner */}
       <section className="bg-navy text-white py-12 px-4 border-b border-border-default/10">
-        <div className="max-w-7xl mx-auto space-y-2 text-left">
-          <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full text-xs font-bold text-gold border border-white/10">
-            <Shield size={14} />
-            <span>Gujarat Industrial Cluster Intelligence</span>
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="space-y-2 text-left">
+            <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full text-xs font-bold text-gold border border-white/10">
+              <Shield size={14} />
+              <span>Gujarat Industrial Clusters & Part Families</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-bold uppercase tracking-wider">
+              Manufacturing Categories & Clusters
+            </h1>
+            <p className="text-white/70 text-xs sm:text-sm max-w-2xl leading-relaxed">
+              Explore audited Gujarat suppliers and specialized manufacturing corridors. Need custom fabrication? Let Aartha coordinate the order end to end.
+            </p>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold uppercase tracking-wider">
-            Specialty Export Categories & Clusters
-          </h1>
-          <p className="text-white/70 text-xs sm:text-sm max-w-2xl leading-relaxed">
-            Browse verified Gujarat manufacturers organized by industry verticals, WHO-GMP & GOTS compliance standards, and GIDC industrial zones.
-          </p>
+          <Link
+            href="/rfq"
+            className="btn-amber px-5 py-3 rounded-xl text-xs font-extrabold uppercase tracking-wider whitespace-nowrap shadow-md"
+          >
+            Upload Custom Drawing →
+          </Link>
         </div>
       </section>
 

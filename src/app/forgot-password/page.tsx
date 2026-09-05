@@ -114,8 +114,9 @@ export default function ForgotPasswordPage() {
           
           {/* Header */}
           <div className="space-y-3 text-center flex flex-col items-center">
-            <div className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 p-1.5 shadow-sm flex items-center justify-center overflow-hidden">
-              <img src="/brand/aartha-logo.png" alt="Aartha Logo" className="w-full h-full object-contain dark:invert" />
+            <div className="w-16 h-16 flex items-center justify-center flex-shrink-0">
+              <img src="/brand/aartha-logo.png" alt="Aartha Logo" className="w-full h-full object-contain block dark:hidden drop-shadow-xs" />
+              <img src="/brand/aartha-logo-white.png" alt="Aartha Logo" className="w-full h-full object-contain hidden dark:block drop-shadow-xs" />
             </div>
             <div>
               <h1 className="text-xl sm:text-2xl font-black uppercase text-navy dark:text-white tracking-tight">

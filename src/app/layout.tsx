@@ -28,21 +28,19 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL('https://aartha.site'),
   title: {
-    default: "Aartha — India's Verified Manufacturing Network | B2B Directory",
-    template: "%s | Aartha B2B",
+    default: "Aartha — Managed Manufacturing for Custom Precision Parts",
+    template: "%s | Aartha Managed Manufacturing",
   },
-  description: "India's verified B2B manufacturing discovery network. Connect directly with authentic Gujarat factories in Chemicals, Textiles, Pharma, Engineering & Ceramics. Zero middleman fees.",
+  description: "Aartha manages custom precision sheet-metal parts from drawing to inspected delivery. Technical review, supplier selection, production, documented QA, and delivered parts.",
   keywords: [
-    "B2B Marketplace India",
-    "Gujarat Manufacturers Directory",
-    "Verified Indian Suppliers",
-    "Chemical Manufacturers Ankleshwar Dahej",
-    "Textile Manufacturers Surat",
-    "Engineering Brass Components Rajkot Jamnagar",
-    "Ceramic Tiles Morbi",
-    "IndiaMART Alternative",
-    "Direct Factory Sourcing India",
-    "GSTIN Verified Manufacturers"
+    "Managed Manufacturing India",
+    "Custom Precision Parts",
+    "Sheet Metal Fabrication Gujarat",
+    "Laser Cutting Press Brake Bending",
+    "DFM Review Quality Inspection",
+    "Custom Brackets Mounting Plates",
+    "Hardware Startups Manufacturing Partner",
+    "Contract Manufacturing India"
   ],
   authors: [{ name: "Aartha Platform" }],
   creator: "Aartha",
@@ -51,22 +49,25 @@ export const metadata: Metadata = {
     canonical: 'https://aartha.site',
   },
   icons: {
-    icon: '/brand/aartha-logo.png',
-    shortcut: '/brand/aartha-logo.png',
-    apple: '/brand/aartha-logo.png',
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/brand/aartha-logo.png', sizes: '512x512', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: '/icon.png',
   },
   openGraph: {
-    title: "Aartha — India's Verified Manufacturing Network",
-    description: "Connect directly with verified Indian manufacturers. Real GPS-audited factories, zero brokerage fees, and verified GSTIN/IEC credentials.",
+    title: "Aartha — Managed Manufacturing for Custom Precision Parts",
+    description: "Send us your drawing. We handle the rest — engineering review, supplier selection, production coordination, and documented inspection.",
     url: 'https://aartha.site',
-    siteName: 'Aartha B2B Platform',
+    siteName: 'Aartha Platform',
     locale: 'en_IN',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Aartha — India's Verified Manufacturing Network",
-    description: "Verified Indian B2B manufacturing network connecting global buyers directly with real factories.",
+    title: "Aartha — Managed Manufacturing for Custom Precision Parts",
+    description: "Managed manufacturing execution layer for custom precision parts. From drawing to inspected delivery.",
   },
   robots: {
     index: true,
@@ -170,17 +171,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${plusJakartaSans.variable} ${inter.variable}`}>
+    <html lang="en" className={`${inter.variable} ${plusJakartaSans.variable}`}>
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredSchema) }}
         />
       </head>
-      <body className="min-h-screen flex flex-col antialiased relative selection:bg-amber-500/20 selection:text-amber-600">
+      <body className="min-h-screen flex flex-col antialiased relative bg-gradient-to-b from-[#dfe4f8] via-[#f7f8fd] to-white dark:from-[#0a1020] dark:via-[#0e1524] dark:to-[#060b13] text-[#0a1020] dark:text-[#f0f4fa] selection:bg-[#ff685c]/20 selection:text-[#ff685c]">
         <ToastProvider>
           <AutoTranslationBridge />
-          <LiquidGlassBackground />
           <AnnouncementBar />
           <Header />
           <main className="flex-1">
